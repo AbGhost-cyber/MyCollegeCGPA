@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">My College CGPA</string>
+    <string name="semesters">Semesters</string>
+    <string name="others">Others</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="reEnterPassword">Re-enter Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="username">Username</string>
+    <string name="log_in">Log in</string>
+    <string name="notSynced">not synced</string>
+    <string name="isSynced">synced</string>
+    <string name="empty_list">no course added yet</string>
+    <string name="no_semester_text">no semester created yet\nclick the plus icon below to create one</string>
+    <string name="no_connection">no network connection</string>
+    <string name="network_available">network connected</string>
+</resources>

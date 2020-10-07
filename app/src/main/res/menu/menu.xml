@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/customize_gp"
+        android:title="@string/semesters" />
+    <item android:id="@+id/no_op" />
+
+    <item
+        android:id="@+id/othersFragment"
+        android:icon="@drawable/others_ic"
+        android:title="@string/others" />
+</menu>

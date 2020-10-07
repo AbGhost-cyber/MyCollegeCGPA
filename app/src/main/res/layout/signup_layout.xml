@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.694" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.241" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.445"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/averia_libre_bold"
+        android:padding="10dp"
+        android:text="@string/sign_up"
+        android:textColor="@color/textColors"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.13999999" />
+
+    <LinearLayout
+        android:id="@+id/lin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/sign_up_bg"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:id="@+id/email_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/TvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/averia_libre_bold"
+                android:text="@string/email"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/auth_selector_bg"
+                android:fontFamily="@font/averia_libre_bold"
+                android:hint="input email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColorHint="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/username_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/TvUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/averia_libre_bold"
+                android:text="@string/username"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/auth_selector_bg"
+                android:fontFamily="@font/averia_libre_bold"
+                android:hint="input username"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColorHint="@color/colorPrimaryDark" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/password_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/TvPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/averia_libre_bold"
+                android:text="@string/password"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/auth_selector_bg"
+                android:fontFamily="@font/averia_libre_bold"
+                android:hint="input password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColorHint="@color/colorPrimaryDark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/reEnterPassword_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/TvReEnterPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/averia_libre_bold"
+                android:text="@string/reEnterPassword"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/editTextReEnterPassword"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/auth_selector_bg"
+                android:fontFamily="@font/averia_libre_bold"
+                android:hint="re-enter password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:padding="10dp"
+                android:textColorHint="@color/colorPrimaryDark" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signUpBtn"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:layout_margin="10dp"
+        android:elevation="100dp"
+        android:fontFamily="@font/averia_libre_bold"
+        android:text="@string/sign_up"
+        android:textAllCaps="true"
+        android:textSize="19sp"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lin"
+        app:layout_constraintVertical_bias="0.0"
+        app:rippleColor="@color/colorPrimaryDark" />
+
+    <View
+        android:id="@+id/customImage2"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginBottom="44dp"
+        android:background="@drawable/custom1_shape"
+        app:layout_constraintBottom_toTopOf="@+id/view1"
+        app:layout_constraintStart_toEndOf="@+id/view2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="30dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="already have an account?"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.69"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpBtn"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/loginRedirect"
+        android:layout_width="62dp"
+        android:layout_height="25dp"
+        android:elevation="30dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/log_in"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
+        app:layout_constraintTop_toBottomOf="@+id/signUpBtn"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/customImage1"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/custom1_shape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/progressImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:elevation="30dp"
+        android:src="@color/colorPrimary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.52" />
+
+    <ProgressBar
+        android:id="@+id/signUpprogressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="30dp"
+        android:theme="@style/AppTheme.WhiteAccent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/progressImage"
+        app:layout_constraintEnd_toEndOf="@+id/progressImage"
+        app:layout_constraintStart_toStartOf="@+id/progressImage"
+        app:layout_constraintTop_toTopOf="@+id/progressImage" />
+</androidx.constraintlayout.widget.ConstraintLayout>
