@@ -93,10 +93,12 @@ class AddCourseDialogFragment : DialogFragment() {
 
         //from arguments
         val courses = arguments?.getSerializable("courses") as Courses?
-        courseNameEditText.setText(courses?.courseName)
-        creditHoursEditText.setText(courses?.creditHours.toString())
-        spinner.setSelection(spinnerAdapter.getPosition(courses?.grade))
-
+        courses?.let {
+            courseNameEditText.setText(it.courseName)
+            creditHoursEditText.setText(it.creditHours.toString())
+            spinner.setSelection(spinnerAdapter.getPosition(it.grade))
+            createCourse.text = getString(R.string.update_course_string)
+        }
 
         createCourse.setOnClickListener {
             val courseName = courseNameEditText.text.toString()
@@ -116,7 +118,6 @@ class AddCourseDialogFragment : DialogFragment() {
                     )
                 }
             }
-
 
             positiveListener?.let {
                 if (course != null) {

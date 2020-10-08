@@ -14,4 +14,5 @@
     <string name="no_semester_text">no semester created yet\nclick the plus icon below to create one</string>
     <string name="no_connection">no network connection</string>
     <string name="network_available">network connected</string>
+    <string name="update_course_string">UPDATE</string>
 </resources>

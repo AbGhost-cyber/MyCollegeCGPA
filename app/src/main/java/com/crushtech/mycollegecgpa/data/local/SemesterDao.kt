@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.crushtech.mycollegecgpa.data.local.entities.Courses
+import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedCourseId
 import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedSemesterId
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import kotlinx.coroutines.flow.Flow
@@ -49,10 +50,19 @@ interface SemesterDao {
     suspend fun getAllLocallyDeletedSemesterIds(): List<LocallyDeletedSemesterId>
 
     @Query("DELETE FROM locally_deleted_semester_ids WHERE deletedSemesterId = :deletedSemesterId")
-    suspend fun deleteLocallySemesterNoteId(deletedSemesterId: String)
+    suspend fun deleteLocallySemesterId(deletedSemesterId: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocallyDeletedSemesterId(locallyDeletedSemesterId: LocallyDeletedSemesterId)
+
+    @Query("SELECT * FROM locally_deleted_course_ids")
+    suspend fun getAllLocallyDeletedCourseIds(): List<LocallyDeletedCourseId>
+
+    @Query("DELETE FROM locally_deleted_course_ids WHERE deletedCourseId = :deletedCourseId")
+    suspend fun deleteLocallyCourseId(deletedCourseId: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertLocallyDeletedCourseId(locallyDeletedCourseId: LocallyDeletedCourseId)
 
 
 }

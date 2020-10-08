@@ -6,7 +6,9 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.CourseAdapter
@@ -17,6 +19,7 @@ import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Status
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.course_list_layout.*
 import java.util.*
@@ -79,6 +82,8 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         courseAdapter = CourseAdapter()
         adapter = courseAdapter
         layoutManager = LinearLayoutManager(requireContext())
+        ItemTouchHelper(itemTouchHelperCallback)
+            .attachToRecyclerView(this)
     }
 
     private fun subscribeToObservers() {
@@ -174,6 +179,34 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         showSnackbar("course saved")
     }
 
+
+    private val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+        0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+    ) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return true
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val position = viewHolder.layoutPosition
+            val course = courseAdapter.differ.currentList[position]
+            viewModel.deleteCourse(course.id, course.semesterId)
+            Snackbar.make(
+                requireView(), "course deleted",
+                Snackbar.LENGTH_LONG
+            ).apply {
+                setAction("Undo") {
+                    viewModel.insertCourse(course, course.semesterId)
+                    viewModel.deleteLocallyDeletedCourseId(course.id)
+                }
+                show()
+            }
+        }
+    }
 
     override fun onPause() {
         saveSemester()

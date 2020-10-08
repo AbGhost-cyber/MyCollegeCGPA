@@ -12,4 +12,5 @@
         android:id="@+id/othersFragment"
         android:icon="@drawable/others_ic"
         android:title="@string/others" />
+
 </menu>

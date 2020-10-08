@@ -3,6 +3,7 @@ package com.crushtech.mycollegecgpa.repositories
 import android.app.Application
 import com.crushtech.mycollegecgpa.data.local.SemesterDao
 import com.crushtech.mycollegecgpa.data.local.entities.Courses
+import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedCourseId
 import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedSemesterId
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.data.remote.SemesterApi
@@ -164,8 +165,29 @@ class SemesterRepository @Inject constructor(
     }
 
     suspend fun deleteLocallyDeletedSemesterId(deletedSemesterId: String) {
-        semesterDao.deleteLocallySemesterNoteId(deletedSemesterId)
+        semesterDao.deleteLocallySemesterId(deletedSemesterId)
     }
+
+
+    suspend fun deleteCourse(courseId: String, semesterId: String) {
+        val response = try {
+            semesterApi.deleteCourse(DeleteCourseRequest(courseId, semesterId))
+        } catch (e: Exception) {
+            null
+        }
+        semesterDao.deleteCourseById(courseId, semesterId)
+
+        if (response == null || !response.isSuccessful) {
+            semesterDao.insertLocallyDeletedCourseId(LocallyDeletedCourseId(courseId, semesterId))
+        } else {
+            deleteLocallyDeletedCourseId(courseId)
+        }
+    }
+
+    suspend fun deleteLocallyDeletedCourseId(deletedCourseId: String) {
+        semesterDao.deleteLocallyCourseId(deletedCourseId)
+    }
+
 
     private var currentSemesterResponse: Response<List<Semester>>? = null
 
@@ -173,6 +195,11 @@ class SemesterRepository @Inject constructor(
         val locallyDeletedSemesterIds = semesterDao.getAllLocallyDeletedSemesterIds()
         locallyDeletedSemesterIds.forEach { id ->
             deleteSemester(id.deletedSemesterId)
+        }
+
+        val locallyDeletedCourseIds = semesterDao.getAllLocallyDeletedCourseIds()
+        locallyDeletedCourseIds.forEach { id ->
+            deleteCourse(id.deletedCourseId, id.deletedCourseSemesterId)
         }
 
         val unSyncedSemesters = semesterDao.getAllUnSyncedSemesters()
