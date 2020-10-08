@@ -28,6 +28,7 @@ import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
+import com.crushtech.mycollegecgpa.utils.Constants.setupDecorator
 import com.crushtech.mycollegecgpa.utils.Status
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -231,7 +232,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     }
 
     private val itemTouchHelperCallback = object : SimpleCallback(
-        0, LEFT or RIGHT
+        0, LEFT
     ) {
         override fun onMove(
             recyclerView: RecyclerView,
@@ -242,19 +243,22 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         }
 
         override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-            val position = viewHolder.layoutPosition
-            val semester = semesterAdapter.differ.currentList[position]
-            homeViewModel.deleteSemester(semester.id)
-            Snackbar.make(
-                requireView(), "semester deleted",
-                Snackbar.LENGTH_LONG
-            ).apply {
-                setAction("Undo") {
-                    homeViewModel.insertSemester(semester)
-                    homeViewModel.deleteLocallyDeletedSemesterId(semester.id)
+            if (direction == LEFT) {
+                val position = viewHolder.layoutPosition
+                val semester = semesterAdapter.differ.currentList[position]
+                homeViewModel.deleteSemester(semester.id)
+                Snackbar.make(
+                    requireView(), "semester deleted",
+                    Snackbar.LENGTH_LONG
+                ).apply {
+                    setAction("Undo") {
+                        homeViewModel.insertSemester(semester)
+                        homeViewModel.deleteLocallyDeletedSemesterId(semester.id)
+                    }
+                    show()
                 }
-                show()
             }
+
         }
 
         override fun onChildDraw(
@@ -266,18 +270,36 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             actionState: Int,
             isCurrentlyActive: Boolean
         ) {
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             if (actionState == ACTION_STATE_SWIPE) {
                 swipingItem.postValue(isCurrentlyActive)
             }
+            setupDecorator(
+                c, recyclerView, viewHolder, dX, dY, actionState,
+                isCurrentlyActive, "Delete",
+                R.drawable.ic_baseline_delete_24,
+                android.R.color.holo_red_light, requireContext()
+            )
+            super.onChildDraw(
+                c,
+                recyclerView,
+                viewHolder,
+                dX,
+                dY,
+                actionState,
+                isCurrentlyActive
+            )
+
         }
 
-    }
 
+    }
     private fun setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener {
             homeViewModel.syncAllSemesters()
-            (activity as MainActivity).handleNetworkChanges()
+            (activity as MainActivity).handleNetworkChanges(
+                getString(R.string.no_connection)
+                , getString(R.string.isSynced)
+            )
         }
     }
 

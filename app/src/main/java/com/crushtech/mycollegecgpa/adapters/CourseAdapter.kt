@@ -68,7 +68,6 @@ class CourseAdapter : RecyclerView.Adapter<CourseViewHolder>() {
             }
         }
     }
-
     private val diffUtilCallBack = object : DiffUtil.ItemCallback<Courses>() {
         override fun areItemsTheSame(oldItem: Courses, newItem: Courses): Boolean {
             return oldItem.id == newItem.id
@@ -89,5 +88,6 @@ class CourseAdapter : RecyclerView.Adapter<CourseViewHolder>() {
     val differ = AsyncListDiffer(this, diffUtilCallBack)
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
 }
 

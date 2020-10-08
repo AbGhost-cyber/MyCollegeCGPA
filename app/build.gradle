@@ -107,4 +107,7 @@ dependencies {
 
     //circular imageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    // swipe decoration
+    implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.2'
 }

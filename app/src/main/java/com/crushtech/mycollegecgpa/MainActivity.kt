@@ -43,7 +43,10 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(gradesNavHostFragment.findNavController(), appBarConfig)
 
-        handleNetworkChanges()
+        handleNetworkChanges(
+            getString(R.string.no_connection),
+            getString(R.string.network_available)
+        )
     }
 
     fun hideAppBar() {
@@ -69,17 +72,17 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp()
     }
 
-    fun handleNetworkChanges() {
+    fun handleNetworkChanges(errorMessage: String, successMessage: String) {
         NetworkUtils.getNetworkLiveData(applicationContext).observe(this, Observer { isConnected ->
             if (!isConnected) {
                 getSnackBar(
-                    getString(R.string.no_connection),
+                    errorMessage,
                     Color.RED
                 ).show()
 
             } else {
                 getSnackBar(
-                    getString(R.string.network_available),
+                    successMessage,
                     Color.parseColor("#00C853")
                 ).show()
             }

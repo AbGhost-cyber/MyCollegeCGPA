@@ -1,6 +1,7 @@
 package com.crushtech.mycollegecgpa.ui.fragments.course
 
 import android.content.SharedPreferences
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -18,6 +19,7 @@ import com.crushtech.mycollegecgpa.dialogs.AddCourseDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
+import com.crushtech.mycollegecgpa.utils.Constants.setupDecorator
 import com.crushtech.mycollegecgpa.utils.Status
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,7 +64,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             val addCourseDialog = parentFragmentManager.findFragmentByTag(ADD_COURSE_DIALOG)
                     as AddCourseDialogFragment?
             addCourseDialog?.setPositiveListener { course ->
-                insertCourse(course)
+                insertCourse(course, "saved")
             }
         }
 
@@ -72,7 +74,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             AddCourseDialogFragment().apply {
                 arguments = bundle
                 setPositiveListener {
-                    insertCourse(it)
+                    insertCourse(it, "course updated")
                 }
             }.show(parentFragmentManager, ADD_COURSE_DIALOG)
         }
@@ -167,28 +169,28 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
     private fun showCreateCourseDialog() {
         AddCourseDialogFragment().apply {
             setPositiveListener { course ->
-                insertCourse(course)
+                insertCourse(course, "course saved")
             }
         }.show(parentFragmentManager, ADD_COURSE_DIALOG)
     }
 
-    private fun insertCourse(course: Courses) {
+    private fun insertCourse(course: Courses, message: String) {
         val semesterId = currentSemester?.id ?: UUID.randomUUID().toString()
         course.semesterId = semesterId
         viewModel.insertCourse(course, semesterId)
-        showSnackbar("course saved")
+        showSnackbar(message)
     }
 
 
     private val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-        0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        0, ItemTouchHelper.LEFT
     ) {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-            return true
+            return false
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -206,6 +208,34 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                 show()
             }
         }
+
+        override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+        ) {
+            setupDecorator(
+                c, recyclerView, viewHolder, dX, dY,
+                actionState, isCurrentlyActive, "Delete",
+                R.drawable.ic_baseline_delete_24, android.R.color.holo_red_dark,
+                requireContext()
+            )
+            super.onChildDraw(
+                c,
+                recyclerView,
+                viewHolder,
+                dX,
+                dY,
+                actionState,
+                isCurrentlyActive
+            )
+
+        }
+
     }
 
     override fun onPause() {
