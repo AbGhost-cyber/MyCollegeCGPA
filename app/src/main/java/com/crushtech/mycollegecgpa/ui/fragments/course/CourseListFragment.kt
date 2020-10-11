@@ -96,6 +96,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                     Status.SUCCESS -> {
                         val semester = result.data!!
                         currentSemester = semester
+                       viewModel.insertCourses(semester.courses, semester.id)
                     }
                     Status.ERROR -> {
                         showSnackbar(
@@ -113,13 +114,15 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
-                        courseAdapter.differ.submitList(result.data)
-                        currentSemester?.courses = result.data!!
-                        viewModel.getCourseList(currentSemester?.id ?: args.semesterId)
-                        if (result.data.isEmpty()) {
-                            no_course.visibility = View.VISIBLE
-                        } else {
-                            no_course.visibility = View.GONE
+                        result.data?.let { courses ->
+                            courseAdapter.differ.submitList(courses)
+                            currentSemester?.courses = courses
+                            viewModel.getCourseList(args.semesterId)
+                            if (result.data.isEmpty()) {
+                                no_course.visibility = View.VISIBLE
+                            } else {
+                                no_course.visibility = View.GONE
+                            }
                         }
 
                     }
@@ -154,11 +157,12 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         val owners = currentSemester?.owners ?: listOf(authEmail)
 
         //if semester's courses isn't null, then insert it
-        val semester = currentSemester?.courses?.let { courses ->
+        val semester = currentSemester?.courses?.let { course ->
             Semester(
                 semesterName = semesterName,
-                owners = owners, id = id, courses = courses
+                owners = owners, id = id, courses = course
             )
+
         }
         if (semester != null) {
             viewModel.insertSemester(semester)
@@ -219,16 +223,14 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             isCurrentlyActive: Boolean
         ) {
             setupDecorator(
-                c, recyclerView, viewHolder, dX, dY,
-                actionState, isCurrentlyActive, "Delete",
-                R.drawable.ic_baseline_delete_24, android.R.color.holo_red_dark,
-                requireContext()
+                c, recyclerView, viewHolder, dX,
+                dY, actionState, isCurrentlyActive
             )
             super.onChildDraw(
                 c,
                 recyclerView,
                 viewHolder,
-                dX,
+                dX / 4,
                 dY,
                 actionState,
                 isCurrentlyActive

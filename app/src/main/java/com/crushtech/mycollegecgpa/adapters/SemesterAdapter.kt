@@ -1,6 +1,7 @@
 package com.crushtech.mycollegecgpa.adapters
 
 import android.graphics.Color.RED
+import android.graphics.Color.parseColor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,10 +62,14 @@ class SemesterAdapter : Adapter<SemesterViewHolder>(), Filterable {
             if (circularProgressBar.progress < 3) {
                 circularProgressBar.progressBarColorEnd = RED
                 circularProgressBar.progressBarColorStart = RED
+            } else {
+                circularProgressBar.progressBarColorEnd = parseColor("#64DD17")
+                circularProgressBar.progressBarColorStart = parseColor("#64DD17")
             }
             setOnClickListener {
                 onItemClickListener?.let { click ->
                     click(semesters)
+
                 }
             }
         }

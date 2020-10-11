@@ -30,6 +30,10 @@ class CourseViewModel @ViewModelInject constructor(
         repository.insertCourseForSemester(courses, semesterId)
     }
 
+    fun insertCourses(courses: List<Courses>, semesterId: String) = GlobalScope.launch {
+        repository.insertCourses(courses, semesterId)
+    }
+
     fun getSemesterById(semesterId: String) = viewModelScope.launch {
         _semester.postValue(Events(Resource.loading(null)))
         val semester = repository.getSemesterById(semesterId)

@@ -84,7 +84,7 @@ class SemesterRepository @Inject constructor(
         }
     }
 
-    fun observeSemesterById(semesterId: String) = semesterDao.observeSemesterById(semesterId)
+   fun observeSemesterById(semesterId: String) = semesterDao.observeSemesterById(semesterId)
 
     suspend fun insertCourseForSemester(courses: Courses, semesterId: String) {
         val response = try {
@@ -103,6 +103,10 @@ class SemesterRepository @Inject constructor(
 
     private suspend fun insertSemesters(notes: List<Semester>) {
         notes.forEach { insertSemester(it) }
+    }
+
+    suspend fun insertCourses(courses: List<Courses>, semesterId: String) {
+        courses.forEach { insertCourseForSemester(it, semesterId) }
     }
 
     suspend fun addOwnerToSemester(owner: String, semesterId: String) =

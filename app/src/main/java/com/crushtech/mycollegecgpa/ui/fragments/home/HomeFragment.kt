@@ -5,8 +5,7 @@ import android.content.pm.ActivityInfo
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.viewModels
@@ -22,6 +21,7 @@ import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.SemesterAdapter
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.dialogs.AddOwnerDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.AddSemesterDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants
@@ -39,6 +39,7 @@ import java.util.*
 import javax.inject.Inject
 
 const val ADD_SEMESTER_DIALOG = "add semester dialog"
+const val ADD_OWNER_DIALOG = "add owner dialog"
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(R.layout.home_layout) {
@@ -51,6 +52,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     private val homeViewModel: HomeViewModel by viewModels()
 
     private val swipingItem = MutableLiveData(false)
+
+    private var currentSemester: Semester? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,6 +70,14 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             addSemesterDialog?.setPositiveListener { semesterName ->
                 insertSemester(semesterName)
             }
+            val addOwnerDialog = parentFragmentManager.findFragmentByTag(ADD_OWNER_DIALOG)
+                    as AddOwnerDialogFragment?
+            addOwnerDialog?.apply {
+                setPositiveListener { owner, _ ->
+                    addOwnerToSemester(owner)
+                }
+            }
+
         }
         setupRecyclerView()
         setUpBestSemesterRecyclerView()
@@ -101,13 +112,24 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
 
         semesterAdapter.setOnItemClickListener { semester ->
-            findNavController().navigate(
-                HomeFragmentDirections
-                    .actionHomeFragmentToCourseListFragment(
-                        semester.id,
-                        semester.semesterName
-                    )
-            )
+            val authEmail = sharedPrefs.getString(
+                KEY_LOGGED_IN_EMAIL,
+                NO_EMAIL
+            ) ?: NO_EMAIL
+            //check if semester belongs to the current user
+            if (semester.owners[0] == authEmail || semester.owners == listOf(authEmail)) {
+                findNavController().navigate(
+                    HomeFragmentDirections
+                        .actionHomeFragmentToCourseListFragment(
+                            semester.id,
+                            semester.semesterName
+                        )
+                )
+            } else {
+                showSnackbar(
+                    "view only, you have no right to edit"
+                )
+            }
         }
     }
 
@@ -173,6 +195,28 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         swipingItem.observe(viewLifecycleOwner, Observer {
             swipeRefreshLayout.isEnabled = !it
         })
+
+        homeViewModel.addOwnerStatus.observe(viewLifecycleOwner, Observer { event ->
+            event?.getContentIfNotHandled()?.let { result ->
+                when (result.status) {
+                    Status.SUCCESS -> {
+                        addOwnerProgressBar.visibility = GONE
+                        showSnackbar(
+                            result.message ?: "Successfully shared semester"
+                        )
+                    }
+                    Status.ERROR -> {
+                        addOwnerProgressBar.visibility = GONE
+                        showSnackbar(
+                            result.message ?: "An unknown error occurred"
+                        )
+                    }
+                    Status.LOADING -> {
+                        addOwnerProgressBar.visibility = VISIBLE
+                    }
+                }
+            }
+        })
     }
 
     private fun showCreateSemesterDialog() {
@@ -182,6 +226,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             }
         }.show(parentFragmentManager, ADD_SEMESTER_DIALOG)
     }
+
 
     private fun insertSemester(semesterName: String) {
         val authEmail = sharedPrefs.getString(
@@ -199,6 +244,29 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         )
         showSnackbar("semester created")
 
+    }
+
+    private fun showAddOwnerToSemesterDialog() {
+        AddOwnerDialogFragment().apply {
+            setPositiveListener { owner, clicked ->
+                addOwnerToSemester(owner)
+                if (clicked) {
+                    semesterAdapter.notifyDataSetChanged()
+                }
+            }
+            setNegativeListener { clicked ->
+                if (clicked) {
+                    semesterAdapter.notifyDataSetChanged()
+                }
+            }
+        }.show(parentFragmentManager, ADD_OWNER_DIALOG)
+
+    }
+
+    private fun addOwnerToSemester(email: String) {
+        currentSemester?.let {
+            homeViewModel.addOwnerToSemester(email, it.id)
+        }
     }
 
     private fun getCurrentUserName(): String {
@@ -219,33 +287,35 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             no_semester_txt.visibility = INVISIBLE
             allSemesterText.visibility = VISIBLE
             bestSemester.visibility = VISIBLE
-            semesterList.onEach {
-                if (semesterList.size == 1 && it.courses.isEmpty()) {
-                    bestSemesterText2.visibility = VISIBLE
-                    rvBestSemester.visibility = INVISIBLE
-                } else {
-                    bestSemesterText2.visibility = INVISIBLE
-                    rvBestSemester.visibility = VISIBLE
-                }
+
+            val allItemsHasNoCourses = semesterList.all {
+                it.courses.isNullOrEmpty()
+            }
+            if (allItemsHasNoCourses) {
+                bestSemesterText2.visibility = VISIBLE
+                rvBestSemester.visibility = INVISIBLE
+            } else {
+                bestSemesterText2.visibility = INVISIBLE
+                rvBestSemester.visibility = VISIBLE
             }
         }
     }
 
     private val itemTouchHelperCallback = object : SimpleCallback(
-        0, LEFT
+        0, LEFT or RIGHT
     ) {
         override fun onMove(
             recyclerView: RecyclerView,
             viewHolder: ViewHolder,
             target: ViewHolder
         ): Boolean {
-            return true
+            return false
         }
 
         override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
+            val position = viewHolder.layoutPosition
+            val semester = semesterAdapter.differ.currentList[position]
             if (direction == LEFT) {
-                val position = viewHolder.layoutPosition
-                val semester = semesterAdapter.differ.currentList[position]
                 homeViewModel.deleteSemester(semester.id)
                 Snackbar.make(
                     requireView(), "semester deleted",
@@ -257,6 +327,14 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     }
                     show()
                 }
+            } else if (direction == RIGHT) {
+                homeViewModel.observeSemesterById(semester.id).observe(viewLifecycleOwner,
+                    Observer {
+                        it?.let { semester ->
+                            currentSemester = semester
+                        }
+                    })
+                showAddOwnerToSemesterDialog()
             }
 
         }
@@ -274,16 +352,16 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                 swipingItem.postValue(isCurrentlyActive)
             }
             setupDecorator(
-                c, recyclerView, viewHolder, dX, dY, actionState,
-                isCurrentlyActive, "Delete",
-                R.drawable.ic_baseline_delete_24,
-                android.R.color.holo_red_light, requireContext()
+                c, recyclerView, viewHolder,
+                dX, dY, actionState,
+                isCurrentlyActive
             )
+
             super.onChildDraw(
                 c,
                 recyclerView,
                 viewHolder,
-                dX,
+                dX / 4,
                 dY,
                 actionState,
                 isCurrentlyActive
@@ -293,6 +371,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
 
     }
+
     private fun setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener {
             homeViewModel.syncAllSemesters()

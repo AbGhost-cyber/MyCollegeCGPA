@@ -1,11 +1,7 @@
 package com.crushtech.mycollegecgpa.utils
 
-import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
-import android.util.TypedValue
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.crushtech.mycollegecgpa.R
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -27,16 +23,13 @@ object Constants {
     const val NO_PASSWORD = "no password"
     const val NO_USERNAME = "no username"
 
+
     fun setupDecorator(
         c: Canvas, recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
         dX: Float, dY: Float, actionState: Int,
-        isCurrentlyActive: Boolean, textLabel: String,
-        drawableId: Int, backgroundColor: Int = Color.RED, context: Context
+        isCurrentlyActive: Boolean
     ) {
-        val textTypeface = ResourcesCompat.getFont(
-            context, R.font.averia_libre_bold
-        )
         RecyclerViewSwipeDecorator.Builder(
             c,
             recyclerView,
@@ -45,17 +38,12 @@ object Constants {
             dY,
             actionState,
             isCurrentlyActive
-        ).addBackgroundColor(
-            ContextCompat.getColor(
-                context,
-                backgroundColor
-            )
-        )
-            .addActionIcon(drawableId)
-            .addSwipeLeftLabel(textLabel)
-            .setSwipeLeftLabelTypeface(textTypeface)
+        ).addSwipeRightActionIcon(R.drawable.ic_email)
+            .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_24)
             .setSwipeLeftLabelColor(Color.WHITE)
-            .setSwipeLeftLabelTextSize(TypedValue.COMPLEX_UNIT_SP, 16F)
+            .setSwipeRightLabelColor(Color.WHITE)
+            .addSwipeLeftBackgroundColor(Color.RED)
+            .addSwipeRightBackgroundColor(Color.GREEN)
             .create()
             .decorate()
     }

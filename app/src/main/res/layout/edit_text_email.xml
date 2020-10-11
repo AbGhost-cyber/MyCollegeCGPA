@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tilAddSemester"
+    android:id="@+id/tilAddOwnerEmail"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/etAddSemesterName"
+        android:id="@+id/etAddOwnerEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:fontFamily="@font/averia_libre_bold"
-        android:hint="semester name"
         android:background="@android:color/white"
+        android:fontFamily="@font/averia_libre_bold"
+        android:hint="E-Mail"
+        android:inputType="textEmailAddress"
         android:padding="16dp"
         android:textColor="@android:color/black"
-        android:textColorHint="@android:color/tertiary_text_light"
-        android:textSize="16sp" />
+        android:textColorHint="@android:color/tertiary_text_light" />
 
 </com.google.android.material.textfield.TextInputLayout>

@@ -29,7 +29,6 @@
                 app:cpb_background_progressbar_color="@color/colorPrimary"
                 app:cpb_background_progressbar_width="10dp"
                 app:cpb_progress_direction="to_right"
-                app:cpb_progressbar_color="@color/progress_color"
                 app:cpb_progressbar_width="10dp"
                 app:cpb_round_border="false"
                 app:layout_constraintBottom_toBottomOf="parent"

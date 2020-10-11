@@ -8,19 +8,25 @@ import com.crushtech.mycollegecgpa.utils.Events
 import com.crushtech.mycollegecgpa.utils.Resource
 import kotlinx.coroutines.launch
 
-class HomeViewModel @ViewModelInject constructor(
-    private val semesterRepository: SemesterRepository
-) : ViewModel() {
+ class HomeViewModel @ViewModelInject constructor(
+     private val semesterRepository: SemesterRepository
+ ) : ViewModel() {
 
-    private val _forceUpdate = MutableLiveData(false)
+     private val _forceUpdate = MutableLiveData(false)
 
-    private val _allSemesters = _forceUpdate.switchMap {
-        semesterRepository.getAllSemesters()
-            .asLiveData(viewModelScope.coroutineContext)
-    }.switchMap {
-        MutableLiveData(Events(it))
-    }
-    val allSemesters: LiveData<Events<Resource<List<Semester>>>> = _allSemesters
+     private val _addOwnerStatus = MutableLiveData<Events<Resource<String>>>()
+     val addOwnerStatus: LiveData<Events<Resource<String>>> = _addOwnerStatus
+
+
+     private val _allSemesters = _forceUpdate.switchMap {
+         semesterRepository.getAllSemesters()
+             .asLiveData(viewModelScope.coroutineContext)
+     }.switchMap {
+         MutableLiveData(Events(it))
+     }
+
+
+     val allSemesters: LiveData<Events<Resource<List<Semester>>>> = _allSemesters
 
     fun syncAllSemesters() = _forceUpdate.postValue(true)
 
@@ -28,11 +34,34 @@ class HomeViewModel @ViewModelInject constructor(
         semesterRepository.insertSemester(semester)
     }
 
-    fun deleteSemester(semesterId: String) = viewModelScope.launch {
-        semesterRepository.deleteSemester(semesterId)
-    }
+     fun deleteSemester(semesterId: String) = viewModelScope.launch {
+         semesterRepository.deleteSemester(semesterId)
+     }
 
-    fun deleteLocallyDeletedSemesterId(deletedSemesterId: String) = viewModelScope.launch {
-        semesterRepository.deleteLocallyDeletedSemesterId(deletedSemesterId)
-    }
-}
+     fun deleteLocallyDeletedSemesterId(deletedSemesterId: String) = viewModelScope.launch {
+         semesterRepository.deleteLocallyDeletedSemesterId(deletedSemesterId)
+     }
+
+     fun addOwnerToSemester(owner: String, semesterId: String) {
+         _addOwnerStatus.postValue(Events(Resource.loading(null)))
+
+         if (owner.isEmpty() || semesterId.isEmpty()) {
+             _addOwnerStatus.postValue(
+                 Events(
+                     Resource.error(
+                         "The owner can't be empty", null
+                     )
+                 )
+             )
+             return
+         }
+         viewModelScope.launch {
+             val result = semesterRepository.addOwnerToSemester(owner, semesterId)
+
+             _addOwnerStatus.postValue(Events(result))
+         }
+     }
+
+     fun observeSemesterById(semesterId: String) =
+         semesterRepository.observeSemesterById(semesterId)
+ }
