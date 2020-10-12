@@ -73,19 +73,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun handleNetworkChanges(errorMessage: String, successMessage: String) {
-        NetworkUtils.getNetworkLiveData(applicationContext).observe(this, Observer { isConnected ->
-            if (!isConnected) {
-                getSnackBar(
-                    errorMessage,
-                    Color.RED
-                ).show()
-
-            } else {
-                getSnackBar(
-                    successMessage,
-                    Color.parseColor("#00C853")
-                ).show()
+        NetworkUtils.getNetworkLiveData(applicationContext).observe(this, Observer {
+            it?.let { event ->
+                val isConnected = event.peekContent()
+                if (isConnected) {
+                    getSnackBar(
+                        successMessage,
+                        Color.parseColor("#00C853")
+                    ).show()
+                } else {
+                    getSnackBar(
+                        errorMessage,
+                        Color.RED
+                    ).show()
+                }
             }
+
         })
     }
 

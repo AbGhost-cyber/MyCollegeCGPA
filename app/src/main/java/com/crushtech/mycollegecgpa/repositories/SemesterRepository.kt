@@ -144,9 +144,17 @@ class SemesterRepository @Inject constructor(
                 }
             },
             shouldFetch = {
-                getNetworkLiveData(context.applicationContext).value!!
+                getConnectionByPeeking()
             }
         )
+    }
+
+    private fun getConnectionByPeeking(): Boolean {
+        val events = getNetworkLiveData(context.applicationContext).value
+        events?.let {
+            return it.peekContent()
+        }
+        return false
     }
 
     suspend fun getSemesterById(semesterId: String) = semesterDao.getSemesterById(semesterId)

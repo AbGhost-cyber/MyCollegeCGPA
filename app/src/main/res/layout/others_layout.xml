@@ -3,16 +3,81 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/OthersContainer"
     android:background="@color/colorPrimaryDark">
 
-    <TextView
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="others"
-        android:textAlignment="center"
-        android:textSize="30sp"
+        android:background="@drawable/dialog_bg"
+        android:orientation="vertical"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.00999999">
+
+        <TextView
+            android:id="@+id/Extras"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+
+            android:fontFamily="@font/averia_libre_bold"
+            android:padding="20dp"
+            android:text="Extras"
+            android:textAlignment="center"
+            android:textColor="@color/textColors"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/logOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/credithours_bg"
+            android:fontFamily="@font/averia_libre_bold"
+            android:padding="20dp"
+            android:text="Log out"
+            android:textColor="@color/textColors"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/ShareApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/credithours_bg"
+            android:fontFamily="@font/averia_libre_bold"
+            android:padding="20dp"
+            android:text="Share this App"
+            android:textColor="@color/textColors"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/AboutApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/credithours_bg"
+            android:fontFamily="@font/averia_libre_bold"
+            android:padding="20dp"
+            android:text="About My College CGPA/ How to Use"
+            android:textColor="@color/textColors"
+            android:textSize="21sp" />
+
+        <TextView
+            android:id="@+id/rateApp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/credithours_bg"
+            android:fontFamily="@font/averia_libre_bold"
+            android:padding="20dp"
+            android:text="Rate This App"
+            android:textColor="@color/textColors"
+            android:textSize="21sp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
