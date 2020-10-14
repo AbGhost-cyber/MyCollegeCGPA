@@ -34,6 +34,10 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.home_layout.*
+import ua.naiksoftware.tooltips.TooltipOverlayParams
+import ua.naiksoftware.tooltips.TooltipOverlayPopup
+import ua.naiksoftware.tooltips.TooltipPosition
+import ua.naiksoftware.tooltips.TooltipView
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -73,8 +77,17 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             val addOwnerDialog = parentFragmentManager.findFragmentByTag(ADD_OWNER_DIALOG)
                     as AddOwnerDialogFragment?
             addOwnerDialog?.apply {
-                setPositiveListener { owner, _ ->
+                setPositiveListener { owner, clicked ->
                     addOwnerToSemester(owner)
+                    if (clicked) {
+                        semesterAdapter.notifyDataSetChanged()
+                    }
+                }
+                setNegativeListener { clicked ->
+                    if (clicked) {
+                        semesterAdapter.notifyDataSetChanged()
+                    }
+
                 }
             }
 
@@ -83,6 +96,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         setUpBestSemesterRecyclerView()
         setupSwipeRefreshLayout()
         subscribeToObservers()
+
 
         (activity as MainActivity).addSemester.setOnClickListener {
             showCreateSemesterDialog()
@@ -375,10 +389,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     private fun setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener {
             homeViewModel.syncAllSemesters()
-            (activity as MainActivity).handleNetworkChanges(
-                getString(R.string.no_connection)
-                , getString(R.string.isSynced)
-            )
         }
     }
 

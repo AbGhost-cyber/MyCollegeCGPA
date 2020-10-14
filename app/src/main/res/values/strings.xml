@@ -15,4 +15,6 @@
     <string name="no_connection">no network connection</string>
     <string name="network_available">network connected</string>
     <string name="update_course_string">UPDATE</string>
+    <string name="share_info">Hey, Check out My College CGPA, an interesting app that tracks and keeps record of your college academic performance. Get it for free at</string>
+    <string name="play_store_uri">http://play.google.com/store/apps/details?id=</string>
 </resources>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/course_drag"
     android:layout_width="match_parent"
     android:layout_height="110dp"
-    android:layout_margin="3dp"
-    android:id="@+id/course_drag"
+    android:layout_margin="5dp"
     android:background="@drawable/search_bg"
     android:clickable="false">
 
@@ -69,8 +69,6 @@
         app:layout_constraintHorizontal_bias="0.771"
         app:layout_constraintStart_toEndOf="@+id/tvCourseName"
         app:layout_constraintTop_toTopOf="parent" />
-    <!--    <ImageView-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:src="@drawable/ic_drag"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

@@ -60,7 +60,23 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/allCourses" />
+                app:layout_constraintTop_toBottomOf="@+id/swipeText" />
+
+            <TextView
+                android:id="@+id/swipeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_arrow"
+                android:fontFamily="@font/averia_libre"
+                android:text="Swipe left to delete"
+                android:textColor="@android:color/secondary_text_dark"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/allCourses"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/instruction"

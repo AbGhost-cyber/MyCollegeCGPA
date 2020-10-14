@@ -23,6 +23,7 @@ object Constants {
     const val NO_PASSWORD = "no password"
     const val NO_USERNAME = "no username"
 
+    const val PRIVACY_POLICY = "http://www.crushtech.unaux.com/privacypolicy/?i=1"
 
     fun setupDecorator(
         c: Canvas, recyclerView: RecyclerView,
@@ -46,6 +47,7 @@ object Constants {
             .addSwipeRightBackgroundColor(Color.GREEN)
             .create()
             .decorate()
+
     }
 }
 

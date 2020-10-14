@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.course_list_layout.*
 import java.util.*
 import javax.inject.Inject
 
+
 const val ADD_COURSE_DIALOG = "add course dialog"
 
 @AndroidEntryPoint
@@ -38,6 +40,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
     private var currentSemester: Semester? = null
 
     private lateinit var courseAdapter: CourseAdapter
+
 
     @Inject
     lateinit var sharedPrefs: SharedPreferences
@@ -86,6 +89,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         layoutManager = LinearLayoutManager(requireContext())
         ItemTouchHelper(itemTouchHelperCallback)
             .attachToRecyclerView(this)
+
     }
 
     private fun subscribeToObservers() {
@@ -96,7 +100,10 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                     Status.SUCCESS -> {
                         val semester = result.data!!
                         currentSemester = semester
-                       viewModel.insertCourses(semester.courses, semester.id)
+                        if (currentSemester?.courses.isNullOrEmpty()) {
+                            viewModel.insertCourses(semester.courses, semester.id)
+                        }
+
                     }
                     Status.ERROR -> {
                         showSnackbar(
@@ -122,6 +129,11 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                                 no_course.visibility = View.VISIBLE
                             } else {
                                 no_course.visibility = View.GONE
+                            }
+                            if (no_course.isVisible) {
+                                swipeText.visibility = View.GONE
+                            } else {
+                                swipeText.visibility = View.VISIBLE
                             }
                         }
 
@@ -194,7 +206,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             viewHolder: RecyclerView.ViewHolder,
             target: RecyclerView.ViewHolder
         ): Boolean {
-            return false
+            return true
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -211,6 +223,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                 }
                 show()
             }
+
         }
 
         override fun onChildDraw(
@@ -226,11 +239,12 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                 c, recyclerView, viewHolder, dX,
                 dY, actionState, isCurrentlyActive
             )
+
             super.onChildDraw(
                 c,
                 recyclerView,
                 viewHolder,
-                dX / 4,
+                dX,
                 dY,
                 actionState,
                 isCurrentlyActive
@@ -239,6 +253,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         }
 
     }
+
 
     override fun onPause() {
         saveSemester()

@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#E8E4FD</color>
     <color name="colorAccent">#00C853</color>
     <color name="itemColor">#E8E4FD</color>
-    <color name="background">#FFFFFF</color>
+    <color name="background">#FBFBFB</color>
     <color name="textColors">#000000</color>
     <color name="progress_color">#64DD17</color>
     <color name="low_gpa">#DD2C00</color>

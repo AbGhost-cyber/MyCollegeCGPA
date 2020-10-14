@@ -18,7 +18,8 @@
         android:label="OthersFragment">
         <action
             android:id="@+id/action_othersFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
