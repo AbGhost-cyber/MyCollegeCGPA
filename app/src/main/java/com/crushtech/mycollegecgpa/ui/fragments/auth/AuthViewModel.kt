@@ -70,7 +70,7 @@ class AuthViewModel @ViewModelInject constructor(
 
 
     fun login(email: String, password: String) {
-        //emit loading state, notify the observers that we are starting the register function
+        //emit loading state, notify the observers that we are starting the login function
         _loginStatus.postValue(Resource.loading(null))
         if (email.isEmpty() || password.isEmpty()) {
             _loginStatus.postValue(

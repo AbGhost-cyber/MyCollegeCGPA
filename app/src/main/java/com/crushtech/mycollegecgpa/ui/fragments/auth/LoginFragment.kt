@@ -73,6 +73,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
+                        progressBg.visibility = View.GONE
                         result.data?.let {
                             this.currentUserName = it
                         }
@@ -102,6 +103,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         redirectLogin()
                     }
                     Status.ERROR -> {
+                        progressBg.visibility = View.GONE
                         logInProgressImage.visibility = View.GONE
                         LoginProgressBar.visibility = View.GONE
                         showSnackbar(
@@ -113,7 +115,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                     Status.LOADING -> {
                         logInProgressImage.visibility = View.VISIBLE
                         LoginProgressBar.visibility = View.VISIBLE
-                        LoginBtn.isEnabled = false
+                        progressBg.visibility = View.VISIBLE
                     }
                 }
             }
@@ -130,7 +132,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             .setPopUpTo(R.id.signUpFragment, true)
             .build()
         findNavController().navigate(
-            // SignUpFragmentDirections.actionSignUpFragmentToHomeFragment(),
             LoginFragmentDirections.actionLoginFragmentToHomeFragment(),
             navOptions
         )

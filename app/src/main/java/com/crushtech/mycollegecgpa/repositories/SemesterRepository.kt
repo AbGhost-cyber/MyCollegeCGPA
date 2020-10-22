@@ -72,6 +72,7 @@ class SemesterRepository @Inject constructor(
         }
 
         if (response != null && response.isSuccessful) {
+            //insert to our server
             semesterDao.insertSemester(semester.apply { isSynced = true })
         } else {
             // if response is null then insert note into

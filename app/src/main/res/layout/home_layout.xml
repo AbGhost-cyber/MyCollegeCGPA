@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
 
+    <LinearLayout
+        android:id="@+id/addOwnerprogressBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_trans"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -169,9 +182,23 @@
         android:id="@+id/addOwnerProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:elevation="10dp"
+        android:theme="@style/AppTheme.WhiteAccent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/addOwnerProgressImage"
+        app:layout_constraintLeft_toLeftOf="@id/addOwnerProgressImage"
+        app:layout_constraintRight_toRightOf="@id/addOwnerProgressImage"
+        app:layout_constraintTop_toTopOf="@id/addOwnerProgressImage" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/addOwnerProgressImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@color/colorPrimary"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintVertical_bias="0.52" />
 </androidx.constraintlayout.widget.ConstraintLayout>

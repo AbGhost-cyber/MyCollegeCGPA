@@ -78,6 +78,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
+                        SignUpprogressBg.visibility = View.GONE
                         progressImage.visibility = View.GONE
                         signUpprogressBar.visibility = View.GONE
                         showSnackbar(
@@ -104,6 +105,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                         redirectLogin()
                     }
                     Status.ERROR -> {
+                        SignUpprogressBg.visibility = View.GONE
                         progressImage.visibility = View.GONE
                         signUpprogressBar.visibility = View.GONE
                         showSnackbar(
@@ -113,6 +115,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                         editTextReEnterPassword.text?.clear()
                     }
                     Status.LOADING -> {
+                        SignUpprogressBg.visibility = View.VISIBLE
                         progressImage.visibility = View.VISIBLE
                         signUpprogressBar.visibility = View.VISIBLE
                     }

@@ -15,6 +15,7 @@ data class Courses(
     @PrimaryKey(autoGenerate = false)
     val id: String = UUID.randomUUID().toString()
 ) : Serializable {
+
     fun getQualityPoints(): Float {
         return creditHours * getGradePoints()
     }
@@ -33,16 +34,3 @@ data class Courses(
         }
     }
 }
-
-
-////POJO
-//data class SemesterWithCourses(
-//    @Embedded
-//    val semester: Semester,
-//    @Relation(parentColumn = "sId",
-//        entityColumn = "semesterId",
-//        entity = Courses::class
-//    )
-//    val courses:ArrayList<Courses>
-//
-//)

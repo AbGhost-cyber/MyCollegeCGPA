@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
+import com.crushtech.mycollegecgpa.adapters.BestSemesterAdapter
 import com.crushtech.mycollegecgpa.adapters.SemesterAdapter
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.dialogs.AddOwnerDialogFragment
@@ -34,10 +35,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.home_layout.*
-import ua.naiksoftware.tooltips.TooltipOverlayParams
-import ua.naiksoftware.tooltips.TooltipOverlayPopup
-import ua.naiksoftware.tooltips.TooltipPosition
-import ua.naiksoftware.tooltips.TooltipView
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -51,7 +48,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     lateinit var sharedPrefs: SharedPreferences
 
     private lateinit var semesterAdapter: SemesterAdapter
-    private lateinit var bestSemesterAdapter: SemesterAdapter
+    private lateinit var bestSemesterAdapter: BestSemesterAdapter
 
     private val homeViewModel: HomeViewModel by viewModels()
 
@@ -156,7 +153,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     }
 
     private fun setUpBestSemesterRecyclerView() = rvBestSemester.apply {
-        bestSemesterAdapter = SemesterAdapter()
+        bestSemesterAdapter = BestSemesterAdapter()
         adapter = bestSemesterAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
@@ -214,18 +211,24 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             event?.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
+                        addOwnerProgressImage.visibility = GONE
+                        addOwnerprogressBg.visibility = GONE
                         addOwnerProgressBar.visibility = GONE
                         showSnackbar(
                             result.message ?: "Successfully shared semester"
                         )
                     }
                     Status.ERROR -> {
+                        addOwnerProgressImage.visibility = GONE
+                        addOwnerprogressBg.visibility = GONE
                         addOwnerProgressBar.visibility = GONE
                         showSnackbar(
                             result.message ?: "An unknown error occurred"
                         )
                     }
                     Status.LOADING -> {
+                        addOwnerProgressImage.visibility = VISIBLE
+                        addOwnerprogressBg.visibility = VISIBLE
                         addOwnerProgressBar.visibility = VISIBLE
                     }
                 }

@@ -8,6 +8,7 @@
     <color name="textColors">#000000</color>
     <color name="progress_color">#64DD17</color>
     <color name="low_gpa">#DD2C00</color>
+    <color name="black_trans">#80000000</color>
 
 
 </resources>

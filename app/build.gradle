@@ -99,9 +99,6 @@ dependencies {
     // Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
-    // Color Picker Dialog
-    implementation "com.github.skydoves:colorpickerview:2.1.7"
-
     //circular progressbar
     implementation 'com.mikhaellopez:circularprogressbar:3.0.3'
 
@@ -111,5 +108,10 @@ dependencies {
     // swipe decoration
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.2'
 
+    // Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }

@@ -20,7 +20,6 @@ inline fun <ResultType, RequestType> networkBoundResource(
      *    handles errors occurring while getting up-to date data
      *   @param shouldFetch
      *        determines if we load data from the api or from the local cache
-     *  @author "Dremo.dev"
      */
 
 ) = flow {
