@@ -6,19 +6,20 @@ import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.repositories.SemesterRepository
 import com.crushtech.mycollegecgpa.utils.Events
 import com.crushtech.mycollegecgpa.utils.Resource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
- class HomeViewModel @ViewModelInject constructor(
-     private val semesterRepository: SemesterRepository
- ) : ViewModel() {
+class HomeViewModel @ViewModelInject constructor(
+    private val semesterRepository: SemesterRepository
+) : ViewModel() {
 
-     private val _forceUpdate = MutableLiveData(false)
+    private val _forceUpdate = MutableLiveData(false)
 
-     private val _addOwnerStatus = MutableLiveData<Events<Resource<String>>>()
-     val addOwnerStatus: LiveData<Events<Resource<String>>> = _addOwnerStatus
+    private val _addOwnerStatus = MutableLiveData<Events<Resource<String>>>()
+    val addOwnerStatus: LiveData<Events<Resource<String>>> = _addOwnerStatus
 
 
-     private val _allSemesters = _forceUpdate.switchMap {
+    private val _allSemesters = _forceUpdate.switchMap {
          semesterRepository.getAllSemesters()
              .asLiveData(viewModelScope.coroutineContext)
      }.switchMap {
@@ -56,6 +57,7 @@ import kotlinx.coroutines.launch
              return
          }
          viewModelScope.launch {
+             delay(3000L)
              val result = semesterRepository.addOwnerToSemester(owner, semesterId)
 
              _addOwnerStatus.postValue(Events(result))

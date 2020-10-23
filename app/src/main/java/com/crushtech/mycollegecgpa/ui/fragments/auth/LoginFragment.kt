@@ -4,7 +4,9 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -21,6 +23,7 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
 import com.crushtech.mycollegecgpa.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.login_layout.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,8 +43,14 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
     private var currentUserName: String? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).hideMainActivityUI()
-        (activity as MainActivity).hideAppBar()
+        (activity as MainActivity).apply {
+            hideMainActivityUI()
+            hideAppBar()
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
         createAnimationsForUIWidgets()
         if (isLoggedIn()) {
             authenticateApi(
@@ -69,6 +78,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
     }
 
     private fun subscribeToObservers() {
+        val progressBg: LinearLayout = (activity as MainActivity).progressBg
         viewModel.loginStatus.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 when (result.status) {
@@ -162,5 +172,13 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         customImage4.startAnimation(animation1)
         customImage3.startAnimation(animation1)
         LoginBtn.startAnimation(animation1)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        (activity as MainActivity)
+            .window.clearFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
     }
 }

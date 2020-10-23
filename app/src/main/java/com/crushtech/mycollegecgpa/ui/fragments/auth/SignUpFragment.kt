@@ -4,7 +4,9 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
+import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -21,6 +23,7 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
 import com.crushtech.mycollegecgpa.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.signup_layout.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,11 +43,18 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     private var currentUserName: String? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).hideMainActivityUI()
-        (activity as MainActivity).hideAppBar()
+        (activity as MainActivity).apply {
+            hideMainActivityUI()
+            hideAppBar()
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
         createAnimationsForUIWidgets()
         //set screen orientation to portrait
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         if (isLoggedIn()) {
             authenticateApi(
                 currentEmail ?: "",
@@ -74,11 +84,12 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     }
 
     private fun subscribeToObservers() {
+        val progressBg: LinearLayout = (activity as MainActivity).progressBg
         viewModel.registerStatus.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
-                        SignUpprogressBg.visibility = View.GONE
+                        progressBg.visibility = View.GONE
                         progressImage.visibility = View.GONE
                         signUpprogressBar.visibility = View.GONE
                         showSnackbar(
@@ -105,7 +116,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                         redirectLogin()
                     }
                     Status.ERROR -> {
-                        SignUpprogressBg.visibility = View.GONE
+                        progressBg.visibility = View.GONE
                         progressImage.visibility = View.GONE
                         signUpprogressBar.visibility = View.GONE
                         showSnackbar(
@@ -115,7 +126,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                         editTextReEnterPassword.text?.clear()
                     }
                     Status.LOADING -> {
-                        SignUpprogressBg.visibility = View.VISIBLE
+                        progressBg.visibility = View.VISIBLE
                         progressImage.visibility = View.VISIBLE
                         signUpprogressBar.visibility = View.VISIBLE
                     }
@@ -165,5 +176,13 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
         customImage1.startAnimation(animation1)
         customImage2.startAnimation(animation1)
         signUpBtn.startAnimation(animation1)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        (activity as MainActivity)
+            .window.clearFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
     }
 }

@@ -8,6 +8,19 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/progressBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_trans"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:id="@+id/flFragment"
         android:layout_width="match_parent"

@@ -99,10 +99,10 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                 when (result.status) {
                     Status.SUCCESS -> {
                         val semester = result.data!!
-                        currentSemester = semester
                         if (currentSemester?.courses.isNullOrEmpty()) {
                             viewModel.insertCourses(semester.courses, semester.id)
                         }
+                        currentSemester = semester
 
                     }
                     Status.ERROR -> {

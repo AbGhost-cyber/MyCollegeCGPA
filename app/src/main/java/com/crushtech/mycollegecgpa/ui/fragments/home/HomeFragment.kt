@@ -1,12 +1,15 @@
 package com.crushtech.mycollegecgpa.ui.fragments.home
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.View
 import android.view.View.*
+import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -208,11 +211,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         })
 
         homeViewModel.addOwnerStatus.observe(viewLifecycleOwner, Observer { event ->
+            val progressBg: LinearLayout = (activity as MainActivity).progressBg
             event?.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
                         addOwnerProgressImage.visibility = GONE
-                        addOwnerprogressBg.visibility = GONE
+                        progressBg.visibility = GONE
                         addOwnerProgressBar.visibility = GONE
                         showSnackbar(
                             result.message ?: "Successfully shared semester"
@@ -220,7 +224,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     }
                     Status.ERROR -> {
                         addOwnerProgressImage.visibility = GONE
-                        addOwnerprogressBg.visibility = GONE
+                        progressBg.visibility = GONE
                         addOwnerProgressBar.visibility = GONE
                         showSnackbar(
                             result.message ?: "An unknown error occurred"
@@ -228,7 +232,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     }
                     Status.LOADING -> {
                         addOwnerProgressImage.visibility = VISIBLE
-                        addOwnerprogressBg.visibility = VISIBLE
+                        progressBg.visibility = VISIBLE
                         addOwnerProgressBar.visibility = VISIBLE
                     }
                 }
@@ -413,5 +417,13 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         val month = localDate.get(Calendar.DAY_OF_MONTH)
         val formatter = SimpleDateFormat(datePattern(month), Locale.getDefault())
         return formatter.format(time)
+    }
+
+    override fun onAttach(context: Context) {
+        (activity as MainActivity)
+            .window.clearFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        super.onAttach(context)
     }
 }

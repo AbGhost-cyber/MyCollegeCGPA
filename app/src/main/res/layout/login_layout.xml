@@ -6,13 +6,12 @@
     android:background="@color/colorPrimaryDark">
 
     <LinearLayout
-        android:id="@+id/progressBg"
+        android:id="@+id/progressBg2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black_trans"
-        android:elevation="10dp"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +61,7 @@
         android:fontFamily="@font/averia_libre_bold"
         android:padding="10dp"
         android:text="@string/log_in"
-        android:textColor="@color/textColors"
+        android:textColor="@color/background"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -186,7 +185,7 @@
         android:elevation="30dp"
         android:fontFamily="@font/roboto_medium"
         android:text="don't have an account?"
-        android:textColor="@android:color/holo_red_dark"
+        android:textColor="@android:color/primary_text_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.634"
@@ -233,7 +232,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45" />
+        app:layout_constraintVertical_bias="0.55" />
 
     <ProgressBar
         android:id="@+id/LoginProgressBar"

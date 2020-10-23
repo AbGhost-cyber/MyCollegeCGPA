@@ -1,6 +1,11 @@
 package com.crushtech.mycollegecgpa.repositories
 
 import android.app.Application
+import android.content.SharedPreferences
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
+import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.local.SemesterDao
 import com.crushtech.mycollegecgpa.data.local.entities.Courses
 import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedCourseId
@@ -8,6 +13,8 @@ import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedSemesterId
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.data.remote.SemesterApi
 import com.crushtech.mycollegecgpa.data.remote.requests.*
+import com.crushtech.mycollegecgpa.ui.fragments.others.OthersFragmentDirections
+import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.NetworkUtils.getNetworkLiveData
 import com.crushtech.mycollegecgpa.utils.Resource
 import com.crushtech.mycollegecgpa.utils.networkBoundResource
@@ -20,7 +27,8 @@ import javax.inject.Inject
 class SemesterRepository @Inject constructor(
     private val semesterDao: SemesterDao,
     private val semesterApi: SemesterApi,
-    private val context: Application
+    private val context: Application,
+    private val sharedPreferences: SharedPreferences
 ) {
 
     suspend fun register(email: String, password: String, username: String) =
@@ -63,6 +71,29 @@ class SemesterRepository @Inject constructor(
             }
 
         }
+
+    fun logOutUser(fragment: Fragment) {
+        sharedPreferences.edit().putString(
+            Constants.KEY_LOGGED_IN_EMAIL,
+            Constants.NO_EMAIL
+        )
+            .apply()
+        sharedPreferences.edit().putString(
+            Constants.KEY_PASSWORD,
+            Constants.NO_PASSWORD
+        ).apply()
+        sharedPreferences.edit().putString(
+            Constants.KEY_USERNAME,
+            Constants.NO_USERNAME
+        ).apply()
+        val navOptions = NavOptions.Builder()
+            .setPopUpTo(R.id.homeFragment, true)
+            .build()
+        fragment.findNavController().navigate(
+            OthersFragmentDirections.actionOthersFragmentToLoginFragment(),
+            navOptions
+        )
+    }
 
     suspend fun insertSemester(semester: Semester) {
         val response = try {

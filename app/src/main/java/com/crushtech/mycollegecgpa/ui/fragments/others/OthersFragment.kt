@@ -8,13 +8,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.TextView
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.viewModels
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.dialogs.LogoutDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
-import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.others_layout.*
@@ -27,6 +25,7 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
+    private val othersViewModel: OthersViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideAppBar()
@@ -39,7 +38,7 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
                     as LogoutDialogFragment?
             logOutDialog?.setPositiveListener { clicked ->
                 if (clicked) {
-                    setupLogOutFunctionality()
+                    othersViewModel.logOutCurrentUser(this)
                 }
             }
         }
@@ -94,34 +93,12 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
         LogoutDialogFragment().apply {
             setPositiveListener { clicked ->
                 if (clicked) {
-                    setupLogOutFunctionality()
+                    othersViewModel.logOutCurrentUser(this)
                 }
             }
         }.show(parentFragmentManager, LOG_OUT_DIALOG)
     }
 
-    private fun setupLogOutFunctionality() {
-        sharedPreferences.edit().putString(
-            Constants.KEY_LOGGED_IN_EMAIL,
-            Constants.NO_EMAIL
-        )
-            .apply()
-        sharedPreferences.edit().putString(
-            Constants.KEY_PASSWORD,
-            Constants.NO_PASSWORD
-        ).apply()
-        sharedPreferences.edit().putString(
-            Constants.KEY_USERNAME,
-            Constants.NO_USERNAME
-        ).apply()
-        val navOptions = NavOptions.Builder()
-            .setPopUpTo(R.id.homeFragment, true)
-            .build()
-        findNavController().navigate(
-            OthersFragmentDirections.actionOthersFragmentToLoginFragment(),
-            navOptions
-        )
-    }
 
     private fun setClickAnimationForTexts(textLists: List<TextView>) {
         val animation = AnimationUtils.loadAnimation(

@@ -4,15 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark">
-
     <LinearLayout
-        android:id="@+id/SignUpprogressBg"
+        android:id="@+id/progressBg2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black_trans"
-        android:elevation="10dp"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,14 +60,14 @@
         android:fontFamily="@font/averia_libre_bold"
         android:padding="10dp"
         android:text="@string/sign_up"
-        android:textColor="@color/textColors"
+        android:textColor="@color/background"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13999999" />
+        app:layout_constraintVertical_bias="0.13" />
 
     <LinearLayout
         android:id="@+id/lin"
@@ -92,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/TvEmail"
@@ -124,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/TvUsername"
@@ -157,7 +155,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/TvPassword"
@@ -189,7 +187,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
             android:orientation="vertical"
-            android:padding="10dp">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/TvReEnterPassword"
@@ -268,7 +266,7 @@
         android:elevation="30dp"
         android:fontFamily="@font/roboto_medium"
         android:text="@string/log_in"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"

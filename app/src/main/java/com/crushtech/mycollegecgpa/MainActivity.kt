@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp()
     }
 
-    fun handleNetworkChanges(errorMessage: String, successMessage: String) {
+    private fun handleNetworkChanges(errorMessage: String, successMessage: String) {
         NetworkUtils.getNetworkLiveData(applicationContext).observe(this, Observer {
             it?.let { event ->
                 val isConnected = event.peekContent()
