@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.fragment.app.viewModels
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
+import com.crushtech.mycollegecgpa.dialogs.AboutAppDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.LogoutDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.others_layout.*
 import javax.inject.Inject
 
 const val LOG_OUT_DIALOG = "log out dialog"
+const val ABOUT_APP_DIALOG = "About app dialog"
 
 @AndroidEntryPoint
 class OthersFragment : BaseFragment(R.layout.others_layout) {
@@ -106,15 +108,17 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
         )
         textLists.forEachIndexed { index, textView ->
             textView.setOnClickListener {
-                when (index) {
-                    0 -> showLogOutDialog()
-                    1 -> shareAppFunction()
-                    2 -> showSnackbar("amc")
-                    3 -> rateAppFunction()
-                    4 -> {
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse(PRIVACY_POLICY)
-                        startActivity(intent)
+                if (animation.hasEnded()) {
+                    when (index) {
+                        0 -> showLogOutDialog()
+                        1 -> shareAppFunction()
+                        2 -> AboutAppDialogFragment().show(parentFragmentManager, ABOUT_APP_DIALOG)
+                        3 -> rateAppFunction()
+                        4 -> {
+                            val intent = Intent(Intent.ACTION_VIEW)
+                            intent.data = Uri.parse(PRIVACY_POLICY)
+                            startActivity(intent)
+                        }
                     }
                 }
                 textView.startAnimation(animation)
