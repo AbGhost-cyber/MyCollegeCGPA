@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/semester_nav_graph"
     app:startDestination="@id/signUpFragment">
 
     <fragment
         android:id="@+id/homeFragment"
+        tools:layout="@layout/home_layout"
         android:name="com.crushtech.mycollegecgpa.ui.fragments.home.HomeFragment"
         android:label="HomeFragment">
         <action
             android:id="@+id/action_homeFragment_to_courseListFragment"
             app:destination="@id/courseListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_statisticsFragment"
+            app:destination="@id/statisticsFragment" />
     </fragment>
     <fragment
         android:id="@+id/othersFragment"
+        tools:layout="@layout/others_layout"
         android:name="com.crushtech.mycollegecgpa.ui.fragments.others.OthersFragment"
         android:label="OthersFragment">
         <action
@@ -23,6 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
+        tools:layout="@layout/login_layout"
         android:name="com.crushtech.mycollegecgpa.ui.fragments.auth.LoginFragment"
         android:label="LoginFragment">
         <action
@@ -34,6 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
+        tools:layout="@layout/signup_layout"
         android:name="com.crushtech.mycollegecgpa.ui.fragments.auth.SignUpFragment"
         android:label="SignUpFragment">
         <action
@@ -45,6 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/courseListFragment"
+        tools:layout="@layout/course_list_layout"
         android:name="com.crushtech.mycollegecgpa.ui.fragments.course.CourseListFragment"
         android:label="CourseListFragment">
         <argument
@@ -54,5 +63,10 @@
             android:name="semesterName"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.crushtech.mycollegecgpa.ui.fragments.StatisticsFragment"
+        android:label="My Statistics"
+        tools:layout="@layout/statistics_fragment" />
 
 </navigation>

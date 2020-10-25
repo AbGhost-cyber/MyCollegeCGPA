@@ -7,7 +7,6 @@
         android:icon="@drawable/customize_gp"
         android:title="@string/semesters" />
     <item android:id="@+id/no_op" />
-
     <item
         android:id="@+id/othersFragment"
         android:icon="@drawable/others_ic"

@@ -83,7 +83,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/semesterSearch"
-                    app:layout_constraintVertical_bias="0.060000002"
+                    app:layout_constraintVertical_bias="0.0"
                     app:textAllCaps="true" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -100,7 +100,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/allSemesterText"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:fontFamily="@font/averia_libre_bold"
@@ -115,6 +115,25 @@
                     app:layout_constraintTop_toBottomOf="@+id/rvBestSemester"
                     app:layout_constraintVertical_bias="0.00999999"
                     app:textAllCaps="true" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/viewPerformance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
+                    android:fontFamily="@font/averia_libre_bold"
+                    android:padding="16dp"
+                    android:text="view statistics"
+                    android:textColor="@color/textColors"
+                    android:textSize="19sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/allSemesterText"
+                    app:layout_constraintTop_toBottomOf="@+id/rvBestSemester"
+                    app:layout_constraintVertical_bias="0.00999999"
+                    app:textAllCaps="false" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvAllSemester"
@@ -142,7 +161,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/rvBestSemester"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/rvBestSemester" />
+                    app:layout_constraintTop_toBottomOf="@+id/bestSemester" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

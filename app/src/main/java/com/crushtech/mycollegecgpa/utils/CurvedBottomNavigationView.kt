@@ -1,4 +1,4 @@
-package com.crushtech.mycollegecgpa.ui
+package com.crushtech.mycollegecgpa.utils
 
 import android.content.Context
 import android.graphics.*

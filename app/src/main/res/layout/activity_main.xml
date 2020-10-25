@@ -41,7 +41,7 @@
 
     </FrameLayout>
 
-    <com.crushtech.mycollegecgpa.ui.CurvedBottomNavigationView
+    <com.crushtech.mycollegecgpa.utils.CurvedBottomNavigationView
         android:id="@+id/customBottomBar"
         android:layout_width="match_parent"
         android:layout_height="62dp"

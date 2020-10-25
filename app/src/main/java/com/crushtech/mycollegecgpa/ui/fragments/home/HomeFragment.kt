@@ -92,6 +92,11 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             }
 
         }
+        viewPerformance.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_homeFragment_to_statisticsFragment
+            )
+        }
         setupRecyclerView()
         setUpBestSemesterRecyclerView()
         setupSwipeRefreshLayout()
@@ -303,11 +308,13 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             bestSemesterText2.visibility = INVISIBLE
             no_semester_txt.visibility = VISIBLE
             allSemesterText.visibility = INVISIBLE
+            viewPerformance.visibility = INVISIBLE
             rvBestSemester.visibility = INVISIBLE
         } else {
             no_semester_txt.visibility = INVISIBLE
             allSemesterText.visibility = VISIBLE
             bestSemester.visibility = VISIBLE
+            viewPerformance.visibility = VISIBLE
 
             val allItemsHasNoCourses = semesterList.all {
                 it.courses.isNullOrEmpty()

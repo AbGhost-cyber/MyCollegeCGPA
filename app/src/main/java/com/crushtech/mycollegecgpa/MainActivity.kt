@@ -43,10 +43,12 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(gradesNavHostFragment.findNavController(), appBarConfig)
 
-        handleNetworkChanges(
-            getString(R.string.no_connection),
-            getString(R.string.network_available)
-        )
+        if (savedInstanceState == null) {
+            handleNetworkChanges(
+                getString(R.string.no_connection),
+                getString(R.string.network_available)
+            )
+        }
     }
 
     fun hideAppBar() {
