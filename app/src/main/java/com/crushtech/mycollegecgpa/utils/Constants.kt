@@ -1,5 +1,6 @@
 package com.crushtech.mycollegecgpa.utils
 
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +23,9 @@ object Constants {
     const val NO_EMAIL = "no email"
     const val NO_PASSWORD = "no password"
     const val NO_USERNAME = "no username"
+    const val TOTAL_NUMBER_OF_CREDIT_HOURS = "totalNumberOfCreditHours"
+    const val TOTAL_NUMBER_OF_COURSES = "totalNumberOfCourses"
+    const val STATISTICS_FIRST_TIME_OPEN = "first time open"
 
     const val PRIVACY_POLICY = "http://www.crushtech.unaux.com/privacypolicy/?i=1"
 
@@ -48,6 +52,13 @@ object Constants {
             .create()
             .decorate()
 
+    }
+
+    fun getCurrentUserName(sharedPrefs: SharedPreferences): String {
+        return sharedPrefs.getString(
+            KEY_USERNAME,
+            NO_USERNAME
+        ) ?: NO_USERNAME
     }
 }
 

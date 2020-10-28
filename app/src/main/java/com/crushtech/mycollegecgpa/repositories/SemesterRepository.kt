@@ -14,7 +14,15 @@ import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.data.remote.SemesterApi
 import com.crushtech.mycollegecgpa.data.remote.requests.*
 import com.crushtech.mycollegecgpa.ui.fragments.others.OthersFragmentDirections
-import com.crushtech.mycollegecgpa.utils.Constants
+import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
+import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
+import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
+import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
+import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
+import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
+import com.crushtech.mycollegecgpa.utils.Constants.STATISTICS_FIRST_TIME_OPEN
+import com.crushtech.mycollegecgpa.utils.Constants.TOTAL_NUMBER_OF_COURSES
+import com.crushtech.mycollegecgpa.utils.Constants.TOTAL_NUMBER_OF_CREDIT_HOURS
 import com.crushtech.mycollegecgpa.utils.NetworkUtils.getNetworkLiveData
 import com.crushtech.mycollegecgpa.utils.Resource
 import com.crushtech.mycollegecgpa.utils.networkBoundResource
@@ -74,18 +82,27 @@ class SemesterRepository @Inject constructor(
 
     fun logOutUser(fragment: Fragment) {
         sharedPreferences.edit().putString(
-            Constants.KEY_LOGGED_IN_EMAIL,
-            Constants.NO_EMAIL
-        )
-            .apply()
-        sharedPreferences.edit().putString(
-            Constants.KEY_PASSWORD,
-            Constants.NO_PASSWORD
+            KEY_LOGGED_IN_EMAIL,
+            NO_EMAIL
         ).apply()
         sharedPreferences.edit().putString(
-            Constants.KEY_USERNAME,
-            Constants.NO_USERNAME
+            KEY_PASSWORD,
+            NO_PASSWORD
         ).apply()
+        sharedPreferences.edit().putString(
+            KEY_USERNAME,
+            NO_USERNAME
+        ).apply()
+        sharedPreferences.edit().remove(
+            TOTAL_NUMBER_OF_COURSES
+        ).apply()
+        sharedPreferences.edit().remove(
+            TOTAL_NUMBER_OF_CREDIT_HOURS
+        ).apply()
+        sharedPreferences.edit().remove(
+            STATISTICS_FIRST_TIME_OPEN
+        ).apply()
+
         val navOptions = NavOptions.Builder()
             .setPopUpTo(R.id.homeFragment, true)
             .build()
@@ -116,7 +133,7 @@ class SemesterRepository @Inject constructor(
         }
     }
 
-   fun observeSemesterById(semesterId: String) = semesterDao.observeSemesterById(semesterId)
+    fun observeSemesterById(semesterId: String) = semesterDao.observeSemesterById(semesterId)
 
     suspend fun insertCourseForSemester(courses: Courses, semesterId: String) {
         val response = try {

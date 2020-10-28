@@ -67,6 +67,18 @@
         android:id="@+id/statisticsFragment"
         android:name="com.crushtech.mycollegecgpa.ui.fragments.StatisticsFragment"
         android:label="My Statistics"
-        tools:layout="@layout/statistics_fragment" />
+        tools:layout="@layout/statistics_fragment">
+        <action
+            android:id="@+id/action_statisticsFragment_to_pdfFragment"
+            app:destination="@id/pdfFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/pdfFragment"
+        android:name="com.crushtech.mycollegecgpa.ui.fragments.PdfFragment"
+        android:label="PdfFragment">
+        <argument
+            android:name="fileString"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

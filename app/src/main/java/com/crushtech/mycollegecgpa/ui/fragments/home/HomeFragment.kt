@@ -28,10 +28,9 @@ import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.dialogs.AddOwnerDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.AddSemesterDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
-import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
-import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
+import com.crushtech.mycollegecgpa.utils.Constants.getCurrentUserName
 import com.crushtech.mycollegecgpa.utils.Constants.setupDecorator
 import com.crushtech.mycollegecgpa.utils.Status
 import com.google.android.material.snackbar.Snackbar
@@ -64,7 +63,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         (activity as MainActivity).hideAppBar()
         (activity as MainActivity).showMainActivityUI()
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        val username = "Hello, ${getCurrentUserName()}"
+        val username = "Hello, ${getCurrentUserName(sharedPrefs)}"
         userName.text = username
         currentDate.text = getFormattedDate()
 
@@ -295,12 +294,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         }
     }
 
-    private fun getCurrentUserName(): String {
-        return sharedPrefs.getString(
-            KEY_USERNAME,
-            Constants.NO_USERNAME
-        ) ?: Constants.NO_USERNAME
-    }
 
     private fun checkForEmptyState(semesterList: List<Semester>) {
         if (semesterList.isNullOrEmpty()) {

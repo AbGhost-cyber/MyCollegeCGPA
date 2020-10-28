@@ -43,7 +43,6 @@ class AddSemesterDialogFragment : DialogFragment() {
                     yes(semesterName)
 
                 }
-
             }
             .setNegativeButton("Cancel") { dialogInterface, _ ->
                 dialogInterface.cancel()

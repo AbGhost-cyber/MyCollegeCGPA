@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/stats_parent"
     android:background="@color/colorPrimaryDark">
 
     <LinearLayout
@@ -73,6 +74,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tvCreditHour"
                     app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/creditHoursChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/averia_libre_bold"
+                    android:text="0"
+                    android:textColor="@color/progress_color"
+                    app:drawableStartCompat="@drawable/ic_baseline_arrow_drop_up_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCHours"
+                    app:layout_constraintVertical_bias="0.13999999" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -132,6 +147,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/coursesOfferedTv"
                     app:layout_constraintVertical_bias="0.0" />
+
+                <TextView
+                    android:id="@+id/courseChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/averia_libre_bold"
+                    android:text="0"
+                    android:textColor="@android:color/holo_red_dark"
+                    app:drawableStartCompat="@drawable/ic_round_arrow_drop_down_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/totalCoursesOffered"
+                    app:layout_constraintVertical_bias="0.07999998" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
@@ -175,7 +204,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/materialButton2"
+            android:id="@+id/saveAsPdf"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/averia_libre_bold"
@@ -188,6 +217,66 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/barChart"
             app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/viewPdf"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/textColors"
+            android:fontFamily="@font/averia_libre_bold"
+            android:text="view pdf 3"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:cornerRadius="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/saveAsPdf"
+            app:layout_constraintTop_toBottomOf="@+id/barChart"
+            app:layout_constraintVertical_bias="0.086" />
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/averia_libre_bold"
+            android:text="For Dremo"
+            android:textColor="@color/textColors"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.969"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/barChart"
+            app:layout_constraintVertical_bias="0.408" />
+
+        <TextView
+            android:id="@+id/sponsored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/averia_libre_bold"
+            android:text="Sponsored by MyCollege CGPA"
+            android:textColor="@color/colorPrimary"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/barChart"
+            app:layout_constraintVertical_bias="0.408" />
+
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/pdf_pb"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:elevation="30dp"
+            android:visibility="invisible"
+            app:cpb_background_progressbar_color="@color/textColors"
+            app:cpb_progressbar_color="@color/background"
+            app:cpb_progressbar_color_direction="right_to_left"
+            app:layout_constraintBottom_toBottomOf="@+id/barChart"
+            app:layout_constraintEnd_toEndOf="@+id/barChart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/barChart"
+            app:layout_constraintVertical_bias="0.85" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
