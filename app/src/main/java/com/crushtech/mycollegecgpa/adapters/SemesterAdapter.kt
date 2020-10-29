@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.semester_items.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SemesterAdapter : Adapter<SemesterViewHolder>(), Filterable {
+class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolder>(), Filterable {
     private var filteredList = ArrayList<Semester>()
     lateinit var actualList: List<Semester>
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SemesterViewHolder {
@@ -38,6 +38,13 @@ class SemesterAdapter : Adapter<SemesterViewHolder>(), Filterable {
         val semesters = differ.currentList[position]
 
         holder.itemView.apply {
+            if (!semesters.owners.isNullOrEmpty()) {
+                if (semesters.owners[0] == authEmail || semesters.owners == listOf(authEmail)) {
+                    itemNotOwned.visibility = View.GONE
+                } else {
+                    itemNotOwned.visibility = View.VISIBLE
+                }
+            }
             semesterName.text = semesters.semesterName
             if (semesters.courses.isNullOrEmpty()) {
                 coursesNames.text = context.getString(R.string.empty_list)

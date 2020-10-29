@@ -27,6 +27,7 @@ import com.crushtech.mycollegecgpa.adapters.SemesterAdapter
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.dialogs.AddOwnerDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.AddSemesterDialogFragment
+import com.crushtech.mycollegecgpa.dialogs.ItemNotOwnedDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
@@ -43,6 +44,7 @@ import javax.inject.Inject
 
 const val ADD_SEMESTER_DIALOG = "add semester dialog"
 const val ADD_OWNER_DIALOG = "add owner dialog"
+const val NOT_OWNER_DIALOG = "not owner dialog"
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(R.layout.home_layout) {
@@ -58,6 +60,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
     private var currentSemester: Semester? = null
 
+    private var authEmail: String? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).hideAppBar()
@@ -66,6 +69,11 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         val username = "Hello, ${getCurrentUserName(sharedPrefs)}"
         userName.text = username
         currentDate.text = getFormattedDate()
+
+        authEmail = sharedPrefs.getString(
+            KEY_LOGGED_IN_EMAIL,
+            NO_EMAIL
+        ) ?: NO_EMAIL
 
         if (savedInstanceState != null) {
             val addSemesterDialog = parentFragmentManager.findFragmentByTag(ADD_SEMESTER_DIALOG)
@@ -130,10 +138,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
 
         semesterAdapter.setOnItemClickListener { semester ->
-            val authEmail = sharedPrefs.getString(
-                KEY_LOGGED_IN_EMAIL,
-                NO_EMAIL
-            ) ?: NO_EMAIL
             //check if semester belongs to the current user
             if (semester.owners[0] == authEmail || semester.owners == listOf(authEmail)) {
                 findNavController().navigate(
@@ -144,15 +148,22 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                         )
                 )
             } else {
-                showSnackbar(
-                    "view only, you have no right to edit"
-                )
+                ItemNotOwnedDialogFragment().apply {
+                    val bundle = Bundle()
+                    bundle.putString("owner", semester.owners[0])
+                    arguments = bundle
+                    setPositiveListener { deleteBtnClicked ->
+                        if (deleteBtnClicked) {
+                            homeViewModel.deleteSemester(semester.id)
+                        }
+                    }
+                }.show(parentFragmentManager, NOT_OWNER_DIALOG)
             }
         }
     }
 
     private fun setupRecyclerView() = rvAllSemester.apply {
-        semesterAdapter = SemesterAdapter()
+        semesterAdapter = SemesterAdapter(authEmail!!)
         adapter = semesterAdapter
         layoutManager = LinearLayoutManager(requireContext())
         ItemTouchHelper(itemTouchHelperCallback)

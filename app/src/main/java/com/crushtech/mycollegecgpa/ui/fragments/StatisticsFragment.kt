@@ -52,7 +52,6 @@ import javax.inject.Inject
 
 
 const val REQUEST_CODE = 1
-const val SHOW_PDF_DIALOG = "show pdf dialog"
 
 @AndroidEntryPoint
 class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
@@ -109,11 +108,11 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
             if (firsTimeOpen) {
                 sharedPrefs
                     .edit()
-                    .putInt(TOTAL_NUMBER_OF_COURSES, totalCC).apply()
+                    .putInt(TOTAL_NUMBER_OF_COURSES, it).apply()
             } else {
                 sharedPrefs
                     .edit()
-                    .putInt(TOTAL_NUMBER_OF_COURSES, it).apply()
+                    .putInt(TOTAL_NUMBER_OF_COURSES, totalCC).apply()
             }
 
 
@@ -337,7 +336,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
             pdf_pb.visibility = View.GONE
             (activity as MainActivity).progressBg.visibility = View.GONE
             if (pdfHasBeenCreated) {
-                showSnackbar("pdf created")
+                showSnackbar("PDF CREATED SUCCESSFULLY")
                 viewPdf.visibility = View.VISIBLE
 
                 viewPdf.setOnClickListener {

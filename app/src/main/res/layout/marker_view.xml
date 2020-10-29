@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="240dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/colorPrimaryDark"
+    android:layout_margin="10dp"
+    android:elevation="10dp"
+    app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="15dp">
 
     <LinearLayout
@@ -20,15 +22,17 @@
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/tvSemesterName"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/averia_libre_bold"
                 android:gravity="bottom"
+                android:maxLength="23"
+                android:text="First semrrrrrrrrrsterrrrrrrrrrrrrrrrrrrr"
+                android:textColor="@android:color/white"
                 android:hint="Semester name"
-                android:maxLength="22"
                 android:minLines="2"
-                android:text="First semrrrrrrrrrsterRRRRRRRRrr" />
+                android:textColorHint="@android:color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -40,14 +44,17 @@
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/tvThreeCourse"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/averia_libre_bold"
                 android:gravity="bottom"
+                android:maxLength="21"
+                android:text="math,english,comp"
+                android:textColor="@android:color/white"
                 android:hint="courses"
                 android:minLines="2"
-                android:text="math,english,comp sci" />
+                android:textColorHint="@android:color/white" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,13 +66,16 @@
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/tvTotalCreditHours"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/averia_libre_bold"
                 android:gravity="bottom"
+                android:maxLength="21"
+                android:textColor="@android:color/white"
                 android:hint="total credit hours"
                 android:minLines="2"
+                android:textColorHint="@android:color/white"
                 android:text="32" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -78,12 +88,15 @@
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/tvTotalCourses"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/averia_libre_bold"
+                android:maxLength="21"
+                android:textColor="@android:color/white"
                 android:gravity="bottom"
                 android:hint="total courses"
+                android:textColorHint="@android:color/white"
                 android:minLines="2"
                 android:text="4.00" />
 
@@ -97,11 +110,14 @@
 
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/tvGPA"
-                android:layout_width="match_parent"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/averia_libre_bold"
                 android:gravity="bottom"
+                android:maxLength="21"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:hint="Semester GPA"
                 android:minLines="2"
                 android:text="4.00" />

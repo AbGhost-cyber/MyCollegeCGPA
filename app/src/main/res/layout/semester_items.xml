@@ -7,10 +7,11 @@
     android:clickable="false">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cardCornerRadius="5dp"
         app:cardBackgroundColor="@android:color/white"
+        app:cardCornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,8 +26,8 @@
                 android:id="@+id/circularProgressBar"
                 android:layout_width="110dp"
                 android:layout_height="117dp"
-                android:layout_marginEnd="10dp"
                 android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
                 app:cpb_background_progressbar_color="@color/colorPrimary"
                 app:cpb_background_progressbar_width="10dp"
                 app:cpb_progress_direction="to_right"
@@ -48,7 +49,7 @@
                 android:fontFamily="@font/averia_libre_bold"
                 android:maxLines="2"
                 android:padding="5dp"
-                android:text="First Semesters"
+                android:text="First Semestersxxxxxxxxxxxxxxx"
                 android:textColor="@color/textColors"
                 android:textSize="21sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -56,17 +57,18 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.058" />
+                app:layout_constraintVertical_bias="0.054" />
 
             <TextView
                 android:id="@+id/coursesNames"
-                android:layout_width="280dp"
+                android:layout_width="260dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/semesterName"
                 android:fontFamily="@font/averia_libre"
                 android:maxLines="2"
-                android:padding="10dp"
-                android:text="Maths,Physics,Chemistry"
+                android:layout_marginBottom="5dp"
+                android:padding="5dp"
+                android:text="Maths,Physics,Chemistrykkkkkkkkkkkkkkkkkkk"
                 android:textColor="@android:color/secondary_text_light"
                 android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -113,29 +115,33 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/ivSynced"
                 android:layout_alignParentBottom="true"
+                android:layout_marginBottom="4dp"
                 android:fontFamily="@font/roboto_medium"
                 android:text="synced"
                 android:textColor="@color/colorPrimaryDark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/circularProgressBar"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/ivSynced"
-                app:layout_constraintTop_toBottomOf="@+id/coursesNames"
-                app:layout_constraintVertical_bias="0.428" />
+                app:layout_constraintStart_toEndOf="@+id/ivSynced" />
 
             <ImageView
                 android:id="@+id/ivSynced"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="8dp"
-                android:padding="5dp"
                 android:src="@drawable/ic_check"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/circularProgressBar"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/coursesNames" />
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/itemNotOwned"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
