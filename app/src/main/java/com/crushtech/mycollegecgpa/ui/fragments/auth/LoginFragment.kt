@@ -2,9 +2,10 @@ package com.crushtech.mycollegecgpa.ui.fragments.auth
 
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
+import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
@@ -15,6 +16,7 @@ import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.mycollegecgpa.ui.BaseFragment
+import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
@@ -47,8 +49,8 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             hideMainActivityUI()
             hideAppBar()
             window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+                FLAG_FULLSCREEN,
+                FLAG_FULLSCREEN
             )
         }
         createAnimationsForUIWidgets()
@@ -57,7 +59,9 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 currentEmail ?: "",
                 currentPassword ?: ""
             )
+            //for choose login or signup fragment to clear on start if true
             redirectLogin()
+            sharedPrefs.edit().putBoolean(IS_LOGGED_IN, isLoggedIn()).apply()
         }
 
         //set screen orientation to portrait
@@ -89,8 +93,10 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         }
                         logInProgressImage.visibility = View.GONE
                         LoginProgressBar.visibility = View.GONE
+                        val snackBarText = "Welcome back $currentUserName"
                         showSnackbar(
-                            "logged in :)"
+                            snackBarText, null, R.drawable.ic_baseline_whatshot_24,
+                            "", Color.BLACK
                         )
                         sharedPrefs.edit().putString(
                             KEY_LOGGED_IN_EMAIL,
@@ -116,8 +122,11 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         progressBg.visibility = View.GONE
                         logInProgressImage.visibility = View.GONE
                         LoginProgressBar.visibility = View.GONE
+                        val snackBarText = result.message
                         showSnackbar(
-                            result.message ?: "An unknown error occurred"
+                            snackBarText ?: "an error occurred", null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
                         )
                         editTextPassword1.text?.clear()
                         LoginBtn.isEnabled = true
@@ -139,7 +148,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
 
     private fun redirectLogin() {
         val navOptions = NavOptions.Builder()
-            .setPopUpTo(R.id.signUpFragment, true)
+            .setPopUpTo(R.id.chooseLoginOrSignUpFragment, true)
             .build()
         findNavController().navigate(
             LoginFragmentDirections.actionLoginFragmentToHomeFragment(),
@@ -178,7 +187,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         super.onDetach()
         (activity as MainActivity)
             .window.clearFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
+                FLAG_FULLSCREEN
             )
     }
 }

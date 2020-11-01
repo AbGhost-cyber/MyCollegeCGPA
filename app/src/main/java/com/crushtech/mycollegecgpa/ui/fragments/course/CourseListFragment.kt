@@ -2,6 +2,7 @@ package com.crushtech.mycollegecgpa.ui.fragments.course
 
 import android.content.SharedPreferences
 import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -22,7 +23,6 @@ import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.setupDecorator
 import com.crushtech.mycollegecgpa.utils.Status
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.course_list_layout.*
 import java.util.*
@@ -107,7 +107,8 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                     }
                     Status.ERROR -> {
                         showSnackbar(
-                            result.message ?: "semester not found"
+                            result.message ?: "semester not found", null,
+                            R.drawable.ic_baseline_error_outline_24, "", Color.RED
                         )
                     }
                     Status.LOADING -> {
@@ -140,7 +141,8 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                     }
                     Status.ERROR -> {
                         showSnackbar(
-                            result.message ?: "course not found"
+                            result.message ?: "course not found", null,
+                            R.drawable.ic_baseline_error_outline_24, "", Color.RED
                         )
                     }
                     Status.LOADING -> {
@@ -179,7 +181,10 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         if (semester != null) {
             viewModel.insertSemester(semester)
         }
-        showSnackbar("semester updated")
+        showSnackbar(
+            "semester updated", null,
+            R.drawable.ic_baseline_bubble_chart_24, "", Color.BLACK
+        )
     }
 
     private fun showCreateCourseDialog() {
@@ -194,7 +199,11 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         val semesterId = currentSemester?.id ?: UUID.randomUUID().toString()
         course.semesterId = semesterId
         viewModel.insertCourse(course, semesterId)
-        showSnackbar(message)
+        showSnackbar(
+            message, null,
+            R.drawable.ic_baseline_bubble_chart_24,
+            "", Color.BLACK
+        )
     }
 
 
@@ -213,16 +222,24 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             val position = viewHolder.layoutPosition
             val course = courseAdapter.differ.currentList[position]
             viewModel.deleteCourse(course.id, course.semesterId)
-            Snackbar.make(
-                requireView(), "course deleted",
-                Snackbar.LENGTH_LONG
-            ).apply {
-                setAction("Undo") {
-                    viewModel.insertCourse(course, course.semesterId)
-                    viewModel.deleteLocallyDeletedCourseId(course.id)
-                }
-                show()
+            val snackListener = View.OnClickListener {
+                viewModel.insertCourse(course, course.semesterId)
+                viewModel.deleteLocallyDeletedCourseId(course.id)
             }
+            showSnackbar(
+                "course deleted", snackListener, R.drawable.ic_baseline_delete_24,
+                "Undo", Color.BLACK
+            )
+//            Snackbar.make(
+//                requireView(), "course deleted",
+//                Snackbar.LENGTH_LONG
+//            ).apply {
+//                setAction("Undo") {
+//                    viewModel.insertCourse(course, course.semesterId)
+//                    viewModel.deleteLocallyDeletedCourseId(course.id)
+//                }
+//                show()
+//            }
 
         }
 

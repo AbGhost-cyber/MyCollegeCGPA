@@ -2,6 +2,7 @@ package com.crushtech.mycollegecgpa.ui.fragments.auth
 
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -15,6 +16,7 @@ import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.mycollegecgpa.ui.BaseFragment
+import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
@@ -61,6 +63,8 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 currentPassword ?: ""
             )
             redirectLogin()
+            //for choose login or signup fragment to clear on start if true
+            sharedPrefs.edit().putBoolean(Constants.IS_LOGGED_IN, isLoggedIn()).apply()
         }
         subscribeToObservers()
         loginRedirect.setOnClickListener {
@@ -93,7 +97,9 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                         progressImage.visibility = View.GONE
                         signUpprogressBar.visibility = View.GONE
                         showSnackbar(
-                            "Successfully registered"
+                            "Successfully registered", null,
+                            R.drawable.ic_baseline_emoji_emotions_24,
+                            "", Color.GREEN
                         )
                         sharedPrefs.edit().putString(
                             KEY_LOGGED_IN_EMAIL,
@@ -120,7 +126,9 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                         progressImage.visibility = View.GONE
                         signUpprogressBar.visibility = View.GONE
                         showSnackbar(
-                            result.message ?: "An unknown error occurred"
+                            result.message ?: "an error occurred", null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
                         )
                         editTextPassword.text.clear()
                         editTextReEnterPassword.text?.clear()
@@ -143,7 +151,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
     private fun redirectLogin() {
         val navOptions = NavOptions.Builder()
-            .setPopUpTo(R.id.signUpFragment, true)
+            .setPopUpTo(R.id.chooseLoginOrSignUpFragment, true)
             .build()
         findNavController().navigate(
             SignUpFragmentDirections.actionSignUpFragmentToHomeFragment(),

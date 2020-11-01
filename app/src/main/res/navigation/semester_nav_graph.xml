@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/semester_nav_graph"
-    app:startDestination="@id/signUpFragment">
+    app:startDestination="@id/chooseLoginOrSignUpFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -26,6 +26,9 @@
             android:id="@+id/action_othersFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_othersFragment_to_chooseLoginOrSignUpFragment"
+            app:destination="@id/chooseLoginOrSignUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -68,17 +71,22 @@
         android:name="com.crushtech.mycollegecgpa.ui.fragments.StatisticsFragment"
         android:label="My Statistics"
         tools:layout="@layout/statistics_fragment">
-        <action
-            android:id="@+id/action_statisticsFragment_to_pdfFragment"
-            app:destination="@id/pdfFragment" />
     </fragment>
+
     <fragment
-        android:id="@+id/pdfFragment"
-        android:name="com.crushtech.mycollegecgpa.ui.fragments.PdfFragment"
-        android:label="PdfFragment">
-        <argument
-            android:name="fileString"
-            app:argType="string" />
+        android:id="@+id/chooseLoginOrSignUpFragment"
+        android:name="com.crushtech.mycollegecgpa.ui.fragments.ChooseLoginOrSignUpFragment"
+        android:label="ChooseLoginOrSignUpFragment"
+        tools:layout="@layout/choose_login_signup_layout">
+        <action
+            android:id="@+id/action_chooseLoginOrSignUpFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+        <action
+            android:id="@+id/action_chooseLoginOrSignUpFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_chooseLoginOrSignUpFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
 </navigation>

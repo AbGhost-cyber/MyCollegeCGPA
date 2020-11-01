@@ -14,6 +14,7 @@ import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.data.remote.SemesterApi
 import com.crushtech.mycollegecgpa.data.remote.requests.*
 import com.crushtech.mycollegecgpa.ui.fragments.others.OthersFragmentDirections
+import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
@@ -93,6 +94,10 @@ class SemesterRepository @Inject constructor(
             KEY_USERNAME,
             NO_USERNAME
         ).apply()
+        sharedPreferences.edit().putBoolean(
+            IS_LOGGED_IN,
+            false
+        ).apply()
         sharedPreferences.edit().remove(
             TOTAL_NUMBER_OF_COURSES
         ).apply()
@@ -107,7 +112,7 @@ class SemesterRepository @Inject constructor(
             .setPopUpTo(R.id.homeFragment, true)
             .build()
         fragment.findNavController().navigate(
-            OthersFragmentDirections.actionOthersFragmentToLoginFragment(),
+            OthersFragmentDirections.actionOthersFragmentToChooseLoginOrSignUpFragment(),
             navOptions
         )
     }

@@ -1,24 +1,18 @@
 package com.crushtech.mycollegecgpa
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue.COMPLEX_UNIT_PX
 import android.view.View
-import android.view.View.TEXT_ALIGNMENT_CENTER
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat.getFont
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.crushtech.mycollegecgpa.R.font.averia_libre_bold
 import com.crushtech.mycollegecgpa.utils.NetworkUtils
-import com.google.android.material.snackbar.Snackbar
+import com.crushtech.mycollegecgpa.utils.SimpleCustomSnackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
-import com.google.android.material.snackbar.Snackbar.make
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -85,17 +79,19 @@ class MainActivity : AppCompatActivity() {
             it?.let { event ->
                 val isConnected = event.peekContent()
                 if (isConnected && successBarShown) {
-                    getSnackBar(
-                        successMessage,
-                        Color.parseColor("#00C853")
-                    ).show()
+                    showSnackbar(
+                        successMessage, null,
+                        R.drawable.ic_baseline_wifi_24, "",
+                        ContextCompat.getColor(this, R.color.progress_color)
+                    )
                     successBarShown = false
                     errorBarShown = true
                 } else if (!isConnected) {
-                    getSnackBar(
-                        errorMessage,
-                        Color.RED
-                    ).show()
+                    showSnackbar(
+                        errorMessage, null,
+                        R.drawable.ic_baseline_wifi_off_24, "",
+                        ContextCompat.getColor(this, android.R.color.holo_red_dark)
+                    )
                     successBarShown = true
                     errorBarShown = false
                 }
@@ -104,21 +100,15 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun getSnackBar(message: String, backgroundColor: Int): Snackbar {
-        val snackbar = make(parent_layout, message, LENGTH_LONG)
-            .setBackgroundTint(backgroundColor)
-        val view = snackbar.view
-        val snackBarText = view.findViewById<TextView>(R.id.snackbar_text)
-        val typeface = getFont(this, averia_libre_bold)
-        snackBarText.apply {
-            textAlignment = TEXT_ALIGNMENT_CENTER
-            setTypeface(typeface)
-            setTextSize(
-                COMPLEX_UNIT_PX,
-                resources.getDimension(R.dimen.snackbar_textsize)
-            )
-        }
-
-        return snackbar
+    fun showSnackbar(
+        text: String, listener: View.OnClickListener?, iconId: Int,
+        actionLabel: String, bgColor: Int
+    ) {
+        SimpleCustomSnackbar.make(
+            parent_layout,
+            text, LENGTH_LONG, listener,
+            iconId, actionLabel,
+            bgColor
+        )?.show()
     }
 }

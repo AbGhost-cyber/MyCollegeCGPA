@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
@@ -173,6 +174,9 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
         })
 
         saveAsPdf.setOnClickListener {
+            if (viewPdf.isVisible) {
+                viewPdf.visibility = View.GONE
+            }
             checkWritePermissionAndProcessPdf()
         }
     }
@@ -336,7 +340,10 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
             pdf_pb.visibility = View.GONE
             (activity as MainActivity).progressBg.visibility = View.GONE
             if (pdfHasBeenCreated) {
-                showSnackbar("PDF CREATED SUCCESSFULLY")
+                showSnackbar(
+                    "PDF CREATED SUCCESSFULLY", null,
+                    R.drawable.ic_baseline_bubble_chart_24, "", Color.BLACK
+                )
                 viewPdf.visibility = View.VISIBLE
 
                 viewPdf.setOnClickListener {
@@ -345,12 +352,18 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
                 val countDown = 4000L
                 val countDownTimer = object : CountDownTimer(countDown, 1000) {
                     override fun onFinish() {
-                        viewPdf.visibility = View.GONE
+                        try {
+                            viewPdf.visibility = View.GONE
+                        } catch (e: Exception) {
+                        }
                     }
 
                     override fun onTick(p0: Long) {
                         val text = "View Pdf ${p0 / 1000}"
-                        viewPdf.text = text
+                        try {
+                            viewPdf.text = text
+                        } catch (e: Exception) {
+                        }
                     }
 
                 }
@@ -366,7 +379,10 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
                 sponsored.visibility = View.INVISIBLE
                 user_name.visibility = View.INVISIBLE
             } else {
-                showSnackbar("an unknown error occurred, please try again")
+                showSnackbar(
+                    "an unknown error occurred, please try again", null,
+                    R.drawable.ic_baseline_error_outline_24, "", Color.RED
+                )
                 saveAsPdf.visibility = View.VISIBLE
                 content.updateLayoutParams {
                     width = ViewGroup.LayoutParams.MATCH_PARENT
@@ -402,7 +418,10 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             startActivity(intent)
         } else {
-            showSnackbar("please accept external read permissions")
+            showSnackbar(
+                "please accept external read permissions", null,
+                R.drawable.ic_baseline_error_outline_24, "", Color.RED
+            )
         }
     }
 
@@ -419,7 +438,12 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
         ) {
             processPdf()
         } else {
-            showSnackbar("please accept external write permissions")
+            showSnackbar(
+                "please accept external write permissions",
+                null,
+                R.drawable.ic_baseline_error_outline_24, "",
+                getColor(requireContext(), android.R.color.holo_red_dark)
+            )
         }
     }
 }

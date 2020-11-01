@@ -26,6 +26,7 @@ object Constants {
     const val TOTAL_NUMBER_OF_CREDIT_HOURS = "totalNumberOfCreditHours"
     const val TOTAL_NUMBER_OF_COURSES = "totalNumberOfCourses"
     const val STATISTICS_FIRST_TIME_OPEN = "first time open"
+    const val IS_LOGGED_IN = "is logged in"
 
     const val PRIVACY_POLICY = "http://www.crushtech.unaux.com/privacypolicy/?i=1"
 
@@ -60,6 +61,7 @@ object Constants {
             NO_USERNAME
         ) ?: NO_USERNAME
     }
+
 }
 
 

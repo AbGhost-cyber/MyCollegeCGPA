@@ -28,7 +28,7 @@ class ItemNotOwnedDialogFragment : DialogFragment() {
         val semesterOwner = arguments?.getString("owner")
 
         val notOwnerText = semesterParent.findViewById<TextView>(R.id.item_not_owned_message)
-        val text = "this semester was shared to you by $semesterOwner and it's view only"
+        val text = "this semester belongs to $semesterOwner and it's view only"
         notOwnerText.text = text
 
         semesterParent.findViewById<MaterialButton>(R.id.close_ino_bg).setOnClickListener {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.View.*
@@ -34,7 +35,6 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.getCurrentUserName
 import com.crushtech.mycollegecgpa.utils.Constants.setupDecorator
 import com.crushtech.mycollegecgpa.utils.Status
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.home_layout.*
@@ -202,7 +202,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     Status.ERROR -> {
                         event.getContentIfNotHandled()?.let { error ->
                             error.message?.let { message ->
-                                showSnackbar(message)
+                                showSnackbar(
+                                    message, null,
+                                    R.drawable.ic_baseline_error_outline_24,
+                                    "", Color.RED
+                                )
+
                             }
                         }
                         results.data?.let { semester ->
@@ -233,16 +238,24 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                         addOwnerProgressImage.visibility = GONE
                         progressBg.visibility = GONE
                         addOwnerProgressBar.visibility = GONE
+
                         showSnackbar(
-                            result.message ?: "Successfully shared semester"
+                            result.message ?: "Successfully shared semester",
+                            null,
+                            R.drawable.ic_baseline_bubble_chart_24,
+                            "", Color.BLACK
                         )
+
                     }
                     Status.ERROR -> {
                         addOwnerProgressImage.visibility = GONE
                         progressBg.visibility = GONE
                         addOwnerProgressBar.visibility = GONE
+
                         showSnackbar(
-                            result.message ?: "An unknown error occurred"
+                            result.message ?: "An unknown error occurred", null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
                         )
                     }
                     Status.LOADING -> {
@@ -278,7 +291,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                 owners = listOf(authEmail)
             )
         )
-        showSnackbar("semester created")
+
+        showSnackbar(
+            "semester created", null,
+            R.drawable.ic_baseline_bubble_chart_24,
+            "", Color.BLACK
+        )
 
     }
 
@@ -349,16 +367,16 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             val semester = semesterAdapter.differ.currentList[position]
             if (direction == LEFT) {
                 homeViewModel.deleteSemester(semester.id)
-                Snackbar.make(
-                    requireView(), "semester deleted",
-                    Snackbar.LENGTH_LONG
-                ).apply {
-                    setAction("Undo") {
-                        homeViewModel.insertSemester(semester)
-                        homeViewModel.deleteLocallyDeletedSemesterId(semester.id)
-                    }
-                    show()
+
+                val snackListener = OnClickListener {
+                    homeViewModel.insertSemester(semester)
+                    homeViewModel.deleteLocallyDeletedSemesterId(semester.id)
                 }
+                showSnackbar(
+                    "semester deleted", snackListener, R.drawable.ic_baseline_delete_24,
+                    "Undo", Color.BLACK
+                )
+
             } else if (direction == RIGHT) {
                 homeViewModel.observeSemesterById(semester.id).observe(viewLifecycleOwner,
                     Observer {
