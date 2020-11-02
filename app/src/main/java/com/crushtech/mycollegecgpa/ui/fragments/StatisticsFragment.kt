@@ -82,7 +82,10 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
         (activity as MainActivity).apply {
             showAppBar()
             hideMainActivityUI()
+//            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
+            mainLayoutToolbar.setNavigationIcon(R.drawable.ic_baseline_chevron_left_24)
         }
+        requireActivity().titleBarText.text = "My Statistics"
         setUpObservers()
         setUpBarCharts()
 

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
-        app:cardBackgroundColor="@color/textColors"
+        app:cardBackgroundColor="@android:color/black"
         app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:fontFamily="@font/averia_libre_bold"
+                android:fontFamily="@font/capriola"
                 android:gravity="start"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -56,11 +56,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:fontFamily="@font/averia_libre_bold"
+                android:fontFamily="@font/capriola"
                 android:gravity="start"
                 android:paddingBottom="10dp"
                 android:text="View"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:visibility="visible"

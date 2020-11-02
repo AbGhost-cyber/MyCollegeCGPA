@@ -16,6 +16,7 @@ import com.crushtech.mycollegecgpa.dialogs.LogoutDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.others_layout.*
 import javax.inject.Inject
 
@@ -30,8 +31,10 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
     private val othersViewModel: OthersViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).hideAppBar()
+        (activity as MainActivity).showAppBar()
         (activity as MainActivity).showMainActivityUI()
+        requireActivity().titleBarText.text = "Extras"
+
 
         setClickAnimationForTexts(listOf(logOut, ShareApp, AboutApp, rateApp, privacyPolicy))
 

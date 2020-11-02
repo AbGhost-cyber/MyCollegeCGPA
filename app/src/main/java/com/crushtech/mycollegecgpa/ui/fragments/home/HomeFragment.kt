@@ -30,6 +30,7 @@ import com.crushtech.mycollegecgpa.dialogs.AddOwnerDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.AddSemesterDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.ItemNotOwnedDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
+import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.getCurrentUserName
@@ -63,9 +64,14 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     private var authEmail: String? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).hideAppBar()
+        (activity as MainActivity).showAppBar()
+
+        requireActivity().titleBarText.text = "My Semesters"
+
         (activity as MainActivity).showMainActivityUI()
+
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
         val username = "Hello, ${getCurrentUserName(sharedPrefs)}"
         userName.text = username
         currentDate.text = getFormattedDate()
@@ -74,6 +80,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             KEY_LOGGED_IN_EMAIL,
             NO_EMAIL
         ) ?: NO_EMAIL
+        sharedPrefs.edit().putBoolean(Constants.IS_LOGGED_IN, true).apply()
 
         if (savedInstanceState != null) {
             val addSemesterDialog = parentFragmentManager.findFragmentByTag(ADD_SEMESTER_DIALOG)

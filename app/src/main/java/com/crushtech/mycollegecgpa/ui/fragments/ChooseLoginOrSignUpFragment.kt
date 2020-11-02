@@ -15,7 +15,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
-import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.TextView.BufferType.SPANNABLE
 import androidx.navigation.NavOptions
@@ -24,9 +23,14 @@ import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.R.id.action_chooseLoginOrSignUpFragment_to_loginFragment
 import com.crushtech.mycollegecgpa.R.id.action_chooseLoginOrSignUpFragment_to_signUpFragment
+import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.ui.fragments.ChooseLoginOrSignUpFragmentDirections.Companion.actionChooseLoginOrSignUpFragmentToHomeFragment
 import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
+import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
+import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
+import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
+import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.choose_login_signup_layout.*
@@ -36,6 +40,10 @@ import javax.inject.Inject
 class ChooseLoginOrSignUpFragment : BaseFragment(R.layout.choose_login_signup_layout) {
     @Inject
     lateinit var sharedPrefs: SharedPreferences
+
+    @Inject
+    lateinit var basicAuthInterceptor: BasicAuthInterceptor
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).apply {
@@ -50,6 +58,16 @@ class ChooseLoginOrSignUpFragment : BaseFragment(R.layout.choose_login_signup_la
         val userIsLoggedIn = sharedPrefs.getBoolean(IS_LOGGED_IN, false)
 
         if (userIsLoggedIn) {
+            val currentEmail = sharedPrefs.getString(
+                KEY_LOGGED_IN_EMAIL,
+                NO_EMAIL
+            ) ?: NO_EMAIL
+            val currentPassword = sharedPrefs.getString(
+                KEY_PASSWORD,
+                NO_PASSWORD
+            ) ?: NO_PASSWORD
+            basicAuthInterceptor.email = currentEmail
+            basicAuthInterceptor.password = currentPassword
             redirectLogin()
         }
         privacyPolicy.makeLinks(Pair("Terms & Privacy Policy", View.OnClickListener {
@@ -67,9 +85,7 @@ class ChooseLoginOrSignUpFragment : BaseFragment(R.layout.choose_login_signup_la
                 action_chooseLoginOrSignUpFragment_to_loginFragment
             )
         }
-        val imageViewAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
-        //imageViewAnim.repeatCount = Animation.INFINITE
-        imageView.startAnimation(imageViewAnim)
+
     }
 
 

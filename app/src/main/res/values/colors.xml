@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0091EA</color>
-    <color name="colorPrimaryDark">#E8E4FD</color>
+    <color name="colorPrimary">#2A5A77</color>
+    <color name="colorPrimaryDark">#CB97D5FA</color>
     <color name="colorAccent">#00C853</color>
     <color name="itemColor">#E8E4FD</color>
-    <color name="background">#FBFBFB</color>
-    <color name="textColors">#000000</color>
+    <color name="textColors">#25000000</color>
     <color name="progress_color">#64DD17</color>
     <color name="low_gpa">#DD2C00</color>
     <color name="black_trans">#80000000</color>
+    <color name="pink">#FAE5E5</color>
+    <color name="tt">#80FFFFFF</color>
 
 
 </resources>

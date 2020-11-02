@@ -31,11 +31,22 @@ class CustomMarkerView(
 
 
         val semesterName = currentSemester.semesterName
-        tvSemesterName.setText(semesterName)
+        if (semesterName.length >= 18) {
+            val shortenedText = semesterName.substring(0, 18) + "\u2026"
+            tvSemesterName.setText(shortenedText)
+
+        } else {
+            tvSemesterName.setText(semesterName)
+        }
 
 
         val courses = currentSemester.getThreeCoursesName()
-        tvThreeCourse.setText(courses)
+        if (courses.length >= 18) {
+            val shortenedText = courses.substring(0, 18) + "\u2026"
+            tvThreeCourse.setText(shortenedText)
+        } else {
+            tvThreeCourse.setText(courses)
+        }
 
 
         var totalCreditHours = 0F

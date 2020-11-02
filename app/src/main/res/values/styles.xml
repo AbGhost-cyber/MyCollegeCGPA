@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -8,12 +8,21 @@
     </style>
 
     <style name="BottomNavigationViewTextStyle">
-        <item name="fontFamily">@font/averia_libre_bold</item>
+        <item name="fontFamily">@font/capriola</item>
     </style>
 
     <style name="AppTheme.WhiteAccent">
-        <item name="colorAccent">@color/background</item> <!-- Whatever color you want-->
+        <item name="colorAccent">@android:color/white</item> <!-- Whatever color you want-->
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_baseline_chevron_left_24</item>
+        <item name="windowActionBarOverlay">true</item>
     </style>
 
     <dimen name="snackbar_textsize">17sp</dimen>
+
+    <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar" />
+
 </resources>

@@ -3,6 +3,7 @@
     android:id="@+id/tilAddSemester"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:textColorHint="@color/colorPrimary"
     android:padding="16dp">
 
     <EditText
@@ -10,12 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:fontFamily="@font/averia_libre_bold"
+        android:background="@color/colorPrimaryDark"
         android:hint="semester name"
-        android:background="@android:color/white"
+        android:fontFamily="@font/capriola"
         android:padding="16dp"
         android:textColor="@android:color/black"
-        android:textColorHint="@android:color/tertiary_text_light"
         android:textSize="16sp" />
 
 </com.google.android.material.textfield.TextInputLayout>

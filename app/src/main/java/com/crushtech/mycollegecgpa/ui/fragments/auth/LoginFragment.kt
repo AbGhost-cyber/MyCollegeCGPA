@@ -16,7 +16,6 @@ import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.mycollegecgpa.ui.BaseFragment
-import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
@@ -59,9 +58,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 currentEmail ?: "",
                 currentPassword ?: ""
             )
-            //for choose login or signup fragment to clear on start if true
             redirectLogin()
-            sharedPrefs.edit().putBoolean(IS_LOGGED_IN, isLoggedIn()).apply()
         }
 
         //set screen orientation to portrait

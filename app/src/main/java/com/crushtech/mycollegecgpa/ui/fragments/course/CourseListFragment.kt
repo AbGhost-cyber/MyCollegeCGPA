@@ -24,6 +24,7 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.setupDecorator
 import com.crushtech.mycollegecgpa.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.course_list_layout.*
 import java.util.*
 import javax.inject.Inject
@@ -45,13 +46,15 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
+    @ExperimentalStdlibApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).apply {
             hideMainActivityUI()
             showAppBar()
-            supportActionBar?.title = args.semesterName
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
         }
+        requireActivity().titleBarText.text = args.semesterName.capitalize(Locale.ROOT)
         semesterName.setText(args.semesterName)
 
         if (args.semesterId.isNotEmpty()) {

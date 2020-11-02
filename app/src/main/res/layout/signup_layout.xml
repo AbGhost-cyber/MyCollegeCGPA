@@ -57,10 +57,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:fontFamily="@font/averia_libre_bold"
+        android:fontFamily="@font/capriola"
+        android:textColor="@android:color/white"
         android:padding="10dp"
         android:text="@string/sign_up"
-        android:textColor="@color/background"
+        android:textStyle="bold"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -112,8 +113,7 @@
                 android:hint="input email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:padding="10dp"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:padding="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -144,8 +144,7 @@
                 android:hint="input username"
                 android:inputType="textPersonName"
                 android:maxLines="1"
-                android:padding="10dp"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:padding="10dp" />
 
         </LinearLayout>
 
@@ -177,8 +176,7 @@
                 android:hint="input password"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:padding="10dp"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:padding="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -209,8 +207,7 @@
                 android:hint="re-enter password"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:padding="10dp"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:padding="10dp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -221,11 +218,13 @@
         android:layout_height="65dp"
         android:layout_margin="10dp"
         android:elevation="100dp"
-        android:fontFamily="@font/averia_libre_bold"
+        android:fontFamily="@font/capriola"
         android:text="@string/sign_up"
+        android:textColor="@color/colorPrimary"
         android:textAllCaps="true"
         android:textSize="19sp"
-        app:backgroundTint="@color/colorPrimary"
+        android:textStyle="bold"
+        app:backgroundTint="@android:color/white"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -249,7 +248,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="30dp"
-        android:fontFamily="@font/roboto_medium"
+        android:fontFamily="@font/capriola"
         android:text="already have an account?"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -264,7 +263,7 @@
         android:layout_width="62dp"
         android:layout_height="25dp"
         android:elevation="30dp"
-        android:fontFamily="@font/roboto_medium"
+        android:fontFamily="@font/capriola"
         android:text="@string/log_in"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

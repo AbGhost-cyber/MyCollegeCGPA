@@ -58,10 +58,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:fontFamily="@font/averia_libre_bold"
+        android:fontFamily="@font/capriola"
         android:padding="10dp"
         android:text="@string/log_in"
-        android:textColor="@color/background"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +98,7 @@
                 android:id="@+id/TvEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/averia_libre_bold"
+                android:fontFamily="@font/capriola"
                 android:text="@string/email"
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp" />
@@ -109,11 +110,12 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/auth_selector_bg"
-                android:fontFamily="@font/averia_libre_bold"
+                android:fontFamily="@font/capriola"
                 android:hint="input email"
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:textColor="@color/colorPrimary"
+                android:textStyle="normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -128,7 +130,7 @@
                 android:id="@+id/TvPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/averia_libre_bold"
+                android:fontFamily="@font/capriola"
                 android:text="@string/password"
                 android:textColor="@color/colorPrimary"
                 android:textSize="15sp" />
@@ -140,11 +142,12 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/auth_selector_bg"
-                android:fontFamily="@font/averia_libre_bold"
+                android:fontFamily="@font/capriola"
+                android:padding="10dp"
+                android:textColor="@color/colorPrimary"
                 android:hint="input password"
                 android:inputType="textPassword"
-                android:padding="10dp"
-                android:textColorHint="@color/colorPrimaryDark" />
+                android:textStyle="normal" />
         </LinearLayout>
 
     </LinearLayout>
@@ -154,11 +157,12 @@
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:layout_margin="10dp"
-        android:fontFamily="@font/averia_libre_bold"
+        android:fontFamily="@font/capriola"
         android:text="@string/log_in"
         android:textAllCaps="true"
         android:textSize="19sp"
-        app:backgroundTint="@color/textColors"
+        android:textStyle="bold"
+        app:backgroundTint="@android:color/black"
         app:cornerRadius="12dp"
         app:elevation="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -183,7 +187,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="30dp"
-        android:fontFamily="@font/roboto_medium"
+        android:fontFamily="@font/capriola"
         android:text="don't have an account?"
         android:textColor="@android:color/primary_text_dark"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -200,7 +204,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:elevation="30dp"
-        android:fontFamily="@font/roboto_medium"
+        android:fontFamily="@font/capriola"
         android:text="@string/sign_up"
         android:textColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"

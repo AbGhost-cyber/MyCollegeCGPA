@@ -16,7 +16,6 @@ import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.mycollegecgpa.ui.BaseFragment
-import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
@@ -63,8 +62,6 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 currentPassword ?: ""
             )
             redirectLogin()
-            //for choose login or signup fragment to clear on start if true
-            sharedPrefs.edit().putBoolean(Constants.IS_LOGGED_IN, isLoggedIn()).apply()
         }
         subscribeToObservers()
         loginRedirect.setOnClickListener {

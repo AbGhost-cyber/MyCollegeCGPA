@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(mainLayoutToolbar)
+        supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+        }
 
         val navController = Navigation.findNavController(this, R.id.gradesNavHostFragment)
 
@@ -53,10 +57,12 @@ class MainActivity : AppCompatActivity() {
 
     fun hideAppBar() {
         supportActionBar?.hide()
+        appBarLayout.visibility = View.GONE
     }
 
     fun showAppBar() {
         supportActionBar?.show()
+        appBarLayout.visibility = View.VISIBLE
     }
 
     fun hideMainActivityUI() {
@@ -79,17 +85,17 @@ class MainActivity : AppCompatActivity() {
             it?.let { event ->
                 val isConnected = event.peekContent()
                 if (isConnected && successBarShown) {
-                    showSnackbar(
+                    "".showSnackbar(
                         successMessage, null,
-                        R.drawable.ic_baseline_wifi_24, "",
+                        R.drawable.ic_baseline_wifi_24,
                         ContextCompat.getColor(this, R.color.progress_color)
                     )
                     successBarShown = false
                     errorBarShown = true
                 } else if (!isConnected) {
-                    showSnackbar(
+                    "".showSnackbar(
                         errorMessage, null,
-                        R.drawable.ic_baseline_wifi_off_24, "",
+                        R.drawable.ic_baseline_wifi_off_24,
                         ContextCompat.getColor(this, android.R.color.holo_red_dark)
                     )
                     successBarShown = true
@@ -100,14 +106,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun showSnackbar(
+    private fun String.showSnackbar(
         text: String, listener: View.OnClickListener?, iconId: Int,
-        actionLabel: String, bgColor: Int
+        bgColor: Int
     ) {
         SimpleCustomSnackbar.make(
             parent_layout,
             text, LENGTH_LONG, listener,
-            iconId, actionLabel,
+            iconId, this,
             bgColor
         )?.show()
     }

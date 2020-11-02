@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/OthersContainer"
-    android:background="@color/colorPrimaryDark">
+    android:id="@+id/OthersContainer">
 
 
     <LinearLayout
@@ -22,29 +21,18 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/Extras"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-
-            android:fontFamily="@font/averia_libre_bold"
-            android:padding="20dp"
-            android:text="Extras"
-            android:textAlignment="center"
-            android:textColor="@color/textColors"
-            android:textSize="25sp" />
-
-        <TextView
             android:id="@+id/logOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/credithours_bg"
-            android:fontFamily="@font/averia_libre_bold"
+            android:fontFamily="@font/capriola"
             android:padding="20dp"
             android:text="Log out"
-            android:textColor="@color/textColors"
-            android:textSize="21sp" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
 
         <TextView
             android:id="@+id/ShareApp"
@@ -52,11 +40,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/credithours_bg"
-            android:fontFamily="@font/averia_libre_bold"
+            android:fontFamily="@font/capriola"
             android:padding="20dp"
+            android:textColor="@color/colorPrimary"
             android:text="Share this App"
-            android:textColor="@color/textColors"
-            android:textSize="21sp" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
 
         <TextView
             android:id="@+id/AboutApp"
@@ -64,11 +54,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/credithours_bg"
-            android:fontFamily="@font/averia_libre_bold"
+            android:fontFamily="@font/capriola"
             android:padding="20dp"
             android:text="About My College CGPA/ How to Use"
-            android:textColor="@color/textColors"
-            android:textSize="21sp" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
 
         <TextView
             android:id="@+id/rateApp"
@@ -76,11 +68,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@drawable/credithours_bg"
-            android:fontFamily="@font/averia_libre_bold"
+            android:fontFamily="@font/capriola"
             android:padding="20dp"
             android:text="Rate This App"
-            android:textColor="@color/textColors"
-            android:textSize="21sp" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
 
         <TextView
             android:id="@+id/privacyPolicy"
@@ -88,10 +82,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="1dp"
             android:background="@drawable/credithours_bg"
-            android:fontFamily="@font/averia_libre_bold"
+            android:fontFamily="@font/capriola"
             android:padding="20dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
             android:text="Privacy Policy"
-            android:textColor="@color/textColors"
-            android:textSize="21sp" />
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
