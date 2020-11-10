@@ -64,5 +64,4 @@ interface SemesterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocallyDeletedCourseId(locallyDeletedCourseId: LocallyDeletedCourseId)
 
-
 }

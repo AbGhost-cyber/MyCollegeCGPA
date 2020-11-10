@@ -233,17 +233,6 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                 "course deleted", snackListener, R.drawable.ic_baseline_delete_24,
                 "Undo", Color.BLACK
             )
-//            Snackbar.make(
-//                requireView(), "course deleted",
-//                Snackbar.LENGTH_LONG
-//            ).apply {
-//                setAction("Undo") {
-//                    viewModel.insertCourse(course, course.semesterId)
-//                    viewModel.deleteLocallyDeletedCourseId(course.id)
-//                }
-//                show()
-//            }
-
         }
 
         override fun onChildDraw(

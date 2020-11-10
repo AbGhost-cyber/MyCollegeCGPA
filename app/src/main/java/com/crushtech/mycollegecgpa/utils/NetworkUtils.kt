@@ -30,6 +30,7 @@ object NetworkUtils : ConnectivityManager.NetworkCallback() {
             connectivityManager.registerNetworkCallback(builder.build(), this)
         }
 
+
         var isConnected = false
 
         // Retrieve current status of connectivity

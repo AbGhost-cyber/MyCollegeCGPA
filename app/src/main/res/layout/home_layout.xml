@@ -75,16 +75,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="49dp"
                     android:fontFamily="@font/capriola"
-                    android:textSize="21sp"
                     android:padding="10dp"
                     android:text="Best Semester"
                     android:textColor="@color/colorPrimary"
+                    android:textSize="21sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/semesterSearch"
-                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintVertical_bias="0.02"
                     app:textAllCaps="true" />
 
                 <androidx.recyclerview.widget.RecyclerView

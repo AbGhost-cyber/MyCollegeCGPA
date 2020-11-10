@@ -7,10 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.local.SemesterDao
-import com.crushtech.mycollegecgpa.data.local.entities.Courses
-import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedCourseId
-import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedSemesterId
-import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.data.local.entities.*
 import com.crushtech.mycollegecgpa.data.remote.SemesterApi
 import com.crushtech.mycollegecgpa.data.remote.requests.*
 import com.crushtech.mycollegecgpa.ui.fragments.others.OthersFragmentDirections
@@ -159,6 +156,40 @@ class SemesterRepository @Inject constructor(
         notes.forEach { insertSemester(it) }
     }
 
+    suspend fun insertUserPdfDownloads(downloads: UserPdfDownloads) {
+        val response = try {
+            semesterApi.upsertUserPdfDownloads(downloads)
+        } catch (e: Exception) {
+            null
+        }
+        if (response == null) {
+            Resource.error(
+                "Couldn't connect to the servers. Check your internet connection",
+                null
+            )
+        }
+    }
+
+    suspend fun getUserPdfDownloads() = withContext(Dispatchers.IO) {
+        try {
+            val response = semesterApi.getUserPdfDownloads()
+            if (response.isSuccessful) {
+                Resource.success(UserPdfDownloads(response.body()!!.noOfPdfDownloads))
+            } else {
+                Resource.error(
+                    "an unknown error occurred, please try again", null
+                )
+            }
+        } catch (e: Exception) {
+            Resource.error(
+                "Couldn't connect to the servers. Check your internet connection",
+                null
+            )
+        }
+
+    }
+
+
     suspend fun insertCourses(courses: List<Courses>, semesterId: String) {
         courses.forEach { insertCourseForSemester(it, semesterId) }
     }
@@ -203,6 +234,7 @@ class SemesterRepository @Inject constructor(
         )
     }
 
+
     private fun getConnectionByPeeking(): Boolean {
         val events = getNetworkLiveData(context.applicationContext).value
         events?.let {
@@ -214,6 +246,7 @@ class SemesterRepository @Inject constructor(
     suspend fun getSemesterById(semesterId: String) = semesterDao.getSemesterById(semesterId)
 
     suspend fun getCourseList(semesterId: String) = semesterDao.getCourseList(semesterId)
+
 
     suspend fun deleteSemester(semesterId: String) {
         val response = try {

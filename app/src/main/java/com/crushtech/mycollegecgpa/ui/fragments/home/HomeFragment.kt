@@ -30,7 +30,7 @@ import com.crushtech.mycollegecgpa.dialogs.AddOwnerDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.AddSemesterDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.ItemNotOwnedDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
-import com.crushtech.mycollegecgpa.utils.Constants
+import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.getCurrentUserName
@@ -80,7 +80,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             KEY_LOGGED_IN_EMAIL,
             NO_EMAIL
         ) ?: NO_EMAIL
-        sharedPrefs.edit().putBoolean(Constants.IS_LOGGED_IN, true).apply()
+
+        sharedPrefs.edit().putBoolean(IS_LOGGED_IN, true).apply()
 
         if (savedInstanceState != null) {
             val addSemesterDialog = parentFragmentManager.findFragmentByTag(ADD_SEMESTER_DIALOG)
@@ -108,7 +109,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         }
         viewPerformance.setOnClickListener {
             findNavController().navigate(
-                R.id.action_homeFragment_to_statisticsFragment
+                HomeFragmentDirections
+                    .actionHomeFragmentToStatisticsFragment()
             )
         }
         setupRecyclerView()

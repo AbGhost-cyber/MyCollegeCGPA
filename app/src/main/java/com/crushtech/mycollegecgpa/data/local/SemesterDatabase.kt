@@ -13,7 +13,7 @@ import com.crushtech.mycollegecgpa.data.local.entities.Semester
         Courses::class,
         LocallyDeletedSemesterId::class,
         LocallyDeletedCourseId::class],
-    version = 4, exportSchema = false
+    version = 9, exportSchema = false
 )
 @TypeConverters(Converters::class, OwnersConverters::class)
 abstract class SemesterDatabase : RoomDatabase() {

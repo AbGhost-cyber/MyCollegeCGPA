@@ -87,7 +87,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -100,9 +100,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
                     android:layout_marginEnd="3dp"
+                    android:ellipsize="end"
                     android:fontFamily="@font/capriola"
-                    android:textColor="@color/colorPrimary"
                     android:padding="5dp"
+                    android:textColor="@color/colorPrimary"
                     android:text="First Semesters"
                     android:textStyle="bold"
                     android:textSize="21sp"
@@ -111,7 +112,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.058" />
+                    app:layout_constraintVertical_bias="0.054" />
 
                 <TextView
                     android:id="@+id/coursesNames"
@@ -119,11 +120,11 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/semesterName"
                     android:fontFamily="@font/capriola"
-                    android:textColor="@android:color/secondary_text_dark"
                     android:padding="10dp"
                     android:text="Maths,Physics,Chemistry"
-                    android:textStyle="normal"
+                    android:textColor="@android:color/secondary_text_dark"
                     android:textSize="17sp"
+                    android:textStyle="normal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -141,21 +142,16 @@
                     android:text="synced"
                     android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/ivSynced"
-                    app:layout_constraintTop_toBottomOf="@+id/coursesNames"
-                    app:layout_constraintVertical_bias="0.428" />
+                    app:layout_constraintStart_toEndOf="@+id/ivSynced" />
 
                 <ImageView
                     android:id="@+id/ivSynced"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="8dp"
                     android:padding="5dp"
                     android:src="@drawable/ic_check"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/coursesNames" />
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.crushtech.mycollegecgpa.data.remote
 
 
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.data.local.entities.UserPdfDownloads
 import com.crushtech.mycollegecgpa.data.remote.requests.*
 import com.crushtech.mycollegecgpa.data.remote.responses.SimpleResponse
 import okhttp3.ResponseBody
@@ -49,4 +50,12 @@ interface SemesterApi {
 
     @GET("/getSemester")
     suspend fun getSemester(): Response<List<Semester>>
+
+    @GET("/getPdfDownloads")
+    suspend fun getUserPdfDownloads(): Response<UserPdfDownloads>
+
+    @POST("/addUserPdfDownloadsCount")
+    suspend fun upsertUserPdfDownloads(
+        @Body pdfDownloads: UserPdfDownloads
+    ): Response<ResponseBody>
 }

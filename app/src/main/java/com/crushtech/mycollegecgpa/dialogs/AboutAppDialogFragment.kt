@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.DialogFragment
 import com.crushtech.mycollegecgpa.R
 import com.google.android.material.button.MaterialButton
@@ -26,15 +25,7 @@ class AboutAppDialogFragment : DialogFragment() {
             dialog?.dismiss()
         }
         return MaterialAlertDialogBuilder(requireContext())
-            .setTitle("About My College CGPA / How to use")
-            .setMessage("LaraPass is a self-hosted personal password manager build with highest level of security, ease-of-use and data ownership in mind. LaraPass comes with a plethora of features listed below and allows you to securely store your sensitive account login information (like username, password, etc) for services such as Banks, Emails, Social Media, etc in an encrypted form on your own server. ")
             .setView(aboutAppParent)
-            .setBackground(
-                ResourcesCompat.getDrawable(
-                    resources, R.drawable.dialog_bg, null
-                )
-            )
-
             .create()
     }
 }

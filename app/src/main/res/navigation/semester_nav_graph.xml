@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.crushtech.mycollegecgpa.ui.fragments.StatisticsFragment"
+        android:name="com.crushtech.mycollegecgpa.ui.fragments.statistics.StatisticsFragment"
         android:label="My Statistics"
         tools:layout="@layout/statistics_fragment">
     </fragment>

@@ -1,4 +1,4 @@
-package com.crushtech.mycollegecgpa.ui.fragments
+package com.crushtech.mycollegecgpa.ui.fragments.statistics
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -21,9 +21,10 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
+import com.android.billingclient.api.BillingClient
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
+import com.crushtech.mycollegecgpa.data.local.entities.UserPdfDownloads
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.ui.fragments.home.HomeViewModel
 import com.crushtech.mycollegecgpa.utils.Constants
@@ -31,6 +32,8 @@ import com.crushtech.mycollegecgpa.utils.Constants.STATISTICS_FIRST_TIME_OPEN
 import com.crushtech.mycollegecgpa.utils.Constants.TOTAL_NUMBER_OF_COURSES
 import com.crushtech.mycollegecgpa.utils.Constants.TOTAL_NUMBER_OF_CREDIT_HOURS
 import com.crushtech.mycollegecgpa.utils.CustomMarkerView
+import com.crushtech.mycollegecgpa.utils.NetworkUtils
+import com.crushtech.mycollegecgpa.utils.Status
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -38,10 +41,7 @@ import com.github.mikephil.charting.data.BarEntry
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.statistics_fragment.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
@@ -61,8 +61,11 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
     private var firsTimeOpen = false
     private var pdfHasBeenCreated = false
     private val viewModel: HomeViewModel by viewModels()
+    private val pdfDownloadsViewModel: StatisticsViewModel by viewModels()
     private val totalCourseChange: MutableLiveData<Int> = MutableLiveData()
     private val totalCreditHoursChange: MutableLiveData<Float> = MutableLiveData()
+    private lateinit var billingClient: BillingClient
+    private var userPdfDownloadsCount: UserPdfDownloads? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,15 +82,16 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        pdfDownloadsViewModel.getUserPdfDownloads()
         (activity as MainActivity).apply {
             showAppBar()
             hideMainActivityUI()
-//            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
             mainLayoutToolbar.setNavigationIcon(R.drawable.ic_baseline_chevron_left_24)
         }
         requireActivity().titleBarText.text = "My Statistics"
         setUpObservers()
         setUpBarCharts()
+        setupSwipeRefreshLayout()
 
         val totalCH = sharedPrefs
             .getFloat(TOTAL_NUMBER_OF_CREDIT_HOURS, 0F)
@@ -175,13 +179,56 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
                 creditHoursChange.setTextColor(getColor(requireContext(), R.color.progress_color))
             }
         })
+        NetworkUtils.getNetworkLiveData(requireContext()).observe(viewLifecycleOwner,
+            Observer { content ->
+                val isConnected = content.peekContent()
+                if (isConnected) {
+                    pdfDownloadsViewModel.getUserPdfDownloads()
+                }
+                saveAsPdf.setOnClickListener {
+                    if (isConnected) {
+                        if (viewPdf.isVisible) {
+                            viewPdf.visibility = View.GONE
+                        }
+                        userPdfDownloadsCount?.let { downloads ->
+                            if (downloads.noOfPdfDownloads <= 0) {
+                                showSnackbar(
+                                    "you've ran out of download points, please purchase", null,
+                                    R.drawable.ic_baseline_error_outline_24,
+                                    "", Color.RED
+                                )
+                            } else {
+                                checkWritePermissionAndProcessPdf()
+                            }
+                        }
+                    } else {
+                        showSnackbar(
+                            "internet connection is required for this feature",
+                            null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
+                        )
+                    }
 
-        saveAsPdf.setOnClickListener {
-            if (viewPdf.isVisible) {
-                viewPdf.visibility = View.GONE
-            }
-            checkWritePermissionAndProcessPdf()
-        }
+                }
+                pdfDownloadParent.setOnClickListener {
+                    if (isConnected) {
+                        userPdfDownloadsCount?.let {
+                            it.noOfPdfDownloads += 5
+                            pdfDownloadsViewModel.upsertUserPdfDownloads(it)
+                        }
+                    } else {
+                        showSnackbar(
+                            "internet connection is required for this feature",
+                            null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
+                        )
+                    }
+                }
+            })
+
+
     }
 
     private fun setUpObservers() {
@@ -223,7 +270,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
                             BarEntry(i.toFloat(), semesters[i].getGPA().toFloat())
                         }
                     val typeface =
-                        ResourcesCompat.getFont(requireContext(), R.font.averia_libre)
+                        ResourcesCompat.getFont(requireContext(), R.font.capriola)
 
 
                     val colorList = listOf(
@@ -248,6 +295,31 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
             }
 
         })
+
+        pdfDownloadsViewModel.pdfDownloads.observe(viewLifecycleOwner, Observer { results ->
+            when (results.status) {
+                Status.SUCCESS -> {
+                    val downloads = results.data!!
+                    pdfDownloadCounts.text = downloads.noOfPdfDownloads.toString()
+                    userPdfDownloadsCount = downloads
+                    statsRefreshLayout.isRefreshing = false
+                    pdfDownloadsViewModel.getUserPdfDownloads()
+
+                }
+                Status.ERROR -> {
+                    showSnackbar(
+                        results.message ?: "an error occurred", null,
+                        R.drawable.ic_baseline_error_outline_24,
+                        "", Color.RED
+                    )
+                }
+                Status.LOADING -> {
+                    statsRefreshLayout.isRefreshing = false
+                }
+            }
+        })
+
+
     }
 
 
@@ -296,10 +368,18 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
         content.measure(measureWidth, measuredHeight)
         content.layout(0, 0, page.canvas.width, page.canvas.height)
         saveAsPdf.visibility = View.INVISIBLE
+        pdfDownloadParent.visibility = View.GONE
         sponsored.visibility = View.VISIBLE
-        val username = Constants.getCurrentUserName(sharedPrefs)
-        user_name.text = "For $username"
+        val username = " For ${Constants.getCurrentUserName(sharedPrefs)}"
+        user_name.text = username
         user_name.visibility = View.VISIBLE
+
+        //if barchart markerview was visible, then hide it while creating the pdf
+        try {
+            barChart.highlightValue(null)
+        } catch (e: Exception) {
+        }
+
         content.draw(page.canvas)
 
         document.finishPage(page)
@@ -321,7 +401,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
 
         val output: OutputStream = FileOutputStream(myFile)
 
-        viewModel.viewModelScope.launch(Dispatchers.Main) {
+        GlobalScope.launch(Dispatchers.Main) {
             (activity as MainActivity).progressBg.visibility = View.VISIBLE
             pdf_pb.apply {
                 progressMax = 100F
@@ -343,6 +423,11 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
             pdf_pb.visibility = View.GONE
             (activity as MainActivity).progressBg.visibility = View.GONE
             if (pdfHasBeenCreated) {
+                userPdfDownloadsCount?.let {
+                    it.noOfPdfDownloads--
+                    pdfDownloadsViewModel.upsertUserPdfDownloads(it)
+                    pdfHasBeenCreated = false
+                }
                 showSnackbar(
                     "PDF CREATED SUCCESSFULLY", null,
                     R.drawable.ic_baseline_bubble_chart_24, "", Color.BLACK
@@ -375,6 +460,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
                 }
 
                 saveAsPdf.visibility = View.VISIBLE
+                pdfDownloadParent.visibility = View.VISIBLE
                 content.updateLayoutParams {
                     width = ViewGroup.LayoutParams.MATCH_PARENT
                     height = ViewGroup.LayoutParams.WRAP_CONTENT
@@ -447,6 +533,12 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
                 R.drawable.ic_baseline_error_outline_24, "",
                 getColor(requireContext(), android.R.color.holo_red_dark)
             )
+        }
+    }
+
+    private fun setupSwipeRefreshLayout() {
+        statsRefreshLayout.setOnRefreshListener {
+            pdfDownloadsViewModel.getUserPdfDownloads()
         }
     }
 }

@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,14 +63,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginScreen"
-            android:layout_width="120dp"
+            android:layout_width="match_parent"
             android:layout_height="70dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:fontFamily="@font/capriola"
             android:text="Log in"
             android:textAllCaps="false"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="17sp"
             android:textStyle="bold"
             app:backgroundTint="@android:color/white"
@@ -78,8 +78,8 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signUpScreen"
-            android:layout_width="120dp"
-            android:layout_height="70dp"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:fontFamily="@font/capriola"
@@ -88,7 +88,9 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            app:backgroundTint="@color/colorPrimary"
+            android:background="@drawable/customize_border_bg"
+            android:backgroundTint="@null"
+            app:backgroundTint="@null"
             app:cornerRadius="12dp" />
     </LinearLayout>
 

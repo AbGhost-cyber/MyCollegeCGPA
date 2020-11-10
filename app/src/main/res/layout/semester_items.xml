@@ -49,7 +49,7 @@
                 android:fontFamily="@font/capriola"
                 android:padding="5dp"
                 android:textColor="@color/colorPrimary"
-                android:text="First Semestersxxxxxxxxxxxxxxx"
+                android:text="First Semesters"
                 android:textStyle="bold"
                 android:textSize="21sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -68,7 +68,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/capriola"
                 android:padding="5dp"
-                android:text="Maths,Physics,Chemistryxxxxxx"
+                android:text="Maths,Physics,Chemistry"
                 android:textColor="@android:color/secondary_text_dark"
                 android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -83,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:fontFamily="@font/averia_libre_bold"
+                android:fontFamily="@font/capriola"
                 android:text="1.0"
                 android:textColor="@color/colorPrimary"
                 android:textSize="24sp"
@@ -92,7 +92,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
                 app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
                 app:layout_constraintTop_toTopOf="@+id/circularProgressBar"
-                app:layout_constraintVertical_bias="0.32999998" />
+                app:layout_constraintVertical_bias="0.26999998" />
 
 
             <TextView
