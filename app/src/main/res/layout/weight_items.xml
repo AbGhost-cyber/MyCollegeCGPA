@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvGrade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/capriola"
+            android:maxLines="1"
+            android:padding="20dp"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvGradePoint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/capriola"
+            android:maxLines="1"
+            android:padding="20dp"
+            android:textAlignment="textEnd"
+            android:textAllCaps="true"
+            android:textColor="@android:color/black"
+            android:textSize="21sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--<com.google.android.material.card.MaterialCardView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:cardCornerRadius="12dp"-->
+    <!--app:cardElevation="2dp"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent">-->
+
+    <!--<LinearLayout-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:orientation="vertical">-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_A_plus"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_A_plus"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_A_minus"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_A_minus"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_B_plus"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_B_plus"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_B"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_B"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_B_minus"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_B_minus"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_C_plus"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_C_plus"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_C"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_C"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_C_minus"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_C_minus"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_D_plus"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_D_plus"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_D"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_D"/>-->
+    <!--    </LinearLayout>-->
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:orientation="horizontal"-->
+    <!--        android:layout_height="match_parent">-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGrade_E_or_F"/>-->
+    <!--        <TextView-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:textAllCaps="true"-->
+    <!--            android:fontFamily="@font/capriola"-->
+    <!--            android:textSize="21sp"-->
+    <!--            android:padding="20dp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:textAlignment="textEnd"-->
+    <!--            android:textColor="@android:color/black"-->
+    <!--            android:id="@+id/tvGradePoint_E_or_F"/>-->
+    <!--    </LinearLayout>-->
+    <!--</LinearLayout>-->
+
+    <!--</com.google.android.material.card.MaterialCardView>-->

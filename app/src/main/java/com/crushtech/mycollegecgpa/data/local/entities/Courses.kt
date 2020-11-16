@@ -12,6 +12,7 @@ data class Courses(
     val grade: String,
     val color: String,
     var semesterId: String,
+    var gradesPoints: List<GradeClass> = listOf(),
     @PrimaryKey(autoGenerate = false)
     val id: String = UUID.randomUUID().toString()
 ) : Serializable {
@@ -21,16 +22,27 @@ data class Courses(
     }
 
     private fun getGradePoints(): Float {
-        return when (grade) {
-            "A" -> 4F
-            "B+" -> 3.5F
-            "B-" -> 3.0F
-            "C+" -> 2.5F
-            "C-" -> 2.0F
-            "D+" -> 1.5F
-            "D-" -> 1.0F
-            "F" -> 0.0F
-            else -> 0.0F
+        //i really had to make gradepoint a list because of room typeconverter issues
+        gradesPoints.forEach { gradesPoints ->
+            return when (grade) {
+                "A+" -> gradesPoints.APlusGrade
+                "A-" -> gradesPoints.AMinusGrade
+                "B+" -> gradesPoints.BPlusGrade
+                "B" -> gradesPoints.BGrade
+                "B-" -> gradesPoints.BMinusGrade
+                "C+" -> gradesPoints.CPlusGrade
+                "C" -> gradesPoints.CGrade
+                "C-" -> gradesPoints.CMinusGrade
+                "D+" -> gradesPoints.DPlusGrade
+                "D" -> gradesPoints.DGrade
+                "E/F" -> gradesPoints.FOrEGrade
+                else -> gradesPoints.FOrEGrade
+            }
         }
+        return 0.0F
     }
 }
+
+
+//@Expose(deserialize = false, serialize = false)
+//var owner: Boolean = false,

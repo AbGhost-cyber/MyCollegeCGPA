@@ -78,7 +78,7 @@ class SemesterRepository @Inject constructor(
 
         }
 
-    fun logOutUser(fragment: Fragment) {
+    suspend fun logOutUser(fragment: Fragment) {
         sharedPreferences.edit().putString(
             KEY_LOGGED_IN_EMAIL,
             NO_EMAIL
@@ -112,6 +112,7 @@ class SemesterRepository @Inject constructor(
             OthersFragmentDirections.actionOthersFragmentToChooseLoginOrSignUpFragment(),
             navOptions
         )
+        semesterDao.deleteGradePoints()
     }
 
     suspend fun insertSemester(semester: Semester) {
@@ -194,6 +195,40 @@ class SemesterRepository @Inject constructor(
         courses.forEach { insertCourseForSemester(it, semesterId) }
     }
 
+    suspend fun insertGradesPoints(gradePoints: GradeClass) {
+        val response = try {
+            semesterApi.upsertUserGradePoints(gradePoints)
+        } catch (e: Exception) {
+            null
+        }
+
+        if (response == null) {
+            Resource.error(
+                "Couldn't connect to the servers. Check your internet connection",
+                null
+            )
+        }
+        semesterDao.insertGrades(gradePoints)
+    }
+
+    suspend fun resetGradesPoints() {
+        val response = try {
+            semesterApi.resetUserGradePoints()
+        } catch (e: Exception) {
+            null
+        }
+        if (response == null) {
+            Resource.error(
+                "Couldn't connect to the servers. Check your internet connection",
+                null
+            )
+        }
+
+        //delete previous grades in dao and reinsert new
+        semesterDao.deleteGradePoints()
+        semesterDao.insertGrades(GradeClass())
+    }
+
     suspend fun addOwnerToSemester(owner: String, semesterId: String) =
         withContext(Dispatchers.IO) {
             try {
@@ -234,6 +269,29 @@ class SemesterRepository @Inject constructor(
         )
     }
 
+    fun getGradePoints(): Flow<Resource<GradeClass>> {
+        return networkBoundResource(
+            query = {
+                semesterDao.getCurrentGradePoints()
+            },
+            fetch = {
+                syncGradePoints()
+//                currentGradePointsResponse
+                currentGradePointsResponse
+
+            },
+            saveFetchResult = { response ->
+                response?.body()?.let {
+                    insertGradesPoints(it)
+                }
+
+            },
+            shouldFetch = {
+                getConnectionByPeeking()
+            }
+        )
+    }
+
 
     private fun getConnectionByPeeking(): Boolean {
         val events = getNetworkLiveData(context.applicationContext).value
@@ -246,6 +304,7 @@ class SemesterRepository @Inject constructor(
     suspend fun getSemesterById(semesterId: String) = semesterDao.getSemesterById(semesterId)
 
     suspend fun getCourseList(semesterId: String) = semesterDao.getCourseList(semesterId)
+
 
 
     suspend fun deleteSemester(semesterId: String) {
@@ -312,6 +371,21 @@ class SemesterRepository @Inject constructor(
             semesterDao.deleteAllSemesters()
             //insert semesters gotten from server and set synced state to true
             insertSemesters(semesters.onEach { semester -> semester.isSynced = true })
+        }
+    }
+
+    private var currentGradePointsResponse: Response<GradeClass>? = null
+
+    private suspend fun syncGradePoints() {
+        val unSyncedGradePoints = semesterDao.getGradePointForUser()
+        unSyncedGradePoints?.let {
+            insertGradesPoints(it)
+        }
+        currentGradePointsResponse = semesterApi.getUserGradePoints()
+        currentGradePointsResponse?.body()?.let {
+            //we delete all local gradePoints and reinsert again
+            semesterDao.deleteGradePoints()
+            insertGradesPoints(it)
         }
     }
 }

@@ -21,6 +21,20 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
+            android:id="@+id/editCourseGp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/credithours_bg"
+            android:fontFamily="@font/capriola"
+            android:padding="20dp"
+            android:text="Edit Course Grade points"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
+
+        <TextView
             android:id="@+id/logOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

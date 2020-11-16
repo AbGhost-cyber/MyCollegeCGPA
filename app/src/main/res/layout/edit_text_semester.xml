@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tilAddSemester"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColorHint="@color/colorPrimary"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    app:boxStrokeColor="@color/colorPrimaryDark"
     android:padding="16dp">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etAddSemesterName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/colorPrimaryDark"
         android:hint="semester name"
         android:fontFamily="@font/capriola"
-        android:padding="16dp"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
 

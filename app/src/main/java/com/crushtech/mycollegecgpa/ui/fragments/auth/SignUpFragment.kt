@@ -91,7 +91,6 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 when (result.status) {
                     Status.SUCCESS -> {
                         progressBg.visibility = View.GONE
-                        progressImage.visibility = View.GONE
                         signUpprogressBar.visibility = View.GONE
                         showSnackbar(
                             "Successfully registered", null,
@@ -120,19 +119,17 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                     }
                     Status.ERROR -> {
                         progressBg.visibility = View.GONE
-                        progressImage.visibility = View.GONE
                         signUpprogressBar.visibility = View.GONE
                         showSnackbar(
                             result.message ?: "an error occurred", null,
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
                         )
-                        editTextPassword.text.clear()
+                        editTextPassword.text?.clear()
                         editTextReEnterPassword.text?.clear()
                     }
                     Status.LOADING -> {
                         progressBg.visibility = View.VISIBLE
-                        progressImage.visibility = View.VISIBLE
                         signUpprogressBar.visibility = View.VISIBLE
                     }
                 }

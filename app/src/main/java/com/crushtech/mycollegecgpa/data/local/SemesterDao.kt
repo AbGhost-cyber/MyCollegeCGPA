@@ -5,10 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.crushtech.mycollegecgpa.data.local.entities.Courses
-import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedCourseId
-import com.crushtech.mycollegecgpa.data.local.entities.LocallyDeletedSemesterId
-import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.data.local.entities.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,6 +15,9 @@ interface SemesterDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCourse(course: Courses)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertGrades(gradePoints: GradeClass)
 
     @Query("SELECT * FROM Semester WHERE id = :semesterId")
     suspend fun getSemesterById(semesterId: String): Semester?
@@ -34,6 +34,9 @@ interface SemesterDao {
     @Query("SELECT * FROM semester WHERE id = :semesterId")
     fun observeSemesterById(semesterId: String): LiveData<Semester>
 
+    @Query("SELECT * FROM grades")
+    fun getCurrentGradePoints(): Flow<GradeClass>
+
     @Query("SELECT * FROM semester ORDER BY id DESC")
     fun getAllSemesters(): Flow<List<Semester>>
 
@@ -42,6 +45,9 @@ interface SemesterDao {
 
     @Query("DELETE FROM semester")
     suspend fun deleteAllSemesters()
+
+    @Query("DELETE FROM grades")
+    suspend fun deleteGradePoints()
 
     @Query("DELETE FROM courses WHERE id = :courseId AND semesterId = :semesterId")
     suspend fun deleteCourseById(courseId: String, semesterId: String)
@@ -63,5 +69,8 @@ interface SemesterDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLocallyDeletedCourseId(locallyDeletedCourseId: LocallyDeletedCourseId)
+
+    @Query("SELECT * FROM grades")
+    suspend fun getGradePointForUser(): GradeClass?
 
 }

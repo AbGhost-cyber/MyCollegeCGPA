@@ -21,4 +21,8 @@
     <string name="privacy_policy_message"><![CDATA[By using my college cgpa, you agree to our Terms & Privacy Policy]]></string>
     <string name="about_mycollege_cgpa">my college cgpa app helps college/university students to keep record of their academic performances,it also provides real-time statistics of the student\'s performances in which you can track in accordance with your semester,you can as well download the statistics record as a pdf file,share semesters with friends or families,sign up and sync across multiple devices and guess what, it\'s absolutely free.</string>
     <string name="how_to_use">to create a semester, click on the floating action button below your thumb in the my semster screen.\nto add courses, click on the just created semester and you will be navigated to a screen, in that same screen, click on + button at the bottom right corner to add courses.\nto log out, navigate to the others screen, click on the log out button.\nto share your semster, swipe right on the semester item and swipe left to delete.</string>
+    <string name="weight_warning_txt">Please Note: Changes will occur when next you create or edit a course</string>
+    <string name="tap_to_edit_weights">Tap to edit weights</string>
+    <string name="view_stats">view statistics</string>
+    <string name="your_best_semester_will_be_shown_here">your best semester will be shown here</string>
 </resources>

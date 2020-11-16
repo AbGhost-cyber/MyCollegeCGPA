@@ -11,6 +11,7 @@ class OthersViewModel @ViewModelInject constructor(
     private val semesterRepository: SemesterRepository
 ) : ViewModel() {
 
+
     fun logOutCurrentUser(fragment: Fragment) {
         viewModelScope.launch {
             semesterRepository.logOutUser(fragment)

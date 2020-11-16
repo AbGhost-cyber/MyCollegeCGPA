@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.dialogs.AboutAppDialogFragment
@@ -36,7 +37,16 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
         requireActivity().titleBarText.text = "Extras"
 
 
-        setClickAnimationForTexts(listOf(logOut, ShareApp, AboutApp, rateApp, privacyPolicy))
+        setClickAnimationForTexts(
+            listOf(
+                editCourseGp,
+                logOut,
+                ShareApp,
+                AboutApp,
+                rateApp,
+                privacyPolicy
+            )
+        )
 
         if (savedInstanceState != null) {
             val logOutDialog = parentFragmentManager.findFragmentByTag(LOG_OUT_DIALOG)
@@ -111,20 +121,23 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
         )
         textLists.forEachIndexed { index, textView ->
             textView.setOnClickListener {
-                if (animation.hasEnded()) {
-                    when (index) {
-                        0 -> showLogOutDialog()
-                        1 -> shareAppFunction()
-                        2 -> AboutAppDialogFragment().show(parentFragmentManager, ABOUT_APP_DIALOG)
-                        3 -> rateAppFunction()
-                        4 -> {
-                            val intent = Intent(Intent.ACTION_VIEW)
-                            intent.data = Uri.parse(PRIVACY_POLICY)
-                            startActivity(intent)
-                        }
+                textView.startAnimation(animation)
+                when (index) {
+                    0 -> {
+                        findNavController().navigate(
+                            R.id.action_othersFragment_to_weightFragment
+                        )
+                    }
+                    1 -> showLogOutDialog()
+                    2 -> shareAppFunction()
+                    3 -> AboutAppDialogFragment().show(parentFragmentManager, ABOUT_APP_DIALOG)
+                    4 -> rateAppFunction()
+                    5 -> {
+                        val intent = Intent(Intent.ACTION_VIEW)
+                        intent.data = Uri.parse(PRIVACY_POLICY)
+                        startActivity(intent)
                     }
                 }
-                textView.startAnimation(animation)
             }
         }
     }

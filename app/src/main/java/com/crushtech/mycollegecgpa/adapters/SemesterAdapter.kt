@@ -61,7 +61,7 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
                 tvSynced1.text = context.getString(R.string.isSynced)
             }
             circularProgressBar.apply {
-                progressMax = 4F
+                progressMax = differ.currentList.maxBy { it.getGPA() }!!.getGPA().toFloat()
                 progress = semesters.getGPA().toFloat()
                 setProgressWithAnimation(progress, 1000)
                 backgroundProgressBarWidth = 3f
@@ -142,4 +142,6 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
 
         }
     }
+
 }
+

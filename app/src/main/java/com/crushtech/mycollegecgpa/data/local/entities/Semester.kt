@@ -12,7 +12,6 @@ data class Semester(
     var courses: List<Courses> = listOf(),
     val owners: List<String> = listOf(),
     val semesterName: String = "semester one",
-
     @Expose(deserialize = false, serialize = false)
     var isSynced: Boolean = false,
 
@@ -56,3 +55,5 @@ fun getCGPA(semester: Triple<Semester, Semester, Semester>): Double {
     val totalGPA = firstSemesterGPA + secondSemesterGPA + thirdSemesterGPA
     return totalGPA / 3
 }
+
+

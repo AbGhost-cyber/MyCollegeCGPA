@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/colorPrimary">
+
     <LinearLayout
         android:id="@+id/progressBg2"
         android:layout_width="match_parent"
@@ -58,11 +59,11 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:fontFamily="@font/capriola"
-        android:textColor="@android:color/white"
         android:padding="10dp"
         android:text="@string/sign_up"
+        android:textColor="@android:color/white"
+        android:textSize="37sp"
         android:textStyle="bold"
-        android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
@@ -79,136 +80,118 @@
         android:background="@drawable/sign_up_bg"
         android:elevation="1dp"
         android:orientation="vertical"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         app:layout_constraintVertical_bias="0.0">
 
-        <LinearLayout
-            android:id="@+id/email_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:textColorHint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/currentWeightTv"
+            app:layout_constraintVertical_bias="0.0">
 
-            <TextView
-                android:id="@+id/TvEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/capriola"
-                android:text="@string/email"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/auth_selector_bg"
-                android:fontFamily="@font/capriola"
-                android:hint="input email"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:padding="10dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/username_parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/TvUsername"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/capriola"
-                android:text="@string/username"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
+                android:gravity="top"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:maxLines="2"
+                android:padding="16dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColorHint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/currentWeightTv"
+            app:layout_constraintVertical_bias="0.0">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextUsername"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/auth_selector_bg"
-                android:fontFamily="@font/capriola"
-                android:hint="input username"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:padding="10dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/password_parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:id="@+id/TvPassword"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/capriola"
-                android:text="@string/password"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
+                android:gravity="top"
+                android:hint="@string/username"
+                android:inputType="textPersonName"
+                android:maxLines="2"
+                android:padding="16dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/newWeightParent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColorHint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/currentWeightTv"
+            app:layout_constraintVertical_bias="0.0"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/auth_selector_bg"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/capriola"
-                android:hint="input password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:padding="10dp" />
-        </LinearLayout>
+                android:gravity="top"
+                android:hint="@string/password"
+                android:inputType="numberPassword|textPassword"
+                android:maxLines="2"
+                android:padding="16dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:id="@+id/reEnterPassword_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_marginTop="20dp"
+            android:textColorHint="@color/colorPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/currentWeightTv"
+            app:layout_constraintVertical_bias="0.0"
+            app:passwordToggleEnabled="true">
 
-            <TextView
-                android:id="@+id/TvReEnterPassword"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextReEnterPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/capriola"
-                android:text="@string/reEnterPassword"
-                android:textColor="@color/colorPrimary"
-                android:textSize="15sp" />
-
-            <EditText
-                android:id="@+id/editTextReEnterPassword"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/auth_selector_bg"
-                android:fontFamily="@font/capriola"
-                android:hint="re-enter password"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:padding="10dp" />
-        </LinearLayout>
+                android:gravity="top"
+                android:hint="@string/password"
+                android:inputType="numberPassword|textPassword"
+                android:maxLines="2"
+                android:padding="16dp"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
 
@@ -220,11 +203,11 @@
         android:elevation="100dp"
         android:fontFamily="@font/capriola"
         android:text="@string/sign_up"
-        android:textColor="@color/colorPrimary"
         android:textAllCaps="true"
+        android:textColor="@android:color/white"
         android:textSize="19sp"
         android:textStyle="bold"
-        app:backgroundTint="@android:color/white"
+        app:backgroundTint="@color/colorPrimary"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -283,28 +266,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/progressImage"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:elevation="30dp"
-        android:src="@color/colorPrimary"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.52" />
 
     <ProgressBar
         android:id="@+id/signUpprogressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="30dp"
-        android:theme="@style/AppTheme.WhiteAccent"
+        android:theme="@style/AppTheme.PrimaryDark"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/progressImage"
-        app:layout_constraintEnd_toEndOf="@+id/progressImage"
-        app:layout_constraintStart_toStartOf="@+id/progressImage"
-        app:layout_constraintTop_toTopOf="@+id/progressImage" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.52" />
 </androidx.constraintlayout.widget.ConstraintLayout>

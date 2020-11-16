@@ -41,7 +41,8 @@ class CourseAdapter : RecyclerView.Adapter<CourseViewHolder>() {
             tvCreditHours.text = creditHours
 
             if (courses.grade.equals("F", true) ||
-                courses.grade.equals("D-", true)
+                courses.grade.equals("D+", true) ||
+                courses.grade.equals("D", true)
             ) {
 
                 tvGrade.setTextColor(Color.RED)
@@ -68,6 +69,7 @@ class CourseAdapter : RecyclerView.Adapter<CourseViewHolder>() {
             }
         }
     }
+
     private val diffUtilCallBack = object : DiffUtil.ItemCallback<Courses>() {
         override fun areItemsTheSame(oldItem: Courses, newItem: Courses): Boolean {
             return oldItem.id == newItem.id

@@ -29,8 +29,13 @@ object AppModule {
     @Provides
     fun provideNoteDatabase(
         @ApplicationContext context: Context
-    ) = Room.databaseBuilder(context, SemesterDatabase::class.java, DATABASE_NAME)
-        .fallbackToDestructiveMigration().build()
+    ) = Room.databaseBuilder(
+        context,
+        SemesterDatabase::class.java,
+        DATABASE_NAME
+    )
+        .fallbackToDestructiveMigration()
+        .build()
 
     @Singleton
     @Provides

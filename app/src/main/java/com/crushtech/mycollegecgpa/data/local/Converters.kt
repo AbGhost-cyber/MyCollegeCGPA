@@ -18,4 +18,5 @@ class Converters {
         return Gson().fromJson(string, object : TypeToken<List<Courses>>() {
         }.type)
     }
+
 }

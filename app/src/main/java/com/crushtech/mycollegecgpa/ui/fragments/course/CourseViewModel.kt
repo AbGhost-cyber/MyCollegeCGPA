@@ -71,4 +71,5 @@ class CourseViewModel @ViewModelInject constructor(
     fun deleteLocallyDeletedCourseId(deletedCourseId: String) = viewModelScope.launch {
         repository.deleteLocallyDeletedCourseId(deletedCourseId)
     }
+
 }

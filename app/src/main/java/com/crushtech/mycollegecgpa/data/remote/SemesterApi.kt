@@ -1,6 +1,7 @@
 package com.crushtech.mycollegecgpa.data.remote
 
 
+import com.crushtech.mycollegecgpa.data.local.entities.GradeClass
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.data.local.entities.UserPdfDownloads
 import com.crushtech.mycollegecgpa.data.remote.requests.*
@@ -58,4 +59,15 @@ interface SemesterApi {
     suspend fun upsertUserPdfDownloads(
         @Body pdfDownloads: UserPdfDownloads
     ): Response<ResponseBody>
+
+    @POST("/editUserGradePoints")
+    suspend fun upsertUserGradePoints(
+        @Body gradePoints: GradeClass
+    ): Response<ResponseBody>
+
+    @POST("/resetUserGradePoints")
+    suspend fun resetUserGradePoints(): Response<GradeClass>
+
+    @GET("/getUserGradePoints")
+    suspend fun getUserGradePoints(): Response<GradeClass>
 }

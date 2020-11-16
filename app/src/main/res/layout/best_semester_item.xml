@@ -122,7 +122,7 @@
                     android:fontFamily="@font/capriola"
                     android:padding="10dp"
                     android:text="Maths,Physics,Chemistry"
-                    android:textColor="@android:color/secondary_text_dark"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="17sp"
                     android:textStyle="normal"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -139,9 +139,12 @@
                     android:layout_alignStart="@id/ivSynced"
                     android:layout_alignParentBottom="true"
                     android:fontFamily="@font/capriola"
+                    android:padding="5dp"
                     android:text="synced"
                     android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/ivSynced" />
 
                 <ImageView

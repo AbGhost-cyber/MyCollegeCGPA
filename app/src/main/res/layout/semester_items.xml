@@ -69,7 +69,7 @@
                 android:fontFamily="@font/capriola"
                 android:padding="5dp"
                 android:text="Maths,Physics,Chemistry"
-                android:textColor="@android:color/secondary_text_dark"
+                android:textColor="@color/colorPrimary"
                 android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

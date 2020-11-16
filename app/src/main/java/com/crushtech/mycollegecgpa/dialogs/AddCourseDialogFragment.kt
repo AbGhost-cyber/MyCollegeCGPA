@@ -44,14 +44,17 @@ class AddCourseDialogFragment : DialogFragment() {
         val spinner = addCourseLayout.findViewById<Spinner>(R.id.spinnerSelectGrade)
 
         val spinnerArrayList: ArrayList<String> = ArrayList()
-        spinnerArrayList.add("A")
+        spinnerArrayList.add("A+")
+        spinnerArrayList.add("A-")
         spinnerArrayList.add("B+")
+        spinnerArrayList.add("B")
         spinnerArrayList.add("B-")
         spinnerArrayList.add("C+")
+        spinnerArrayList.add("C")
         spinnerArrayList.add("C-")
         spinnerArrayList.add("D+")
-        spinnerArrayList.add("D-")
-        spinnerArrayList.add("F")
+        spinnerArrayList.add("D")
+        spinnerArrayList.add("E/F")
 
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
@@ -108,15 +111,16 @@ class AddCourseDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
+
             val course = if (courses?.id.isNullOrEmpty()) {
                 Courses(courseName, creditHours.toFloat(), grade, color, "")
             } else {
                 courses?.semesterId?.let { it1 ->
                     Courses(
-                        courseName, creditHours.toFloat(), grade, color,
-                        it1, courses.id
+                        courseName, creditHours.toFloat(), grade, color, it1, id = courses.id
                     )
                 }
+
             }
 
             positiveListener?.let {

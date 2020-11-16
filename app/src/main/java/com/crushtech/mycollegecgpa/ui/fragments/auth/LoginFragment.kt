@@ -88,7 +88,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         result.data?.let {
                             this.currentUserName = it
                         }
-                        logInProgressImage.visibility = View.GONE
                         LoginProgressBar.visibility = View.GONE
                         val snackBarText = "Welcome back $currentUserName"
                         showSnackbar(
@@ -117,7 +116,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                     }
                     Status.ERROR -> {
                         progressBg.visibility = View.GONE
-                        logInProgressImage.visibility = View.GONE
                         LoginProgressBar.visibility = View.GONE
                         val snackBarText = result.message
                         showSnackbar(
@@ -129,7 +127,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         LoginBtn.isEnabled = true
                     }
                     Status.LOADING -> {
-                        logInProgressImage.visibility = View.VISIBLE
                         LoginProgressBar.visibility = View.VISIBLE
                         progressBg.visibility = View.VISIBLE
                     }

@@ -429,7 +429,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
                     pdfHasBeenCreated = false
                 }
                 showSnackbar(
-                    "PDF CREATED SUCCESSFULLY", null,
+                    "Pdf has been generated", null,
                     R.drawable.ic_baseline_bubble_chart_24, "", Color.BLACK
                 )
                 viewPdf.visibility = View.VISIBLE

@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_othersFragment_to_chooseLoginOrSignUpFragment"
             app:destination="@id/chooseLoginOrSignUpFragment" />
+        <action
+            android:id="@+id/action_othersFragment_to_weightFragment"
+            app:destination="@id/weightFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -88,5 +91,10 @@
             android:id="@+id/action_chooseLoginOrSignUpFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/weightFragment"
+        android:name="com.crushtech.mycollegecgpa.ui.fragments.weights.WeightFragment"
+        android:label="My Weights"
+        tools:layout="@layout/weight_layout" />
 
 </navigation>

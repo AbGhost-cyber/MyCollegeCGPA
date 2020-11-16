@@ -197,6 +197,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                 val results = event.peekContent()
                 when (results.status) {
                     Status.SUCCESS -> {
+                        swipeRefreshLayout.isRefreshing = false
                         semesterAdapter.differ.submitList(results.data!!)
                         if (results.data.isNotEmpty()) {
                             bestSemesterAdapter.differ.submitList(
@@ -204,9 +205,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                             )
                         }
                         checkForEmptyState(results.data)
-
-                        swipeRefreshLayout.isRefreshing = false
-
                     }
                     Status.ERROR -> {
                         event.getContentIfNotHandled()?.let { error ->
@@ -376,6 +374,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             val semester = semesterAdapter.differ.currentList[position]
             if (direction == LEFT) {
                 homeViewModel.deleteSemester(semester.id)
+                semesterAdapter.notifyItemRemoved(position)
 
                 val snackListener = OnClickListener {
                     homeViewModel.insertSemester(semester)
@@ -386,7 +385,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     "Undo", Color.BLACK
                 )
 
-            } else if (direction == RIGHT) {
+            }
+            if (direction == RIGHT) {
                 homeViewModel.observeSemesterById(semester.id).observe(viewLifecycleOwner,
                     Observer {
                         it?.let { semester ->

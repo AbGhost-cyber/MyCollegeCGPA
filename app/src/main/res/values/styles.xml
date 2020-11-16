@@ -15,6 +15,10 @@
         <item name="colorAccent">@android:color/white</item> <!-- Whatever color you want-->
     </style>
 
+    <style name="AppTheme.PrimaryDark">
+        <item name="colorAccent">@color/colorPrimaryDark</item> <!-- Whatever color you want-->
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_baseline_chevron_left_24</item>
