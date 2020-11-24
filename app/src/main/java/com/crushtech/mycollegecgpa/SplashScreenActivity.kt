@@ -23,10 +23,11 @@ class SplashScreenActivity : AppCompatActivity() {
         )
         setContentView(R.layout.splash_screen_layout)
 
-        val imageViewAnim = AnimationUtils.loadAnimation(this, R.anim.fade_out)
-        appLogo.startAnimation(imageViewAnim)
-        val textAnim = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
-        appNameTv.startAnimation(textAnim)
+        AnimationUtils.loadAnimation(this, android.R.anim.fade_in).apply {
+            appLogo.startAnimation(this)
+            appNameTv.startAnimation(this)
+        }
+
 
         val intent = Intent(this, MainActivity::class.java)
         GlobalScope.launch(Dispatchers.Main) {

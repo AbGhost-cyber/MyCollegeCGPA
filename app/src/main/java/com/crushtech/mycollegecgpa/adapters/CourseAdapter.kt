@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.CourseAdapter.CourseViewHolder
 import com.crushtech.mycollegecgpa.data.local.entities.Courses
+import com.crushtech.mycollegecgpa.utils.Constants.SHIMMER_ITEM_NUMBER
 import kotlinx.android.synthetic.main.course_items.view.*
 
 class CourseAdapter : RecyclerView.Adapter<CourseViewHolder>() {
+
+    var showShimmer = true
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
         return CourseViewHolder(
             LayoutInflater.from(parent.context).inflate(
@@ -24,49 +27,63 @@ class CourseAdapter : RecyclerView.Adapter<CourseViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        return if (showShimmer) SHIMMER_ITEM_NUMBER else differ.currentList.size
     }
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
-        val courses = differ.currentList[position]
         holder.itemView.apply {
-            tvCourseName.text = courses.courseName
-
-            val creditHours = if (courses.creditHours <= 1) {
-                "${courses.creditHours} credit hour"
+            if (showShimmer) {
+                viewCourseColor.visibility = View.INVISIBLE
+                course_shimmer.startShimmer()
             } else {
-                "${courses.creditHours} credit hours"
-            }
+                val courses = differ.currentList[position]
+                course_shimmer.apply {
+                    stopShimmer()
+                    setShimmer(null)
+                }
+                viewCourseColor.visibility = View.VISIBLE
+                tvCourseName.background = null
+                tvCreditHours.background = null
+                tvGrade.background = null
+                tvCourseName.text = courses.courseName
 
-            tvCreditHours.text = creditHours
+                val creditHours = if (courses.creditHours <= 1) {
+                    "${courses.creditHours} credit hour"
+                } else {
+                    "${courses.creditHours} credit hours"
+                }
 
-            if (courses.grade.equals("F", true) ||
-                courses.grade.equals("D+", true) ||
-                courses.grade.equals("D", true)
-            ) {
+                tvCreditHours.text = creditHours
 
-                tvGrade.setTextColor(Color.RED)
-            } else {
-                tvGrade.setTextColor(Color.parseColor("#4A56E2"))
-            }
-            tvGrade.text = courses.grade
+                if (courses.grade.equals("F", true) ||
+                    courses.grade.equals("D+", true) ||
+                    courses.grade.equals("D", true)
+                ) {
+
+                    tvGrade.setTextColor(Color.RED)
+                } else {
+                    tvGrade.setTextColor(Color.parseColor("#4A56E2"))
+                }
+                tvGrade.text = courses.grade
 
 
-            val drawable = ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.thin_shape, null
-            )
-            drawable?.let {
-                val wrappedDrawable = DrawableCompat.wrap(it)
-                val color = Color.parseColor("#${courses.color}")
-                DrawableCompat.setTint(wrappedDrawable, color)
-                viewCourseColor.background = wrappedDrawable
-            }
-            setOnClickListener {
-                onItemClickListener?.let { click ->
-                    click(courses)
+                val drawable = ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.thin_shape, null
+                )
+                drawable?.let {
+                    val wrappedDrawable = DrawableCompat.wrap(it)
+                    val color = Color.parseColor("#${courses.color}")
+                    DrawableCompat.setTint(wrappedDrawable, color)
+                    viewCourseColor.background = wrappedDrawable
+                }
+                setOnClickListener {
+                    onItemClickListener?.let { click ->
+                        click(courses)
+                    }
                 }
             }
+
         }
     }
 

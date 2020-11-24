@@ -21,7 +21,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.*
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.local.entities.UserPdfDownloads
@@ -55,7 +55,7 @@ import javax.inject.Inject
 const val REQUEST_CODE = 1
 
 @AndroidEntryPoint
-class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
+class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), PurchasesUpdatedListener {
     @Inject
     lateinit var sharedPrefs: SharedPreferences
     private var firsTimeOpen = false
@@ -66,7 +66,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
     private val totalCreditHoursChange: MutableLiveData<Float> = MutableLiveData()
     private lateinit var billingClient: BillingClient
     private var userPdfDownloadsCount: UserPdfDownloads? = null
-
+    private val skuList = listOf("stats_download_coins")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -211,21 +211,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
                     }
 
                 }
-                pdfDownloadParent.setOnClickListener {
-                    if (isConnected) {
-                        userPdfDownloadsCount?.let {
-                            it.noOfPdfDownloads += 5
-                            pdfDownloadsViewModel.upsertUserPdfDownloads(it)
-                        }
-                    } else {
-                        showSnackbar(
-                            "internet connection is required for this feature",
-                            null,
-                            R.drawable.ic_baseline_error_outline_24,
-                            "", Color.RED
-                        )
-                    }
-                }
+
             })
 
 
@@ -540,5 +526,124 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment) {
         statsRefreshLayout.setOnRefreshListener {
             pdfDownloadsViewModel.getUserPdfDownloads()
         }
+    }
+
+//    private val purchasesUpdatedListener =
+//        PurchasesUpdatedListener { billingResult, purchases ->
+//            // To be implemented in a later section.
+//        }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupBillingClient()
+    }
+
+    private fun setupBillingClient() {
+        billingClient = BillingClient.newBuilder(requireContext())
+            .enablePendingPurchases()
+            .setListener(this)
+            .build()
+        billingClient.startConnection(object : BillingClientStateListener {
+
+            override fun onBillingServiceDisconnected() {
+                showSnackbar(
+                    "an error occurred, please retry again",
+                    null,
+                    R.drawable.ic_baseline_error_outline_24, "",
+                    getColor(requireContext(), android.R.color.holo_red_dark)
+                )
+            }
+
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    // The BillingClient is setup successfully
+                    loadPdfSkus()
+                }
+            }
+
+        })
+    }
+
+
+    private fun loadPdfSkus() = if (billingClient.isReady) {
+        val params = SkuDetailsParams.newBuilder()
+            .setSkusList(skuList)
+            .setType(BillingClient.SkuType.INAPP)
+            .build()
+
+        billingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                if (skuDetailsList != null) {
+                    for (skuDetails in skuDetailsList) {
+                        //this will return both the SKUs from Google Play Console
+                        if (skuDetails.sku == skuList[0])
+                            pdfDownloadParent.setOnClickListener {
+                                val billingFlowParams = BillingFlowParams
+                                    .newBuilder()
+                                    .setSkuDetails(skuDetails)
+                                    .build()
+                                billingClient.launchBillingFlow(
+                                    requireActivity(),
+                                    billingFlowParams
+                                )
+                            }
+                    }
+                }
+            }
+
+        }
+    } else {
+        //not necessary
+        println("Billing client  not ready")
+    }
+
+    override fun onPurchasesUpdated(
+        billingResult: BillingResult,
+        purchases: MutableList<Purchase>?
+    ) {
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+            //purchase was successful
+            for (purchase in purchases) {
+                acknowledgePurchaseAndMarkAsConsumed(purchase.purchaseToken)
+            }
+        } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+            showSnackbar(
+                "purchase cancelled",
+                null,
+                R.drawable.ic_baseline_error_outline_24, "",
+                getColor(requireContext(), android.R.color.holo_red_dark)
+            )
+        }
+    }
+
+    private fun acknowledgePurchaseAndMarkAsConsumed(purchaseToken: String) {
+        val consumeParams = ConsumeParams.newBuilder()
+            .setPurchaseToken(purchaseToken)
+            .build()
+
+        billingClient.consumeAsync(consumeParams) { billingResult, outToken ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                //award 5 download coins
+                userPdfDownloadsCount?.let {
+                    it.noOfPdfDownloads += 5
+                    pdfDownloadsViewModel.upsertUserPdfDownloads(it)
+                }
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            in 1..3 -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    processPdf()
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }

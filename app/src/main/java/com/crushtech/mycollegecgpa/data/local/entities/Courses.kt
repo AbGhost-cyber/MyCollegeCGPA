@@ -22,7 +22,8 @@ data class Courses(
     }
 
     private fun getGradePoints(): Float {
-        //i really had to make gradepoint a list because of room typeconverter issues
+        //i really had to make gradepoint a list
+        // because of room typeconverter issues
         gradesPoints.forEach { gradesPoints ->
             return when (grade) {
                 "A+" -> gradesPoints.APlusGrade
@@ -43,6 +44,3 @@ data class Courses(
     }
 }
 
-
-//@Expose(deserialize = false, serialize = false)
-//var owner: Boolean = false,

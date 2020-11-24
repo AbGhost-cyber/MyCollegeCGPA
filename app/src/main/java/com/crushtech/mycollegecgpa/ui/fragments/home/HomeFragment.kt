@@ -336,11 +336,15 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             bestSemester.visibility = INVISIBLE
             bestSemesterText2.visibility = INVISIBLE
             no_semester_txt.visibility = VISIBLE
+            semesterLottie.visibility = VISIBLE
+            no_semester_desc.visibility = VISIBLE
             allSemesterText.visibility = INVISIBLE
             viewPerformance.visibility = INVISIBLE
             rvBestSemester.visibility = INVISIBLE
         } else {
             no_semester_txt.visibility = INVISIBLE
+            semesterLottie.visibility = INVISIBLE
+            no_semester_desc.visibility = INVISIBLE
             allSemesterText.visibility = VISIBLE
             bestSemester.visibility = VISIBLE
             viewPerformance.visibility = VISIBLE

@@ -46,7 +46,6 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
     private lateinit var courseAdapter: CourseAdapter
 
-
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
@@ -93,6 +92,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
     private fun setupRecyclerView() {
         courseRv.apply {
+            itemAnimator = null
             courseAdapter = CourseAdapter()
             adapter = courseAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -136,6 +136,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
+                        courseAdapter.showShimmer = false
                         val semester = result.data!!
                         if (currentSemester?.courses.isNullOrEmpty()) {
                             viewModel.insertCourses(semester.courses, semester.id)
@@ -144,16 +145,17 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
                     }
                     Status.ERROR -> {
+                        courseAdapter.showShimmer = false
                         showSnackbar(
                             result.message ?: "semester not found", null,
                             R.drawable.ic_baseline_error_outline_24, "", Color.RED
                         )
                     }
                     Status.LOADING -> {
-                        showSnackbar(
-                            "loading please wait....", null,
-                            R.drawable.ic_baseline_emoji_emotions_24, "", Color.BLACK
-                        )
+                        courseAdapter.showShimmer = true
+                        no_course.visibility = View.GONE
+                        lottieAnimationView.visibility = View.GONE
+                        no_course_des.visibility = View.GONE
                     }
                 }
             }
@@ -163,14 +165,19 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
+                        courseAdapter.showShimmer = false
                         result.data?.let { courses ->
                             courseAdapter.differ.submitList(courses)
                             currentSemester?.courses = courses
                             viewModel.getCourseList(args.semesterId)
                             if (result.data.isEmpty()) {
                                 no_course.visibility = View.VISIBLE
+                                lottieAnimationView.visibility = View.VISIBLE
+                                no_course_des.visibility = View.VISIBLE
                             } else {
                                 no_course.visibility = View.GONE
+                                lottieAnimationView.visibility = View.GONE
+                                no_course_des.visibility = View.GONE
                             }
                             if (no_course.isVisible) {
                                 swipeText.visibility = View.GONE
@@ -185,9 +192,12 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                             result.message ?: "course not found", null,
                             R.drawable.ic_baseline_error_outline_24, "", Color.RED
                         )
+                        no_course.visibility = View.GONE
+                        lottieAnimationView.visibility = View.GONE
+                        no_course_des.visibility = View.GONE
                     }
                     Status.LOADING -> {
-                        /* NO-OP */
+                        //NO_OP
                     }
                 }
             }

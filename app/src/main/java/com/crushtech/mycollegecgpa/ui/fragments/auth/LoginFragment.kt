@@ -69,6 +69,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
         LoginBtn.setOnClickListener {
+            hideKeyboard()
             val email = editTextEmail1.text.toString()
             val password = editTextPassword1.text.toString()
 

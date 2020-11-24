@@ -1,71 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/course_drag"
+    android:id="@+id/course_shimmer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:background="@drawable/search_bg"
-    android:clickable="false">
+    android:background="@color/colorPrimaryDark"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <View
-        android:id="@+id/viewCourseColor"
-        android:layout_width="10dp"
-        android:layout_height="0dp"
-        android:background="@drawable/thin_shape"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvCourseName"
-        android:layout_width="280dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/course_drag"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:ellipsize="end"
-        android:fontFamily="@font/capriola"
-        android:text="Maths"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/viewCourseColor"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.06999999" />
+        android:layout_margin="5dp"
+        android:background="@drawable/search_bg"
+        android:clickable="false">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tvCreditHours"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="20dp"
-        android:fontFamily="@font/capriola"
-        android:text="3 credit hours"
-        android:textColor="@android:color/secondary_text_dark"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/viewCourseColor"
-        app:layout_constraintTop_toBottomOf="@+id/tvCourseName" />
+        <View
+            android:id="@+id/viewCourseColor"
+            android:layout_width="10dp"
+            android:layout_height="0dp"
+            android:background="@drawable/thin_shape"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvGrade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/capriola"
-        android:text="C-"
-        android:textAllCaps="true"
-        android:textColor="@color/colorPrimary"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.771"
-        app:layout_constraintStart_toEndOf="@+id/tvCourseName"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvCourseName"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/shimmer_color"
+            android:ellipsize="end"
+            android:fontFamily="@font/capriola"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewCourseColor"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.06999999" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvCreditHours"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/shimmer_color"
+            android:fontFamily="@font/capriola"
+            android:textColor="@android:color/secondary_text_dark"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/viewCourseColor"
+            app:layout_constraintTop_toBottomOf="@+id/tvCourseName" />
+
+        <TextView
+            android:id="@+id/tvGrade"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@color/shimmer_color"
+            android:fontFamily="@font/capriola"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.771"
+            app:layout_constraintStart_toEndOf="@+id/tvCourseName"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.facebook.shimmer.ShimmerFrameLayout>
+
+
+
 
 

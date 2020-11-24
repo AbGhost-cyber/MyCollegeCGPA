@@ -71,6 +71,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
 
         signUpBtn.setOnClickListener {
+            hideKeyboard()
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
             val reEnterPassword = editTextReEnterPassword.text.toString()

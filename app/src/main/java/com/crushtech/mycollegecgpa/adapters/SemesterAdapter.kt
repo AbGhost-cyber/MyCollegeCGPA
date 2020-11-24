@@ -62,17 +62,23 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
             }
             circularProgressBar.apply {
                 progressMax = differ.currentList.maxBy { it.getGPA() }!!.getGPA().toFloat()
+
                 progress = semesters.getGPA().toFloat()
-                setProgressWithAnimation(progress, 1000)
+                setProgressWithAnimation(progress, 5000)
                 backgroundProgressBarWidth = 3f
             }
-            if (circularProgressBar.progress < 3) {
+            if (circularProgressBar.progress > 0 && circularProgressBar.progress < 3) {
                 circularProgressBar.progressBarColorEnd = RED
                 circularProgressBar.progressBarColorStart = RED
+            } else if (circularProgressBar.progress == 0F) {
+                //set progress to 4 to clear circular progressBarColorEnd
+                // and progressBarColorStart color for that item
+                circularProgressBar.progressMax = 4F
             } else {
                 circularProgressBar.progressBarColorEnd = parseColor("#64DD17")
                 circularProgressBar.progressBarColorStart = parseColor("#64DD17")
             }
+
             setOnClickListener {
                 onItemClickListener?.let { click ->
                     click(semesters)
