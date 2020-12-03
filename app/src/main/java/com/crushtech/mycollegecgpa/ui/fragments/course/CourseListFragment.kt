@@ -170,7 +170,6 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
-                        courseAdapter.showShimmer = false
                         val semester = result.data!!
                         if (firsTimeOpen) {
                             viewModel.insertCourses(semester.courses, semester.id)
@@ -185,14 +184,12 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
                     }
                     Status.ERROR -> {
-                        courseAdapter.showShimmer = false
                         showSnackbar(
                             result.message ?: "semester not found", null,
                             R.drawable.ic_baseline_error_outline_24, "", Color.RED
                         )
                     }
                     Status.LOADING -> {
-                        courseAdapter.showShimmer = true
                         no_course.visibility = View.GONE
                         lottieAnimationView.visibility = View.GONE
                         no_course_des.visibility = View.GONE
@@ -205,7 +202,6 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
-                        courseAdapter.showShimmer = false
                         result.data?.let { courses ->
                             courseAdapter.differ.submitList(courses)
                             currentSemester?.courses = courses
@@ -223,7 +219,6 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
                     }
                     Status.ERROR -> {
-                        courseAdapter.showShimmer = false
                         showSnackbar(
                             result.message ?: "course not found", null,
                             R.drawable.ic_baseline_error_outline_24, "", Color.RED
@@ -233,7 +228,6 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                         no_course_des.visibility = View.GONE
                     }
                     Status.LOADING -> {
-                        courseAdapter.showShimmer = false
                     }
                 }
             }
@@ -294,7 +288,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         }.show(parentFragmentManager, ADD_COURSE_DIALOG)
     }
 
-    fun insertCourse(course: Courses, message: String) {
+    private fun insertCourse(course: Courses, message: String) {
         val semesterId = currentSemester?.id ?: UUID.randomUUID().toString()
         course.semesterId = semesterId
         currentGradePoints?.let {

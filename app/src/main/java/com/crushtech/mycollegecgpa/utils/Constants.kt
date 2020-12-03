@@ -11,7 +11,6 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 object Constants {
     val IGNORE_AUTH_URLS = listOf("/login", "register")
-    const val SHIMMER_ITEM_NUMBER = 7
     const val DATABASE_NAME = "semester_db"
 
     const val BASE_URL = "https://mycollegecgpa.xyz/"
