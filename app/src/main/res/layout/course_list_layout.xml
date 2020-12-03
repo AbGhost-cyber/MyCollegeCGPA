@@ -18,23 +18,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/semesterName"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/editSemesterParent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:background="@drawable/cl_text_bg"
-                android:fontFamily="@font/capriola"
-                android:hint="@string/semester_name_hint"
-                android:padding="16dp"
-                android:textColor="@android:color/black"
-                android:textSize="19sp"
+                android:padding="10dp"
+                app:boxStrokeColor="@color/colorPrimary"
+                app:hintTextColor="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/instruction"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/semesterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/capriola"
+                    android:hint="@string/semester_name_hint"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/allCourses"
@@ -42,15 +51,15 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/capriola"
                 android:padding="15dp"
-                android:textColor="@color/colorPrimary"
                 android:text="@string/all_courses"
-                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
                 android:textSize="22sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/semesterName"
+                app:layout_constraintTop_toBottomOf="@id/editSemesterParent"
                 app:layout_constraintVertical_bias="0.0" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -61,59 +70,53 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/swipeText" />
-
-            <TextView
-                android:id="@+id/swipeText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/capriola"
-                android:text="Swipe left to delete"
-                android:textColor="@color/colorPrimary"
-                android:textSize="17sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/allCourses"
-                app:drawableStartCompat="@drawable/ic_baseline_chevron_left_24"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/instruction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/capriola"
-                android:padding="10dp"
-                android:text="@string/change_semester_name"
-                android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/allCourses" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fabCreateCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/add_ic"
+        android:fontFamily="@font/capriola"
+        android:text="@string/create"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
         app:backgroundTint="@android:color/white"
-        app:fabCustomSize="70dp"
+        app:icon="@drawable/ic_create_semester4"
+        app:iconTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.92"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fabSaveCourse"
+        app:layout_constraintVertical_bias="0.26"
+        app:rippleColor="@color/colorPrimary"
+        app:tint="@null" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabSaveCourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/capriola"
+        android:text="@string/save_course"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        app:backgroundTint="@color/colorPrimary"
+        app:icon="@drawable/ic_save4"
+        app:iconTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/add_course_text"
-        app:layout_constraintVertical_bias="0.97" />
+        app:layout_constraintVertical_bias="0.88"
+        app:rippleColor="@android:color/white"
+        app:tint="@null" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottieAnimationView"
@@ -156,8 +159,8 @@
         android:fontFamily="@font/capriola"
         android:text="@string/no_course_des"
         android:textAlignment="center"
-        android:textSize="15sp"
         android:textColor="@color/colorPrimary"
+        android:textSize="15sp"
         android:textStyle="normal"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -167,3 +170,4 @@
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

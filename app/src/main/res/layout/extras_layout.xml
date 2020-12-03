@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/OthersContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/dialog_bg"
+                android:orientation="vertical"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <TextView
+                    android:id="@+id/editCourseGp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/credithours_bg"
+                    android:fontFamily="@font/capriola"
+                    android:padding="20dp"
+                    android:text="@string/edit_course_grade_points"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
+
+                <TextView
+                    android:id="@+id/ShareApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/credithours_bg"
+                    android:fontFamily="@font/capriola"
+                    android:padding="20dp"
+                    android:text="@string/share_this_app_txt"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
+
+                <TextView
+                    android:id="@+id/AboutApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/credithours_bg"
+                    android:fontFamily="@font/capriola"
+                    android:padding="20dp"
+                    android:text="@string/about_app_txt"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
+
+                <TextView
+                    android:id="@+id/rateApp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/credithours_bg"
+                    android:fontFamily="@font/capriola"
+                    android:padding="20dp"
+                    android:text="@string/rate_this_app_txt"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
+
+                <TextView
+                    android:id="@+id/privacyPolicy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/credithours_bg"
+                    android:fontFamily="@font/capriola"
+                    android:padding="20dp"
+                    android:text="@string/privacy_policy_txt"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24" />
+
+                <TextView
+                    android:id="@+id/logOut"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/logout_bg"
+                    android:fontFamily="@font/capriola"
+                    android:padding="20dp"
+                    android:text="@string/log_out"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:drawableEndCompat="@drawable/ic_baseline_chevron_right_24"
+                    app:drawableTint="@android:color/white" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

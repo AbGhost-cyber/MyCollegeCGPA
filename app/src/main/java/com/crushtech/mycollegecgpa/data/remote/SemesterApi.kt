@@ -49,6 +49,11 @@ interface SemesterApi {
         @Body addCourseRequest: AddCourseRequest
     ): Response<ResponseBody>
 
+    @POST("/updateAddedCourse")
+    suspend fun updateAddedCourse(
+        @Body updateCourseRequest: UpdateCourseRequest
+    ): Response<ResponseBody>
+
     @GET("/getSemester")
     suspend fun getSemester(): Response<List<Semester>>
 

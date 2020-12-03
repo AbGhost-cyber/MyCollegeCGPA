@@ -15,12 +15,15 @@
         tools:layout_editor_absoluteY="0dp">
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/homeNestedView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
@@ -60,13 +63,14 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@drawable/search_bg"
+                    android:focusable="false"
                     app:iconifiedByDefault="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintHorizontal_bias="0.55"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/currentDate"
-                    app:layout_constraintVertical_bias="0.0"
+                    app:layout_constraintVertical_bias="0.019"
                     app:queryBackground="@null"
                     app:queryHint="search your semesters" />
 
@@ -99,46 +103,50 @@
                     app:layout_constraintTop_toBottomOf="@+id/bestSemester"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/allSemesterText"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/textsParent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
-                    android:fontFamily="@font/capriola"
-                    android:textSize="20sp"
-                    android:padding="16dp"
-                    android:text="All Semesters"
-                    android:textColor="@color/colorPrimary"
-                    android:textStyle="bold"
-                    android:visibility="gone"
+                    android:layout_margin="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rvBestSemester"
-                    app:layout_constraintVertical_bias="0.00999999"
-                    app:textAllCaps="true" />
+                    app:layout_constraintVertical_bias="0.00999999">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/viewPerformance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
-                    android:fontFamily="@font/capriola"
-                    android:padding="16dp"
-                    android:visibility="gone"
-                    android:focusable="true"
-                    android:textColor="@color/colorPrimary"
-                    android:text="@string/view_stats"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/allSemesterText"
-                    app:layout_constraintTop_toBottomOf="@+id/rvBestSemester"
-                    app:layout_constraintVertical_bias="0.00999999"
-                    android:textSize="18sp"
-                    app:textAllCaps="false" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/allSemesterText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="false"
+                        android:fontFamily="@font/capriola"
+                        android:padding="5dp"
+                        android:text="All Semesters"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:visibility="visible"
+                        app:textAllCaps="true" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/viewPerformance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:drawableEnd="@drawable/ic_baseline_chevron_right_24"
+                        android:focusable="true"
+                        android:fontFamily="@font/capriola"
+                        android:padding="5dp"
+                        android:text="@string/view_stats"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        android:visibility="visible"
+                        app:textAllCaps="false" />
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvAllSemester"
@@ -151,7 +159,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/allSemesterText"
+                    app:layout_constraintTop_toBottomOf="@+id/textsParent"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
@@ -246,4 +254,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.52" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/addSemesterFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/capriola"
+        android:text="@string/create"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:backgroundTint="@android:color/white"
+        app:icon="@drawable/ic_create_semester4"
+        app:iconTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:rippleColor="@color/colorPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

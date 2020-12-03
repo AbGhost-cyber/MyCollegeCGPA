@@ -5,8 +5,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -18,8 +18,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private lateinit var navController: NavController
     private var successBarShown = false
     private var errorBarShown = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,24 +30,27 @@ class MainActivity : AppCompatActivity() {
             setDisplayShowTitleEnabled(false)
         }
 
-        val navController = Navigation.findNavController(this, R.id.gradesNavHostFragment)
 
-        customBottomBar.setOnNavigationItemSelectedListener {
-            if (it.itemId != customBottomBar.selectedItemId) {
+        navController = Navigation.findNavController(this, R.id.gradesNavHostFragment)
+
+
+        bottomNavigationView.setOnNavigationItemSelectedListener {
+            if (it.itemId != bottomNavigationView.selectedItemId) {
                 NavigationUI.onNavDestinationSelected(it, navController)
             }
             true
         }
-        customBottomBar.setOnNavigationItemReselectedListener {}
-        NavigationUI.setupWithNavController(customBottomBar, navController)
+        NavigationUI.setupWithNavController(bottomNavigationView, navController)
+        bottomNavigationView.setOnNavigationItemReselectedListener {}
 
         val appBarConfig = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
-                R.id.othersFragment
+                R.id.extrasFragment
             )
         )
-        setupActionBarWithNavController(gradesNavHostFragment.findNavController(), appBarConfig)
+        setupActionBarWithNavController(navController, appBarConfig)
+
 
 
         handleNetworkChanges(
@@ -54,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         )
 
     }
+
 
     fun hideAppBar() {
         supportActionBar?.hide()
@@ -66,17 +72,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun hideMainActivityUI() {
-        customBottomBar.visibility = View.GONE
-        addSemester.visibility = View.GONE
+        bottomNavigationView.visibility = View.GONE
     }
 
     fun showMainActivityUI() {
-        customBottomBar.visibility = View.VISIBLE
-        addSemester.visibility = View.VISIBLE
+        bottomNavigationView.visibility = View.VISIBLE
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = gradesNavHostFragment.findNavController()
         return navController.navigateUp()
     }
 
@@ -117,4 +120,5 @@ class MainActivity : AppCompatActivity() {
             bgColor
         )?.show()
     }
+
 }

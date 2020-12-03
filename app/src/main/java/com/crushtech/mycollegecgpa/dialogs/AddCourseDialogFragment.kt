@@ -1,6 +1,7 @@
 package com.crushtech.mycollegecgpa.dialogs
 
 import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +14,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.local.entities.Courses
+import com.crushtech.mycollegecgpa.utils.SimpleCustomSnackbar
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.course_list_layout.*
 import kotlin.random.Random
 
@@ -29,7 +33,7 @@ class AddCourseDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val addCourseLayout = LayoutInflater.from(requireContext()).inflate(
-            R.layout.create_course_layout,
+            R.layout.create_course_items,
             courseContainer,
             false
         ) as ConstraintLayout
@@ -108,6 +112,12 @@ class AddCourseDialogFragment : DialogFragment() {
             val creditHours = creditHoursEditText.text.toString()
 
             if (courseName.isEmpty() || creditHours.isEmpty()) {
+                SimpleCustomSnackbar.make(
+                    requireActivity().parent_layout,
+                    "please input all fields", Snackbar.LENGTH_LONG, null,
+                    R.drawable.ic_baseline_error_outline_24, "",
+                    Color.RED
+                )?.show()
                 return@setOnClickListener
             }
 

@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.crushtech.mycollegecgpa.repositories.SemesterRepository
 import com.crushtech.mycollegecgpa.utils.Resource
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -64,7 +63,6 @@ class AuthViewModel @ViewModelInject constructor(
             return
         }
         viewModelScope.launch {
-            delay(3000L)
             val result = repository.register(email, password, username)
             _registerStatus.postValue(result)
         }
@@ -84,7 +82,6 @@ class AuthViewModel @ViewModelInject constructor(
             return
         }
         viewModelScope.launch {
-            delay(3000L)
             val result = repository.login(email, password)
             _loginStatus.postValue(result)
         }

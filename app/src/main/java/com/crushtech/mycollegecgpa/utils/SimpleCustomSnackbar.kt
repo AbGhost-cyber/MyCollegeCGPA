@@ -50,6 +50,8 @@ class SimpleCustomSnackbar(
                     customView.tvAction.text = action_label
                     customView.tvAction.setOnClickListener {
                         listener?.onClick(customView.tvAction)
+                        //hide snack bar if action label is clicked
+                        customView.visibility = View.GONE
                     }
                 }
                 customView.imLeft.setImageResource(icon)

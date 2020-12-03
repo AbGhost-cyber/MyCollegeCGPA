@@ -4,7 +4,7 @@
     android:id="@+id/about_app"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="30dp"
     android:background="@drawable/dialog_bg">
 
     <TextView
@@ -13,9 +13,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/capriola"
         android:padding="10dp"
-        android:text="About My College CGPA"
+        android:text="@string/about_my_college_cgpa"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
         android:fontFamily="@font/capriola"
         android:text="@string/about_mycollege_cgpa"
         android:textAlignment="center"
-        android:textColor="@android:color/secondary_text_dark"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -47,7 +47,7 @@
         android:padding="10dp"
         android:text="How to Use"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
         android:fontFamily="@font/capriola"
         android:text="@string/how_to_use"
         android:textAlignment="center"
-        android:textColor="@android:color/secondary_text_dark"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -74,11 +74,11 @@
         android:id="@+id/close_about_app"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
         android:fontFamily="@font/capriola"
         android:text="Ok, got it"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
         android:textColor="@android:color/white"
         android:textStyle="bold"
         app:backgroundTint="@android:color/black"
@@ -87,6 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        app:layout_constraintVertical_bias="0.00999999" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

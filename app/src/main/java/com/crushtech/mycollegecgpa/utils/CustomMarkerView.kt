@@ -31,34 +31,7 @@ class CustomMarkerView(
 
 
         val semesterName = currentSemester.semesterName
-        if (semesterName.length >= 18) {
-            val shortenedText = semesterName.substring(0, 18) + "\u2026"
-            tvSemesterName.setText(shortenedText)
-
-        } else {
-            tvSemesterName.setText(semesterName)
-        }
-
-
-        val courses = currentSemester.getThreeCoursesName()
-        if (courses.length >= 18) {
-            val shortenedText = courses.substring(0, 18) + "\u2026"
-            tvThreeCourse.setText(shortenedText)
-        } else {
-            tvThreeCourse.setText(courses)
-        }
-
-
-        var totalCreditHours = 0F
-        currentSemester.courses.forEach {
-            totalCreditHours += it.creditHours
-            tvTotalCreditHours.setText(totalCreditHours.toString())
-        }
-        val totalCourses = currentSemester.courses.size
-        tvTotalCourses.setText(totalCourses.toString())
-
-        val GPA = currentSemester.getGPA()
-        tvGPA.setText(GPA.toString())
+        tvSemesterName.setText(semesterName)
 
     }
 }

@@ -12,15 +12,19 @@
         android:label="HomeFragment">
         <action
             android:id="@+id/action_homeFragment_to_courseListFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit"
             app:destination="@id/courseListFragment" />
         <action
             android:id="@+id/action_homeFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment" />
     </fragment>
     <fragment
-        android:id="@+id/othersFragment"
-        tools:layout="@layout/others_layout"
-        android:name="com.crushtech.mycollegecgpa.ui.fragments.others.OthersFragment"
+        android:id="@+id/extrasFragment"
+        android:name="com.crushtech.mycollegecgpa.ui.fragments.extras.OthersFragment"
+        tools:layout="@layout/extras_layout"
         android:label="OthersFragment">
         <action
             android:id="@+id/action_othersFragment_to_loginFragment"

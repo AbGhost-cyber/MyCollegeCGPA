@@ -1,5 +1,6 @@
 package com.crushtech.mycollegecgpa.ui.fragments.home
 
+
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -7,11 +8,12 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.view.View.*
+import android.view.View.OnClickListener
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.core.view.isEmpty
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -20,7 +22,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView.*
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.BestSemesterAdapter
@@ -33,6 +35,7 @@ import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
+import com.crushtech.mycollegecgpa.utils.Constants.customRecyclerViewScrollListener
 import com.crushtech.mycollegecgpa.utils.Constants.getCurrentUserName
 import com.crushtech.mycollegecgpa.utils.Constants.setupDecorator
 import com.crushtech.mycollegecgpa.utils.Status
@@ -64,13 +67,17 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     private var authEmail: String? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).showAppBar()
+
+        (activity as MainActivity).apply {
+            showAppBar()
+        }
 
         requireActivity().titleBarText.text = "My Semesters"
 
         (activity as MainActivity).showMainActivityUI()
 
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
 
         val username = "Hello, ${getCurrentUserName(sharedPrefs)}"
         userName.text = username
@@ -119,7 +126,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         subscribeToObservers()
 
 
-        (activity as MainActivity).addSemester.setOnClickListener {
+        addSemesterFab.setOnClickListener {
             showCreateSemesterDialog()
         }
 
@@ -128,7 +135,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         cancelIcon.setOnClickListener {
             //clear and reload items
             semesterSearch.setQuery("", false)
-            subscribeToObservers()
+            semesterAdapter.notifyDataSetChanged()
         }
 
         semesterSearch.setOnQueryTextListener(object : OnQueryTextListener {
@@ -143,7 +150,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                 return false
             }
         })
-
 
 
         semesterAdapter.setOnItemClickListener { semester ->
@@ -177,7 +183,10 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         layoutManager = LinearLayoutManager(requireContext())
         ItemTouchHelper(itemTouchHelperCallback)
             .attachToRecyclerView(this)
+        addOnScrollListener(customRecyclerViewScrollListener(listOf(addSemesterFab)))
+        itemAnimator?.changeDuration = 0
     }
+
 
     private fun setUpBestSemesterRecyclerView() = rvBestSemester.apply {
         bestSemesterAdapter = BestSemesterAdapter()
@@ -236,6 +245,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         swipingItem.observe(viewLifecycleOwner, Observer {
             swipeRefreshLayout.isEnabled = !it
         })
+
 
         homeViewModel.addOwnerStatus.observe(viewLifecycleOwner, Observer { event ->
             val progressBg: LinearLayout = (activity as MainActivity).progressBg
@@ -341,7 +351,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             allSemesterText.visibility = INVISIBLE
             viewPerformance.visibility = INVISIBLE
             rvBestSemester.visibility = INVISIBLE
+            (activity as MainActivity).showMainActivityUI()
         } else {
+            (activity as MainActivity).showMainActivityUI()
             no_semester_txt.visibility = INVISIBLE
             semesterLottie.visibility = INVISIBLE
             no_semester_desc.visibility = INVISIBLE
@@ -377,7 +389,10 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             val position = viewHolder.layoutPosition
             val semester = semesterAdapter.differ.currentList[position]
             if (direction == LEFT) {
-                homeViewModel.deleteSemester(semester.id)
+                try {
+                    homeViewModel.deleteSemester(semester.id)
+                } catch (e: Exception) {
+                }
                 semesterAdapter.notifyItemRemoved(position)
 
                 val snackListener = OnClickListener {
@@ -437,6 +452,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
     private fun setupSwipeRefreshLayout() {
         swipeRefreshLayout.setOnRefreshListener {
+
+            //clear searchview on refresh
+            if (!(semesterSearch.isEmpty())) {
+                semesterSearch.setQuery("", false)
+            }
+            semesterAdapter.notifyDataSetChanged()
             homeViewModel.syncAllSemesters()
         }
     }

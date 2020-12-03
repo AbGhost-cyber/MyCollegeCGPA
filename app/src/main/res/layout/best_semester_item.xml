@@ -37,55 +37,9 @@
                     android:layout_height="100dp" />
             </RelativeLayout>
 
-            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                android:id="@+id/circularProgressBar"
-                android:layout_width="132dp"
-                android:layout_height="149dp"
-                android:layout_alignParentEnd="true"
-                app:cpb_background_progressbar_color="@color/colorPrimary"
-                app:cpb_background_progressbar_width="10dp"
-                app:cpb_progress_direction="to_right"
-                app:cpb_progressbar_width="10dp"
-                app:cpb_round_border="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.81" />
-
-            <TextView
-                android:id="@+id/gpa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:fontFamily="@font/capriola"
-                android:text="1.0"
-                android:textColor="@color/colorPrimary"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
-                app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
-                app:layout_constraintTop_toTopOf="@+id/circularProgressBar"
-                app:layout_constraintVertical_bias="0.32999998" />
-
-            <TextView
-                android:id="@+id/gpaTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="GPA"
-                android:fontFamily="@font/capriola"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="17sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
-                app:layout_constraintHorizontal_bias="0.511"
-                app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
-                app:layout_constraintTop_toBottomOf="@+id/gpa"
-                app:layout_constraintVertical_bias="0.0" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -96,17 +50,17 @@
 
                 <TextView
                     android:id="@+id/semesterName"
-                    android:layout_width="250dp"
+                    android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
                     android:layout_marginEnd="3dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/capriola"
                     android:padding="5dp"
+                    android:text="First Semestersxxxxxxxxxx"
                     android:textColor="@color/colorPrimary"
-                    android:text="First Semesters"
-                    android:textStyle="bold"
                     android:textSize="21sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -116,7 +70,7 @@
 
                 <TextView
                     android:id="@+id/coursesNames"
-                    android:layout_width="250dp"
+                    android:layout_width="240dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/semesterName"
                     android:fontFamily="@font/capriola"
@@ -156,7 +110,59 @@
                     android:src="@drawable/ic_check"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursesNames" />
+                    app:layout_constraintTop_toBottomOf="@+id/coursesNames"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                    android:id="@+id/circularProgressBar"
+                    android:layout_width="130dp"
+                    android:layout_height="149dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    app:cpb_background_progressbar_color="@color/colorPrimary"
+                    app:cpb_background_progressbar_width="10dp"
+                    app:cpb_progress_direction="to_right"
+                    app:cpb_progressbar_width="10dp"
+                    app:cpb_round_border="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.78"
+                    app:layout_constraintStart_toEndOf="@+id/semesterName"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/gpa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/capriola"
+                    android:text="1.0"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
+                    app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
+                    app:layout_constraintTop_toTopOf="@+id/circularProgressBar"
+                    app:layout_constraintVertical_bias="0.32999998" />
+
+                <TextView
+                    android:id="@+id/gpaTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/capriola"
+                    android:text="GPA"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="17sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/circularProgressBar"
+                    app:layout_constraintHorizontal_bias="0.511"
+                    app:layout_constraintStart_toStartOf="@+id/circularProgressBar"
+                    app:layout_constraintTop_toBottomOf="@+id/gpa"
+                    app:layout_constraintVertical_bias="0.0" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

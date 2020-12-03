@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -26,7 +27,6 @@ import com.crushtech.mycollegecgpa.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.login_layout.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -112,7 +112,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                             currentEmail ?: "",
                             currentPassword ?: ""
                         )
-                        Timber.d("CALLED")
                         redirectLogin()
                     }
                     Status.ERROR -> {
@@ -124,8 +123,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
                         )
-                        editTextPassword1.text?.clear()
-                        LoginBtn.isEnabled = true
                     }
                     Status.LOADING -> {
                         LoginProgressBar.visibility = View.VISIBLE
@@ -184,5 +181,16 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             .window.clearFlags(
                 FLAG_FULLSCREEN
             )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val onBackPressed = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressed)
     }
 }

@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20sp"
                         android:fontFamily="@font/capriola"
-                        android:text="Save as pdf"
+                        android:text="@string/save_as_pdf"
                         android:textSize="12sp"
                         android:textStyle="bold"
                         app:cornerRadius="15dp"
@@ -84,14 +84,18 @@
                         android:id="@+id/user_name"
                         android:layout_width="70dp"
                         android:layout_height="wrap_content"
+                        android:ellipsize="end"
                         android:fontFamily="@font/capriola"
+                        android:maxLines="2"
                         android:text="For Dremo"
                         android:textColor="@android:color/black"
                         android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toEndOf="@+id/sponsored"
-                        app:layout_constraintTop_toBottomOf="@+id/barChart" />
+                        app:layout_constraintTop_toBottomOf="@+id/barChart"
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <TextView
                         android:id="@+id/sponsored"
@@ -104,10 +108,9 @@
                         android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.4"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/barChart"
-                        app:layout_constraintVertical_bias="0.408" />
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <com.mikhaellopez.circularprogressbar.CircularProgressBar
                         android:id="@+id/pdf_pb"
@@ -138,6 +141,7 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="150dp"
+                        android:id="@+id/tCHParent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
                         android:backgroundTint="@color/colorPrimary"
@@ -156,13 +160,13 @@
 
                             <TextView
                                 android:id="@+id/tvCreditHour"
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:layout_centerVertical="true"
                                 android:layout_margin="13dp"
                                 android:fontFamily="@font/capriola"
-                                android:padding="5dp"
+                                android:padding="2dp"
                                 android:text="Total credit Hours"
                                 android:textAlignment="center"
                                 android:textColor="@color/colorPrimaryDark"
@@ -182,11 +186,13 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_centerVertical="true"
                                 android:layout_margin="10dp"
+                                android:ellipsize="end"
                                 android:fontFamily="@font/capriola"
+                                android:maxLines="2"
                                 android:text="22 Hours"
                                 android:textAlignment="center"
                                 android:textColor="@android:color/white"
-                                android:textSize="23sp"
+                                android:textSize="21sp"
                                 android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -198,6 +204,7 @@
                                 android:id="@+id/creditHoursChange"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
                                 android:fontFamily="@font/capriola"
                                 android:text="0"
                                 android:textColor="@color/progress_color"
@@ -216,6 +223,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
                         android:layout_weight="1"
+                        android:id="@+id/tCCParent"
                         android:backgroundTint="@color/colorPrimary"
                         app:cardCornerRadius="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -239,7 +247,7 @@
                                 android:layout_margin="13dp"
                                 android:fontFamily="@font/capriola"
                                 android:padding="5dp"
-                                android:text="Total courses offered"
+                                android:text="@string/total_courses_offered"
                                 android:textAlignment="center"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textSize="16sp"
@@ -248,7 +256,7 @@
                                 app:layout_constraintHorizontal_bias="0.529"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                app:layout_constraintVertical_bias="0.110000014" />
+                                app:layout_constraintVertical_bias="0.0" />
 
                             <TextView
                                 android:id="@+id/totalCoursesOffered"
@@ -257,7 +265,9 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_centerVertical="true"
                                 android:layout_margin="10dp"
+                                android:ellipsize="end"
                                 android:fontFamily="@font/capriola"
+                                android:maxLines="2"
                                 android:text="34 courses"
                                 android:textAlignment="center"
                                 android:textColor="@android:color/white"
@@ -267,12 +277,13 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/coursesOfferedTv"
-                                app:layout_constraintVertical_bias="0.19" />
+                                app:layout_constraintVertical_bias="0.0" />
 
                             <TextView
                                 android:id="@+id/courseChange"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
                                 android:fontFamily="@font/capriola"
                                 android:text="0"
                                 android:textColor="@android:color/holo_red_dark"
@@ -281,7 +292,7 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/totalCoursesOffered"
-                                app:layout_constraintVertical_bias="0.07999998" />
+                                app:layout_constraintVertical_bias="0.0" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -326,7 +337,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:fontFamily="@font/capriola"
-                            android:text="No of free pdf downloads remaining"
+                            android:text="@string/no_of_pdf_downloads_remaining"
                             android:textColor="@android:color/white"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -342,7 +353,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:fontFamily="@font/capriola"
-                            android:text="click to purchase more"
+                            android:text="@string/click_to_purchase_more"
                             android:textColor="@android:color/secondary_text_dark"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -353,17 +364,18 @@
 
                         <TextView
                             android:id="@+id/pdfDownloadCounts"
-                            android:layout_width="wrap_content"
+                            android:layout_width="70dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
+                            android:ellipsize="end"
                             android:fontFamily="@font/capriola"
-                            android:text="0"
-                            android:textColor="@android:color/white"
-                            android:textSize="26sp"
+                            android:maxLines="2"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="21sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.851"
+                            app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toEndOf="@+id/pdfDownloadText"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.513" />

@@ -4,12 +4,14 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/customize_gp"
+        android:icon="@drawable/semester_ic4"
         android:title="@string/semesters" />
-    <item android:id="@+id/no_op" />
+    <!--    <item-->
+    <!--        android:id="@+id/placeholder"-->
+    <!--        android:title="" />-->
     <item
-        android:id="@+id/othersFragment"
-        android:icon="@drawable/others_ic"
-        android:title="@string/others" />
+        android:id="@+id/extrasFragment"
+        android:icon="@drawable/ic_extra4"
+        android:title="@string/extras" />
 
 </menu>

@@ -6,7 +6,6 @@ import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.repositories.SemesterRepository
 import com.crushtech.mycollegecgpa.utils.Events
 import com.crushtech.mycollegecgpa.utils.Resource
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HomeViewModel @ViewModelInject constructor(
@@ -57,7 +56,6 @@ class HomeViewModel @ViewModelInject constructor(
              return
          }
          viewModelScope.launch {
-             delay(3000L)
              val result = semesterRepository.addOwnerToSemester(owner, semesterId)
 
              _addOwnerStatus.postValue(Events(result))

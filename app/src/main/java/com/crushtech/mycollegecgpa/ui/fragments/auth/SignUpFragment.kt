@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
@@ -26,7 +27,6 @@ import com.crushtech.mycollegecgpa.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.signup_layout.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -115,7 +115,6 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                             currentEmail ?: "",
                             currentPassword ?: ""
                         )
-                        Timber.d("CALLED")
                         redirectLogin()
                     }
                     Status.ERROR -> {
@@ -126,8 +125,6 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
                         )
-                        editTextPassword.text?.clear()
-                        editTextReEnterPassword.text?.clear()
                     }
                     Status.LOADING -> {
                         progressBg.visibility = View.VISIBLE
@@ -169,7 +166,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
         ) ?: NO_USERNAME
 
         return currentEmail != NO_EMAIL && currentPassword !=
-                NO_PASSWORD && currentUserName != NO_USERNAME
+                NO_PASSWORD
     }
 
     private fun createAnimationsForUIWidgets() {
@@ -187,5 +184,16 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
             .window.clearFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val onBackPressed = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressed)
     }
 }

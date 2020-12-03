@@ -3,26 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/dialog_bg"
-    android:layout_margin="10dp">
+    android:layout_margin="10dp"
+    android:background="@drawable/dialog_bg">
 
-    <EditText
-        android:id="@+id/cc_courseName"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/cc_courseNameParent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/capriola"
-        android:hint="input course name"
-        android:padding="15dp"
-        android:textColor="@color/colorPrimary"
-        android:textColorHint="@color/colorPrimary"
-        android:inputType="textAutoComplete"
-        android:textStyle="bold"
+        android:padding="10dp"
+        app:boxStrokeColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintVertical_bias="0.05">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/cc_courseName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/capriola"
+            android:hint="@string/input_course_name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Spinner
         android:id="@+id/spinnerSelectGrade"
@@ -33,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cc_courseName"
+        app:layout_constraintTop_toBottomOf="@+id/cc_courseNameParent"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -44,11 +52,10 @@
         android:padding="5dp"
         android:text="input credit hours below"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/cc_creditHours"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerSelectGrade"
         app:layout_constraintVertical_bias="0.0" />
@@ -57,7 +64,7 @@
         android:id="@+id/cc_creditHours"
         android:layout_width="70dp"
         android:layout_height="50dp"
-        android:background="@drawable/credithours_bg"
+        android:background="@drawable/credit_hours_bg"
         android:fontFamily="@font/capriola"
         android:inputType="numberDecimal|textNoSuggestions|number"
         android:padding="8dp"
@@ -67,7 +74,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/creditHoursParent"
-        app:layout_constraintVertical_bias="0.311" />
+        app:layout_constraintVertical_bias="0.13" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnCreateCourse"
@@ -78,8 +85,8 @@
         android:fontFamily="@font/capriola"
         android:text="Create"
         android:textAllCaps="true"
-        android:textStyle="bold"
         android:textColor="@android:color/white"
+        android:textStyle="bold"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

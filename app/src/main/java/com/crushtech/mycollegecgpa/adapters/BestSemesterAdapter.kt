@@ -50,9 +50,14 @@ class BestSemesterAdapter : Adapter<BestSemesterViewHolder>() {
                 tvSynced1.text = context.getString(R.string.isSynced)
             }
             circularProgressBar.apply {
-                progressMax = 4F
+                semesters.courses.forEach {
+                    it.gradesPoints.forEach { grade ->
+                        val max = grade.APlusGrade
+                        progressMax = max
+                    }
+                }
                 progress = semesters.getGPA().toFloat()
-                setProgressWithAnimation(progress, 1000)
+                setProgressWithAnimation(progress, 6000)
                 backgroundProgressBarWidth = 3f
             }
             if (circularProgressBar.progress < 3) {

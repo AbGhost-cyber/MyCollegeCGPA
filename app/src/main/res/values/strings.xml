@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">My College CGPA</string>
     <string name="semesters">Semesters</string>
-    <string name="others">Others</string>
+    <string name="extras">Extras</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="reEnterPassword">Re-enter Password</string>
@@ -31,4 +31,27 @@
     <string name="semester_name_hint">input semester name</string>
     <string name="change_semester_name">Change Semester Name</string>
     <string name="all_courses">All Courses</string>
+    <string name="input_course_name">input course name</string>
+    <string name="edit_weight">Edit Weight</string>
+    <string name="type_in_your_new_weight">type in your new weight</string>
+    <string name="update_btn">Update</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="about_my_college_cgpa">About My College CGPA</string>
+    <string name="semester_name_markerview">Semester Name</string>
+    <string name="swipe_left_to_delete">Swipe left to delete</string>
+    <string name="log_out">Log out</string>
+    <string name="privacy_policy_txt">Privacy Policy</string>
+    <string name="rate_this_app_txt">Rate This App</string>
+    <string name="about_app_txt">About My College CGPA/ How to Use</string>
+    <string name="share_this_app_txt">Share this App</string>
+    <string name="edit_course_grade_points">Edit Course Grade points</string>
+    <string name="create_semester">create semester</string>
+    <string name="no_of_pdf_downloads_remaining">No of pdf downloads remaining</string>
+    <string name="click_to_purchase_more">click to purchase more</string>
+    <string name="save_as_pdf">Save as pdf</string>
+    <string name="total_courses_offered">Total courses offered</string>
+    <string name="save_course">save</string>
+    <string name="create">create</string>
+    <string name="countdown_done">DONE</string>
+    <string name="course_other_actions">other actions</string>
 </resources>

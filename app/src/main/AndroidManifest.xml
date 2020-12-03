@@ -46,3 +46,4 @@
     </application>
 
 </manifest>
+<!--    android:usesCleartextTraffic="true"-->

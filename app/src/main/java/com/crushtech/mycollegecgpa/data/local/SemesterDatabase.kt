@@ -11,7 +11,7 @@ import com.crushtech.mycollegecgpa.data.local.entities.*
         LocallyDeletedSemesterId::class,
         LocallyDeletedCourseId::class,
         GradeClass::class],
-    version = 12, exportSchema = false
+    version = 14, exportSchema = false
 )
 @TypeConverters(
     Converters::class,

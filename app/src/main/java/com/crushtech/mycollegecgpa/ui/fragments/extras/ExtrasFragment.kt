@@ -1,4 +1,4 @@
-package com.crushtech.mycollegecgpa.ui.fragments.others
+package com.crushtech.mycollegecgpa.ui.fragments.extras
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -18,18 +18,18 @@ import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.others_layout.*
+import kotlinx.android.synthetic.main.extras_layout.*
 import javax.inject.Inject
 
 const val LOG_OUT_DIALOG = "log out dialog"
 const val ABOUT_APP_DIALOG = "About app dialog"
 
 @AndroidEntryPoint
-class OthersFragment : BaseFragment(R.layout.others_layout) {
+class OthersFragment : BaseFragment(R.layout.extras_layout) {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
-    private val othersViewModel: OthersViewModel by viewModels()
+    private val extrasViewModel: ExtrasViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).showAppBar()
@@ -40,11 +40,11 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
         setClickAnimationForTexts(
             listOf(
                 editCourseGp,
-                logOut,
                 ShareApp,
                 AboutApp,
                 rateApp,
-                privacyPolicy
+                privacyPolicy,
+                logOut
             )
         )
 
@@ -53,7 +53,7 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
                     as LogoutDialogFragment?
             logOutDialog?.setPositiveListener { clicked ->
                 if (clicked) {
-                    othersViewModel.logOutCurrentUser(this)
+                    extrasViewModel.logOutCurrentUser(this)
                 }
             }
         }
@@ -108,7 +108,7 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
         LogoutDialogFragment().apply {
             setPositiveListener { clicked ->
                 if (clicked) {
-                    othersViewModel.logOutCurrentUser(this)
+                    extrasViewModel.logOutCurrentUser(this)
                 }
             }
         }.show(parentFragmentManager, LOG_OUT_DIALOG)
@@ -128,15 +128,15 @@ class OthersFragment : BaseFragment(R.layout.others_layout) {
                             R.id.action_othersFragment_to_weightFragment
                         )
                     }
-                    1 -> showLogOutDialog()
-                    2 -> shareAppFunction()
-                    3 -> AboutAppDialogFragment().show(parentFragmentManager, ABOUT_APP_DIALOG)
-                    4 -> rateAppFunction()
-                    5 -> {
+                    1 -> shareAppFunction()
+                    2 -> AboutAppDialogFragment().show(parentFragmentManager, ABOUT_APP_DIALOG)
+                    3 -> rateAppFunction()
+                    4 -> {
                         val intent = Intent(Intent.ACTION_VIEW)
                         intent.data = Uri.parse(PRIVACY_POLICY)
                         startActivity(intent)
                     }
+                    5 -> showLogOutDialog()
                 }
             }
         }

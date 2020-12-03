@@ -8,6 +8,20 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".MainActivity">
 
+
+    <LinearLayout
+        android:id="@+id/progressBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_trans"
+        android:elevation="10dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -41,28 +55,14 @@
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/progressBg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black_trans"
-        android:elevation="10dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <FrameLayout
         android:id="@+id/flFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/customBottomBar"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
         <fragment
             android:id="@+id/gradesNavHostFragment"
@@ -74,11 +74,11 @@
 
     </FrameLayout>
 
-    <com.crushtech.mycollegecgpa.utils.CurvedBottomNavigationView
-        android:id="@+id/customBottomBar"
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="62dp"
-        app:itemRippleColor="@android:color/white"
+        android:layout_height="55dp"
         app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
         app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -86,18 +86,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addSemester"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:src="@drawable/add_ic"
-        app:backgroundTint="@android:color/white"
-        app:fabCustomSize="70dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.97"
-        app:tint="@color/colorPrimary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,11 +12,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 abstract class BaseFragment(layoutId: Int) : Fragment(layoutId) {
     fun showSnackbar(
         text: String, listener: View.OnClickListener?, iconId: Int,
-        actionLabel: String, bgColor: Int
+        actionLabel: String, bgColor: Int, length: Int = Snackbar.LENGTH_LONG
     ) {
         SimpleCustomSnackbar.make(
             requireActivity().parent_layout,
-            text, Snackbar.LENGTH_LONG, listener,
+            text, length, listener,
             iconId, actionLabel,
             bgColor
         )?.show()

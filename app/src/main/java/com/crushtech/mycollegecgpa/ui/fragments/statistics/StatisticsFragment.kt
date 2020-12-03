@@ -38,6 +38,7 @@ import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.statistics_fragment.*
@@ -86,6 +87,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         (activity as MainActivity).apply {
             showAppBar()
             hideMainActivityUI()
+
             mainLayoutToolbar.setNavigationIcon(R.drawable.ic_baseline_chevron_left_24)
         }
         requireActivity().titleBarText.text = "My Statistics"
@@ -333,7 +335,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
 
     private fun processPdf() {
-        val pageInfo = PdfDocument.PageInfo.Builder(2250, 1400, 1).create()
+        val pageInfo = PdfDocument.PageInfo.Builder(2250, 1500, 1).create()
         val document = PdfDocument()
         val page = document.startPage(pageInfo)
         val content =
@@ -353,6 +355,8 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
         content.measure(measureWidth, measuredHeight)
         content.layout(0, 0, page.canvas.width, page.canvas.height)
+        tCHParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
+        tCCParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
         saveAsPdf.visibility = View.INVISIBLE
         pdfDownloadParent.visibility = View.GONE
         sponsored.visibility = View.VISIBLE
@@ -371,7 +375,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         document.finishPage(page)
         val pdfFolder = File(
             requireContext().externalCacheDir?.absolutePath,
-            " COLLEGE CGPA"
+            "MY COLLEGE CGPA"
         )
 
         if (!pdfFolder.exists()) {
@@ -415,15 +419,16 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                     pdfHasBeenCreated = false
                 }
                 showSnackbar(
-                    "Pdf has been generated", null,
-                    R.drawable.ic_baseline_bubble_chart_24, "", Color.BLACK
+                    "Pdf created: please check ${myFile.parent} ", null,
+                    R.drawable.ic_baseline_bubble_chart_24,
+                    "", Color.BLACK, Snackbar.LENGTH_SHORT
                 )
                 viewPdf.visibility = View.VISIBLE
 
                 viewPdf.setOnClickListener {
                     checkReadPermissionsAndOpenPdf(fileNamePath)
                 }
-                val countDown = 4000L
+                val countDown = 6000L
                 val countDownTimer = object : CountDownTimer(countDown, 1000) {
                     override fun onFinish() {
                         try {
@@ -528,10 +533,6 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         }
     }
 
-//    private val purchasesUpdatedListener =
-//        PurchasesUpdatedListener { billingResult, purchases ->
-//            // To be implemented in a later section.
-//        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -637,13 +638,15 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when (requestCode) {
-            in 1..3 -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    processPdf()
-                }
-            }
+        if (checkSelfPermission(
+                requireContext(),
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            processPdf()
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
     }
 }

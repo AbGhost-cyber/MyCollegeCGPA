@@ -19,6 +19,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -53,6 +54,9 @@ object AppModule {
     ): SemesterApi {
         val client = OkHttpClient.Builder()
             .addInterceptor(basicAuthInterceptor)
+            .connectTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS)
+            .writeTimeout(120, TimeUnit.SECONDS)
             .build()
 
         return Retrofit.Builder()

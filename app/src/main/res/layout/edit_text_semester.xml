@@ -12,7 +12,7 @@
         android:id="@+id/etAddSemesterName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="semester name"
+        android:hint="@string/semester_name_hint"
         android:fontFamily="@font/capriola"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
