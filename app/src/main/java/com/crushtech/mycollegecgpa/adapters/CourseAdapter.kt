@@ -76,6 +76,7 @@ class CourseAdapter(private val courseListFragment: CourseListFragment) :
                     duration = 50
                     start()
                 }
+                enableViews(listOf(edit_course, delete_course, close_view))
             }
             close_view.setOnClickListener {
                 actionsLayout.layoutParams.height = ConstraintLayout.LayoutParams.WRAP_CONTENT
@@ -85,33 +86,40 @@ class CourseAdapter(private val courseListFragment: CourseListFragment) :
                     duration = 50
                     start()
                 }
+                disableViews(listOf(edit_course, delete_course, close_view))
             }
             edit_course.setOnClickListener {
-                val bundle = Bundle()
-                bundle.putSerializable("courses", courses)
-                AddCourseDialogFragment().apply {
-                    arguments = bundle
-                    setPositiveListener {
-                        courseListFragment.updateCourse(it, "course updated", position)
-                        ObjectAnimator.ofFloat(
-                            itemsLayout, "translationX",
-                            0F
-                        ).apply {
-                            duration = 50
-                            start()
+                if (courseListFragment.isOwner) {
+                    val bundle = Bundle()
+                    bundle.putSerializable("courses", courses)
+                    AddCourseDialogFragment().apply {
+                        arguments = bundle
+                        setPositiveListener {
+                            courseListFragment.updateCourse(it, "course updated", position)
+                            ObjectAnimator.ofFloat(
+                                itemsLayout, "translationX",
+                                0F
+                            ).apply {
+                                duration = 50
+                                start()
+                            }
+                            disableViews(listOf(edit_course, delete_course, close_view))
                         }
-                    }
-                }.show(courseListFragment.parentFragmentManager, ADD_COURSE_DIALOG)
+                    }.show(courseListFragment.parentFragmentManager, ADD_COURSE_DIALOG)
+                }
             }
 
             delete_course.setOnClickListener {
-                courseListFragment.showDeleteCourseDialog(courses)
-                ObjectAnimator.ofFloat(
-                    itemsLayout, "translationX",
-                    0F
-                ).apply {
-                    duration = 50
-                    start()
+                if (courseListFragment.isOwner) {
+                    courseListFragment.showDeleteCourseDialog(courses)
+                    ObjectAnimator.ofFloat(
+                        itemsLayout, "translationX",
+                        0F
+                    ).apply {
+                        duration = 50
+                        start()
+                    }
+                    disableViews(listOf(edit_course, delete_course, close_view))
                 }
             }
 
@@ -152,9 +160,25 @@ class CourseAdapter(private val courseListFragment: CourseListFragment) :
         this.onItemClickListener = listener
     }
 
+    private fun disableViews(views: List<View>) {
+        views.forEach {
+            it.isEnabled = false
+        }
+
+    }
+
+    private fun enableViews(views: List<View>) {
+        views.forEach {
+            it.isEnabled = true
+        }
+
+    }
+
     val differ = AsyncListDiffer(this, diffUtilCallBack)
 
     inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 }
+
+
 

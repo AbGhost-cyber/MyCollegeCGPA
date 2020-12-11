@@ -72,7 +72,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             showAppBar()
         }
 
-        requireActivity().titleBarText.text = "My Semesters"
+        requireActivity().titleBarText.text = getString(R.string.mysemesters)
 
         (activity as MainActivity).showMainActivityUI()
 
@@ -167,10 +167,19 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     val bundle = Bundle()
                     bundle.putString("owner", semester.owners[0])
                     arguments = bundle
-                    setPositiveListener { deleteBtnClicked ->
+                    setDeleteCourseListener { deleteBtnClicked ->
                         if (deleteBtnClicked) {
                             homeViewModel.deleteSemester(semester.id)
                         }
+                    }
+                    setProceedListener {
+                        findNavController().navigate(
+                            HomeFragmentDirections
+                                .actionHomeFragmentToCourseListFragment(
+                                    semester.id,
+                                    semester.semesterName
+                                )
+                        )
                     }
                 }.show(parentFragmentManager, NOT_OWNER_DIALOG)
             }
@@ -183,8 +192,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         layoutManager = LinearLayoutManager(requireContext())
         ItemTouchHelper(itemTouchHelperCallback)
             .attachToRecyclerView(this)
-        addOnScrollListener(customRecyclerViewScrollListener(listOf(addSemesterFab)))
         itemAnimator?.changeDuration = 0
+        addOnScrollListener(customRecyclerViewScrollListener(listOf(addSemesterFab)))
     }
 
 
@@ -314,7 +323,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             R.drawable.ic_baseline_bubble_chart_24,
             "", Color.BLACK
         )
-
+        setupSwipeRefreshLayout()
     }
 
     private fun showAddOwnerToSemesterDialog() {

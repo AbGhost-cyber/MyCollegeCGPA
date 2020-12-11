@@ -52,6 +52,10 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
     private var firsTimeOpen = false
 
+    private var authEmail: String? = null
+
+    var isOwner: Boolean = false
+
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
@@ -71,6 +75,10 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         weightViewModel.syncGradePoints()
+        authEmail = sharedPrefs.getString(
+            KEY_LOGGED_IN_EMAIL,
+            NO_EMAIL
+        ) ?: NO_EMAIL
         (activity as MainActivity).apply {
             hideMainActivityUI()
             showAppBar()
@@ -85,6 +93,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             setupRecyclerView()
             subscribeToObservers()
         }
+
         fabCreateCourse.setOnClickListener {
             showCreateCourseDialog()
         }
@@ -96,15 +105,25 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             }
         }
 
+
         courseAdapter.setOnItemClickListener { courses, position ->
-            val bundle = Bundle()
-            bundle.putSerializable("courses", courses)
-            AddCourseDialogFragment().apply {
-                arguments = bundle
-                setPositiveListener {
-                    updateCourse(it, "course updated", position)
-                }
-            }.show(parentFragmentManager, ADD_COURSE_DIALOG)
+            if (isOwner) {
+                val bundle = Bundle()
+                bundle.putSerializable("courses", courses)
+                AddCourseDialogFragment().apply {
+                    arguments = bundle
+                    setPositiveListener {
+                        updateCourse(it, "course updated", position)
+                    }
+                }.show(parentFragmentManager, ADD_COURSE_DIALOG)
+            } else {
+                showSnackbar(
+                    "can't edit, this course is view only!", null,
+                    R.drawable.ic_baseline_error_outline_24,
+                    "", Color.RED
+                )
+            }
+
         }
 
         fabSaveCourse.setOnClickListener {
@@ -123,7 +142,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
     private fun setupRecyclerView() {
         courseRv.apply {
-            itemAnimator = null
+            //  itemAnimator = null
             courseAdapter = CourseAdapter(this@CourseListFragment)
             adapter = courseAdapter
             layoutManager = LinearLayoutManager(requireContext())
@@ -181,7 +200,20 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                         }
 
                         currentSemester = semester
-
+                        currentSemester?.let { _semester ->
+                            if (_semester.owners[0] == authEmail || _semester.owners == listOf(
+                                    authEmail
+                                )
+                            ) {
+                                fabSaveCourse.visibility = View.VISIBLE
+                                fabCreateCourse.visibility = View.VISIBLE
+                                isOwner = true
+                            } else {
+                                fabSaveCourse.visibility = View.GONE
+                                fabCreateCourse.visibility = View.GONE
+                                isOwner = false
+                            }
+                        }
                     }
                     Status.ERROR -> {
                         showSnackbar(

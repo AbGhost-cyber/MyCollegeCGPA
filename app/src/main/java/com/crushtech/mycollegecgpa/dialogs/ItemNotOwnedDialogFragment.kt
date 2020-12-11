@@ -13,10 +13,15 @@ import kotlinx.android.synthetic.main.home_layout.*
 
 
 class ItemNotOwnedDialogFragment : DialogFragment() {
-    private var positiveListener: ((Boolean) -> Unit)? = null
+    private var deleteCourseListener: ((Boolean) -> Unit)? = null
+    private var proceedListener: ((Boolean) -> Unit)? = null
 
-    fun setPositiveListener(listener: (Boolean) -> Unit) {
-        positiveListener = listener
+    fun setDeleteCourseListener(listener: (Boolean) -> Unit) {
+        deleteCourseListener = listener
+    }
+
+    fun setProceedListener(listener: (Boolean) -> Unit) {
+        proceedListener = listener
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -31,11 +36,14 @@ class ItemNotOwnedDialogFragment : DialogFragment() {
         val text = "this semester belongs to $semesterOwner and it's view only"
         notOwnerText.text = text
 
-        semesterParent.findViewById<MaterialButton>(R.id.close_ino_bg).setOnClickListener {
+        semesterParent.findViewById<MaterialButton>(R.id.proceed_btn).setOnClickListener {
+            proceedListener?.let { proceed ->
+                proceed(true)
+            }
             dialog?.dismiss()
         }
         semesterParent.findViewById<TextView>(R.id.delete_item_not_owned).setOnClickListener {
-            positiveListener?.let { clicked ->
+            deleteCourseListener?.let { clicked ->
                 clicked(true)
             }
             dialog?.dismiss()

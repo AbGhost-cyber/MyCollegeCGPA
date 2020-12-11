@@ -3,6 +3,7 @@ package com.crushtech.mycollegecgpa.utils
 import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.crushtech.mycollegecgpa.R
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -32,7 +33,7 @@ object Constants {
     const val COURSE_FIRST_TIME_OPEN = "course first time open"
     const val IS_LOGGED_IN = "is logged in"
 
-    const val PRIVACY_POLICY = "http://www.crushtech.unaux.com/privacypolicy/?i=1"
+    const val PRIVACY_POLICY = "https://www.mycollegecgpa.com/privacypolicy/"
 
     fun setupDecorator(
         c: Canvas, recyclerView: RecyclerView,
@@ -72,17 +73,17 @@ object Constants {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     list.forEach {
-                        it.extend()
+                        it.visibility = View.VISIBLE
                     }
                 }
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     list.forEach {
-                        it.shrink()
+                        it.visibility = View.GONE
                     }
                 }
                 if (newState == RecyclerView.SCROLL_STATE_SETTLING) {
                     list.forEach {
-                        it.extend()
+                        it.visibility = View.VISIBLE
                     }
                 }
                 super.onScrollStateChanged(recyclerView, newState)

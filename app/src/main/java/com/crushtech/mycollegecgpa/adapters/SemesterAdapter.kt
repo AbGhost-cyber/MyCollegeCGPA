@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -40,9 +41,19 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
         holder.itemView.apply {
             if (!semesters.owners.isNullOrEmpty()) {
                 if (semesters.owners[0] == authEmail || semesters.owners == listOf(authEmail)) {
-                    itemNotOwned.visibility = View.GONE
+                    materialCardView.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.itemOwned
+                        )
+                    )
                 } else {
-                    itemNotOwned.visibility = View.VISIBLE
+                    materialCardView.setBackgroundColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.itemNotOwnedColor
+                        )
+                    )
                 }
             }
             semesterName.text = semesters.semesterName

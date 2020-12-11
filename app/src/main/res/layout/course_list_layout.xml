@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/courseContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,13 +9,13 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-180dp">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true">
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -24,6 +23,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:descendantFocusability="beforeDescendants"
+                android:focusableInTouchMode="true"
                 android:padding="10dp"
                 app:boxStrokeColor="@color/colorPrimary"
                 app:hintTextColor="@color/colorPrimary"
@@ -39,7 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/capriola"
-                    android:hint="@string/semester_name_hint"
+                    android:hint="@string/semester_name_markerview"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 
@@ -80,17 +81,19 @@
         android:id="@+id/fabCreateCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:fontFamily="@font/capriola"
-        android:text="@string/create"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
+        android:visibility="gone"
         app:backgroundTint="@android:color/white"
         app:icon="@drawable/ic_create_semester4"
         app:iconTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
+        app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fabSaveCourse"
         app:layout_constraintVertical_bias="0.26"
@@ -101,17 +104,19 @@
         android:id="@+id/fabSaveCourse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/capriola"
-        android:text="@string/save_course"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textStyle="bold"
+        android:visibility="gone"
         app:backgroundTint="@color/colorPrimary"
         app:icon="@drawable/ic_save4"
         app:iconTint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
+        app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.88"

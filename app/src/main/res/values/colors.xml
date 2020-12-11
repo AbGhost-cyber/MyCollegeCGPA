@@ -9,8 +9,8 @@
     <color name="low_gpa">#DD2C00</color>
     <color name="black_trans">#80000000</color>
     <color name="pink">#FAE5E5</color>
-    <color name="tt">#80FFFFFF</color>
-    <color name="shimmer_color">#CBBAE2FA</color>
+    <color name="itemNotOwnedColor">#80FFFFFF</color>
+    <color name="itemOwned">#FFFFFF</color>
 
 
 </resources>

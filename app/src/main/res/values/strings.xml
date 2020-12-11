@@ -38,7 +38,6 @@
     <string name="cancel_btn">Cancel</string>
     <string name="about_my_college_cgpa">About My College CGPA</string>
     <string name="semester_name_markerview">Semester Name</string>
-    <string name="swipe_left_to_delete">Swipe left to delete</string>
     <string name="log_out">Log out</string>
     <string name="privacy_policy_txt">Privacy Policy</string>
     <string name="rate_this_app_txt">Rate This App</string>
@@ -50,8 +49,12 @@
     <string name="click_to_purchase_more">click to purchase more</string>
     <string name="save_as_pdf">Save as pdf</string>
     <string name="total_courses_offered">Total courses offered</string>
-    <string name="save_course">save</string>
-    <string name="create">create</string>
     <string name="countdown_done">DONE</string>
     <string name="course_other_actions">other actions</string>
+    <string name="no_semesters">No Semesters</string>
+    <string name="all_semesters">All Semesters</string>
+    <string name="best_semester">Best Semester</string>
+    <string name="mysemesters">My Semesters</string>
+    <string name="ok_proceed">OK, Proceed</string>
+    <string name="delete_course">Delete</string>
 </resources>
