@@ -15,7 +15,10 @@ import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.dialogs.AboutAppDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.LogoutDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
+import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
+import com.facebook.login.LoginManager
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.extras_layout.*
@@ -29,13 +32,22 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
+    private var isThirdPartyUser = false
+    private lateinit var firebaseAuth: FirebaseAuth
+
     private val extrasViewModel: ExtrasViewModel by viewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as MainActivity).showAppBar()
-        (activity as MainActivity).showMainActivityUI()
-        requireActivity().titleBarText.text = "Extras"
-
+        (activity as MainActivity).apply {
+            showAppBar()
+            showMainActivityUI()
+            titleBarText.text = getString(R.string.my_extras)
+        }
+        isThirdPartyUser = sharedPreferences.getBoolean(
+            Constants.IS_THIRD_PARTY,
+            Constants.NOT_THIRD_PARTY
+        )
+        firebaseAuth = FirebaseAuth.getInstance()
 
         setClickAnimationForTexts(
             listOf(
@@ -109,6 +121,11 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
             setPositiveListener { clicked ->
                 if (clicked) {
                     extrasViewModel.logOutCurrentUser(this)
+                    if (isThirdPartyUser) {
+                        if (firebaseAuth.currentUser != null)
+                            firebaseAuth.signOut()
+                        LoginManager.getInstance().logOut()
+                    }
                 }
             }
         }.show(parentFragmentManager, LOG_OUT_DIALOG)

@@ -1,13 +1,15 @@
 package com.crushtech.mycollegecgpa.ui.fragments.auth
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
-import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -17,16 +19,23 @@ import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.mycollegecgpa.ui.BaseFragment
+import com.crushtech.mycollegecgpa.utils.Constants.IS_THIRD_PARTY
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
+import com.crushtech.mycollegecgpa.utils.Constants.NOT_THIRD_PARTY
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
 import com.crushtech.mycollegecgpa.utils.Status
+import com.facebook.*
+import com.facebook.login.LoginResult
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FacebookAuthProvider
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.signup_layout.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,14 +43,24 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
+    private val TAG = "Facebook auth"
+
     @Inject
     lateinit var basicAuthInterceptor: BasicAuthInterceptor
 
     private val viewModel: AuthViewModel by viewModels()
 
+    private var signInBtnWasClicked = false
+
+    lateinit var callbackManager: CallbackManager
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var accessTokenTracker: AccessTokenTracker
+
     private var currentEmail: String? = null
     private var currentPassword: String? = null
     private var currentUserName: String? = null
+    private var isThirdParty = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).apply {
@@ -52,6 +71,10 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
+
+        firebaseAuth = FirebaseAuth.getInstance()
+        callbackManager = CallbackManager.Factory.create()
+
         createAnimationsForUIWidgets()
         //set screen orientation to portrait
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -71,6 +94,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
 
         signUpBtn.setOnClickListener {
+            signInBtnWasClicked = true
             hideKeyboard()
             val email = editTextEmail.text.toString()
             val password = editTextPassword.text.toString()
@@ -83,16 +107,83 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
             viewModel.register(email, password, reEnterPassword, username)
         }
+
+        FaceBookSignInBtn.setOnClickListener {
+            fb_signup_button.callOnClick()
+        }
+
+        fb_signup_button.apply {
+            fragment = this@SignUpFragment
+            setReadPermissions("email", "public_profile")
+            registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+                @SuppressLint("LogNotTimber")
+                override fun onSuccess(result: LoginResult?) {
+                    Log.d(TAG, "on success, $result")
+                    handleFacebookToken(result?.accessToken)
+                }
+
+                override fun onCancel() {
+                    Timber.d("$TAG: on cancel")
+                }
+
+                override fun onError(error: FacebookException?) {
+                    Timber.d("$TAG: on error, $error")
+                }
+
+            })
+        }
+
+        accessTokenTracker = object : AccessTokenTracker() {
+            override fun onCurrentAccessTokenChanged(
+                oldAccessToken: AccessToken?,
+                currentAccessToken: AccessToken?
+            ) {
+                if (currentAccessToken == null) {
+                    firebaseAuth.signOut()
+                }
+            }
+
+        }
+    }
+
+
+    private fun handleFacebookToken(token: AccessToken?) {
+        Timber.d("$TAG: handleFacebookToken $token")
+        token?.let {
+            val credentials = FacebookAuthProvider.getCredential(it.token)
+            firebaseAuth.signInWithCredential(credentials).addOnCompleteListener { task ->
+                if (task.isComplete) {
+                    Timber.d("$TAG: sign in successfully")
+                    val user = firebaseAuth.currentUser
+                    user?.let { usr ->
+                        usr.email?.let { email ->
+                            if (currentEmail == NO_EMAIL || currentEmail.isNullOrEmpty()) {
+                                currentEmail = email
+                            }
+                            usr.displayName?.let { username ->
+                                currentUserName = username
+                                viewModel.registerThirdPartyUser(email, username)
+                            }
+                        }
+                    }
+                } else {
+                    Timber.d("$TAG: unknown error occurred")
+                    showSnackbar(
+                        "Authentication error", null,
+                        R.drawable.ic_baseline_error_outline_24,
+                        "", Color.RED
+                    )
+                }
+            }
+        }
     }
 
     private fun subscribeToObservers() {
-        val progressBg: LinearLayout = (activity as MainActivity).progressBg
         viewModel.registerStatus.observe(viewLifecycleOwner, Observer { result ->
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
-                        progressBg.visibility = View.GONE
-                        signUpprogressBar.visibility = View.GONE
+                        resetUIForLoginButton()
                         showSnackbar(
                             "Successfully registered", null,
                             R.drawable.ic_baseline_emoji_emotions_24,
@@ -118,8 +209,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                         redirectLogin()
                     }
                     Status.ERROR -> {
-                        progressBg.visibility = View.GONE
-                        signUpprogressBar.visibility = View.GONE
+                        resetUIForLoginButton()
                         showSnackbar(
                             result.message ?: "an error occurred", null,
                             R.drawable.ic_baseline_error_outline_24,
@@ -127,8 +217,58 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                         )
                     }
                     Status.LOADING -> {
-                        progressBg.visibility = View.VISIBLE
-                        signUpprogressBar.visibility = View.VISIBLE
+                        updateUIForSignInButton()
+                    }
+                }
+            }
+        })
+
+        viewModel.thirdPartyRegisterStatus.observe(viewLifecycleOwner, Observer { result ->
+            result?.let {
+                when (result.status) {
+                    Status.SUCCESS -> {
+                        this.isThirdParty = true
+                        showSnackbar(
+                            "Successfully registered",
+                            null, R.drawable.ic_baseline_whatshot_24,
+                            "", Color.BLACK
+                        )
+                        sharedPrefs.edit().putBoolean(
+                            IS_THIRD_PARTY,
+                            true
+                        ).apply()
+                        sharedPrefs.edit().putString(
+                            KEY_LOGGED_IN_EMAIL,
+                            currentEmail
+                        ).apply()
+                        sharedPrefs.edit().putString(
+                            KEY_PASSWORD,
+                            currentPassword
+                        ).apply()
+                        sharedPrefs.edit().putString(
+                            KEY_USERNAME,
+                            currentUserName
+                        ).apply()
+
+                        authenticateApi(currentEmail ?: "")
+                        redirectLogin()
+                    }
+                    Status.ERROR -> {
+                        val snackBarText = result.message
+                        showSnackbar(
+                            snackBarText ?: "an error occurred", null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
+                        )
+                    }
+                    Status.LOADING -> {
+                        showSnackbar(
+                            "please hold on for a moment.....",
+                            null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.BLACK,
+                            Snackbar.LENGTH_INDEFINITE
+                        )
                     }
                 }
             }
@@ -136,9 +276,28 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     }
 
 
-    private fun authenticateApi(email: String, password: String) {
-        basicAuthInterceptor.email = email
-        basicAuthInterceptor.password = password
+    private fun updateUIForSignInButton() {
+        if (signInBtnWasClicked) {
+            signUpBtn.isAllCaps = false
+            signUpBtn.text = getString(R.string.loading_wait)
+            signUpprogressBar.visibility = View.VISIBLE
+        }
+    }
+
+    private fun resetUIForLoginButton() {
+        signUpBtn.isAllCaps = true
+        signUpBtn.text = requireContext().getString(R.string.sign_up)
+        signUpprogressBar.visibility = View.GONE
+    }
+
+
+    private fun authenticateApi(email: String, password: String = "") {
+        if (isThirdParty) {
+            basicAuthInterceptor.email = email
+        } else {
+            basicAuthInterceptor.email = email
+            basicAuthInterceptor.password = password
+        }
     }
 
     private fun redirectLogin() {
@@ -164,18 +323,28 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
             KEY_USERNAME,
             NO_USERNAME
         ) ?: NO_USERNAME
-
-        return currentEmail != NO_EMAIL && currentPassword !=
-                NO_PASSWORD
+        isThirdParty = sharedPrefs.getBoolean(
+            IS_THIRD_PARTY,
+            NOT_THIRD_PARTY
+        )
+        return if (isThirdParty) {
+            //auth with email
+            currentEmail != NO_EMAIL
+        } else {
+            //basic auth requires email & password
+            currentEmail != NO_EMAIL && currentPassword != NO_PASSWORD
+        }
     }
 
     private fun createAnimationsForUIWidgets() {
-        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
+        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_left)
         lin.startAnimation(animation)
-        val animation1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
-        customImage1.startAnimation(animation1)
-        customImage2.startAnimation(animation1)
+        val animation1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_right)
         signUpBtn.startAnimation(animation1)
+        val animation2 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_slowly)
+        signuptxt.startAnimation(animation2)
+        val animation3 = AnimationUtils.loadAnimation(requireContext(), R.anim.blink)
+        thirdPartyLoginLayoutParent1.startAnimation(animation3)
     }
 
     override fun onDetach() {
@@ -195,5 +364,10 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressed)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

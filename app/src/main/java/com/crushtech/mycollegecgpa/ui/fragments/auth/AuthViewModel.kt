@@ -17,6 +17,12 @@ class AuthViewModel @ViewModelInject constructor(
     private val _registerStatus = MutableLiveData<Resource<String>>()
     val registerStatus: LiveData<Resource<String>> = _registerStatus
 
+    private val _thirdPartyRegisterStatus = MutableLiveData<Resource<String>>()
+    val thirdPartyRegisterStatus: LiveData<Resource<String>> = _thirdPartyRegisterStatus
+
+    private val _thirdPartyLoginStatus = MutableLiveData<Resource<String>>()
+    val thirdPartyLoginStatus: LiveData<Resource<String>> = _thirdPartyLoginStatus
+
     private val _loginStatus = MutableLiveData<Resource<String>>()
     val loginStatus: LiveData<Resource<String>> = _loginStatus
 
@@ -68,6 +74,23 @@ class AuthViewModel @ViewModelInject constructor(
         }
     }
 
+    fun registerThirdPartyUser(email: String, username: String) {
+        _thirdPartyRegisterStatus.postValue(Resource.loading(null))
+        if (email.isEmpty() || username.isEmpty()) {
+            _thirdPartyRegisterStatus.postValue(
+                Resource.error(
+                    "some required details are missing",
+                    null
+                )
+            )
+            return
+        }
+        viewModelScope.launch {
+            val result = repository.registerThirdPartyUser(email, username)
+            _thirdPartyRegisterStatus.postValue(result)
+        }
+    }
+
 
     fun login(email: String, password: String) {
         //emit loading state, notify the observers that we are starting the login function
@@ -84,6 +107,23 @@ class AuthViewModel @ViewModelInject constructor(
         viewModelScope.launch {
             val result = repository.login(email, password)
             _loginStatus.postValue(result)
+        }
+    }
+
+    fun loginThirdPartyUser(email: String, username: String) {
+        _thirdPartyLoginStatus.postValue(Resource.loading(null))
+        if (email.isEmpty() || username.isEmpty()) {
+            _thirdPartyLoginStatus.postValue(
+                Resource.error(
+                    "Please fill out the required fields",
+                    null
+                )
+            )
+            return
+        }
+        viewModelScope.launch {
+            val result = repository.loginThirdPartyUser(email, username)
+            _thirdPartyLoginStatus.postValue(result)
         }
     }
 

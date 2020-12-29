@@ -17,10 +17,10 @@
     <string name="update_course_string">UPDATE</string>
     <string name="share_info">Hey, Check out My College CGPA, an interesting app that tracks and keeps record of your college academic performance. Get it for free at</string>
     <string name="play_store_uri">http://play.google.com/store/apps/details?id=</string>
-    <string name="cgpa_info_message">Manage and keep track of your college academic performance with ease, sign up and sync across all your devices</string>
+    <string name="cgpa_info_message">Manage and keep track of your college academics performances with ease, sign up and sync across all your devices</string>
     <string name="privacy_policy_message"><![CDATA[By using my college cgpa, you agree to our Terms & Privacy Policy]]></string>
     <string name="about_mycollege_cgpa">my college cgpa app helps college/university students to keep record of their academic performances, it also provides real-time statistics of the student\'s performances in respect to your semester, you can as well download the statistics record as a pdf file, share semesters with friends or families,sign up and sync across multiple devices and guess what, it\'s absolutely free.</string>
-    <string name="how_to_use">to create a semester, click on the floating action button below your thumb in the my semster screen.\nto add courses, click on the just created semester and you will be navigated to a screen, in that same screen, click on + button at the bottom right corner to add courses.\nto log out, navigate to the others screen, click on the log out button.\nto share your semster, swipe right on the semester item and swipe left to delete.</string>
+    <string name="how_to_use">to create a semester, click on the floating action button below your thumb in the my semster screen.\nto add courses, click on the just created semester and you will be navigated to a screen, in that same screen, click on + button at the bottom right corner to add courses.\nto log out, navigate to the settings screen, click on the log out button.\nto share your semster, swipe right on the semester item and swipe left to delete.</string>
     <string name="weight_warning_txt">Please Note: Changes will occur when next you create or edit a course</string>
     <string name="tap_to_edit_weights">Tap to edit weights</string>
     <string name="view_stats">view statistics</string>
@@ -57,4 +57,19 @@
     <string name="mysemesters">My Semesters</string>
     <string name="ok_proceed">OK, Proceed</string>
     <string name="delete_course">Delete</string>
+    <string name="sponsored_by_mycollege_cgpa">Sponsored by MyCollege CGPA</string>
+    <string name="total_credit_hours">Total credit Hours</string>
+    <string name="my_stats">My Statistics</string>
+    <string name="my_extras">Extras</string>
+    <string name="my_weights">My Weights</string>
+    <string name="facebook_app_id">388013185616690</string>
+    <string name="fb_login_protocol_scheme">fb388013185616690</string>
+    <string name="facebook">facebook</string>
+    <string name="google">google</string>
+    <string name="already_have_an_account">Already Have an Account?</string>
+    <string name="you_don_t_have_an_account">You don\'t have an account?</string>
+    <string name="create_one_acct">Create one</string>
+    <string name="or_connect_with">OR CONNECT WITH</string>
+    <string name="loading_wait">Loading Please wait</string>
+
 </resources>

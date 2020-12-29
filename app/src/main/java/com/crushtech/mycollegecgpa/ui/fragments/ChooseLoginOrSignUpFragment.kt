@@ -53,7 +53,7 @@ class ChooseLoginOrSignUpFragment : BaseFragment(R.layout.choose_login_signup_la
                 FLAG_FULLSCREEN,
                 FLAG_FULLSCREEN
             )
-            requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
         val userIsLoggedIn = sharedPrefs.getBoolean(IS_LOGGED_IN, false)
 

@@ -19,7 +19,7 @@ interface SemesterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGrades(gradePoints: GradeClass)
 
-    @Query("SELECT * FROM Semester WHERE id = :semesterId ORDER BY id DESC")
+    @Query("SELECT * FROM Semester WHERE id = :semesterId ORDER BY id DESC ")
     suspend fun getSemesterById(semesterId: String): Semester?
 
     @Query("SELECT * FROM COURSES WHERE semesterId = :semesterId ORDER BY id DESC")

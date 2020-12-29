@@ -13,6 +13,7 @@ import com.crushtech.mycollegecgpa.data.remote.requests.*
 import com.crushtech.mycollegecgpa.ui.fragments.extras.OthersFragmentDirections
 import com.crushtech.mycollegecgpa.utils.Constants.COURSE_FIRST_TIME_OPEN
 import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
+import com.crushtech.mycollegecgpa.utils.Constants.IS_THIRD_PARTY
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_USERNAME
@@ -59,6 +60,29 @@ class SemesterRepository @Inject constructor(
 
         }
 
+    suspend fun registerThirdPartyUser(email: String, username: String) =
+        withContext(Dispatchers.IO) {
+            try {
+                val response =
+                    semesterApi.thirdPartyRegister(ThirdPartyAuthRequest(email, username))
+                if (response.isSuccessful && response.body()!!.success) {
+                    Resource.success(response.body()?.message)
+                } else {
+                    Resource.error(
+                        response.body()?.message
+                            ?: response.message(), null
+                    )
+                }
+            } catch (e: Exception) {
+                Resource.error(
+                    "Couldn't connect to the servers. Check your internet connection",
+                    null
+                )
+            }
+
+        }
+
+
     suspend fun login(email: String, password: String) =
         withContext(Dispatchers.IO) {
             try {
@@ -79,10 +103,35 @@ class SemesterRepository @Inject constructor(
 
         }
 
+
+    suspend fun loginThirdPartyUser(email: String, username: String) =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = semesterApi.thirdPartyLogin(ThirdPartyAuthRequest(email, username))
+                if (response.isSuccessful && response.body()!!.success) {
+                    Resource.success(response.body()?.message)
+                } else {
+                    Resource.error(
+                        response.body()?.message ?: response.message(), null
+                    )
+                }
+            } catch (e: Exception) {
+                Resource.error(
+                    "Couldn't connect to the servers. Check your internet connection",
+                    null
+                )
+            }
+
+        }
+
     suspend fun logOutUser(fragment: Fragment) {
         sharedPreferences.edit().putString(
             KEY_LOGGED_IN_EMAIL,
             NO_EMAIL
+        ).apply()
+        sharedPreferences.edit().putBoolean(
+            IS_THIRD_PARTY,
+            false
         ).apply()
         sharedPreferences.edit().putString(
             KEY_PASSWORD,
@@ -328,7 +377,6 @@ class SemesterRepository @Inject constructor(
     suspend fun getSemesterById(semesterId: String) = semesterDao.getSemesterById(semesterId)
 
     suspend fun getCourseList(semesterId: String) = semesterDao.getCourseList(semesterId)
-
 
 
     suspend fun deleteSemester(semesterId: String) {

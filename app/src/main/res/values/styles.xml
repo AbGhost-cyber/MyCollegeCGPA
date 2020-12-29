@@ -29,4 +29,5 @@
 
     <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar" />
 
+
 </resources>

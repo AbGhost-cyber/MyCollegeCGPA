@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.SemesterAdapter.SemesterViewHolder
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.utils.Constants.getHighestGrade
 import kotlinx.android.synthetic.main.semester_items.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -71,11 +72,15 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
                 ivSynced.setImageResource(R.drawable.ic_check)
                 tvSynced1.text = context.getString(R.string.isSynced)
             }
+
             circularProgressBar.apply {
                 semesters.courses.forEach {
-                    it.gradesPoints.forEach { grade ->
-                        val max = grade.APlusGrade
-                        progressMax = max
+                    if (it.gradesPoints.isNotEmpty()) {
+                        val grade = it.gradesPoints[0]
+                        val max = getHighestGrade(grade)
+                        max?.let {
+                            progressMax = max
+                        }
                     }
                 }
 
@@ -114,6 +119,7 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
         }
 
     }
+
 
     private var onItemClickListener: ((Semester) -> Unit)? = null
 

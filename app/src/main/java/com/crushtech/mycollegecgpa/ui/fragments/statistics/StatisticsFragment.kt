@@ -90,7 +90,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
             mainLayoutToolbar.setNavigationIcon(R.drawable.ic_baseline_chevron_left_24)
         }
-        requireActivity().titleBarText.text = "My Statistics"
+        requireActivity().titleBarText.text = getString(R.string.my_stats)
         setUpObservers()
         setUpBarCharts()
         setupSwipeRefreshLayout()
@@ -392,7 +392,6 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         val output: OutputStream = FileOutputStream(myFile)
 
         GlobalScope.launch(Dispatchers.Main) {
-            (activity as MainActivity).progressBg.visibility = View.VISIBLE
             pdf_pb.apply {
                 progressMax = 100F
                 visibility = View.VISIBLE
@@ -411,7 +410,6 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
             }
             pdf_pb.visibility = View.GONE
-            (activity as MainActivity).progressBg.visibility = View.GONE
             if (pdfHasBeenCreated) {
                 userPdfDownloadsCount?.let {
                     it.noOfPdfDownloads--

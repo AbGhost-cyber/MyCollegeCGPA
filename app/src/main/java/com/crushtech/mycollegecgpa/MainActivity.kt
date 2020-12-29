@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private var successBarShown = false
     private var errorBarShown = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,7 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         navController = Navigation.findNavController(this, R.id.gradesNavHostFragment)
 
-
+        bottomNavigationView.setOnNavigationItemReselectedListener {
+        }
         bottomNavigationView.setOnNavigationItemSelectedListener {
             if (it.itemId != bottomNavigationView.selectedItemId) {
                 NavigationUI.onNavDestinationSelected(it, navController)
@@ -41,7 +43,7 @@ class MainActivity : AppCompatActivity() {
             true
         }
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
-        bottomNavigationView.setOnNavigationItemReselectedListener {}
+
 
         val appBarConfig = AppBarConfiguration(
             setOf(
@@ -120,5 +122,13 @@ class MainActivity : AppCompatActivity() {
             bgColor
         )?.show()
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        //listen to callbacks for fragments
+//        for(fragments in supportFragmentManager.fragments){
+//            fragments.onActivityResult(requestCode,resultCode,data)
+//        }
+//        super.onActivityResult(requestCode, resultCode, data)
+//    }
 
 }

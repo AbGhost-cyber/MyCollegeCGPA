@@ -19,9 +19,20 @@ interface SemesterApi {
         @Body signInRequest: SignInRequest
     ): Response<SimpleResponse>
 
+    @POST("/third_party_register")
+    suspend fun thirdPartyRegister(
+        @Body thirdPartyAuthRequest: ThirdPartyAuthRequest
+    ): Response<SimpleResponse>
+
+
     @POST("/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
+    ): Response<SimpleResponse>
+
+    @POST("/third_party_login")
+    suspend fun thirdPartyLogin(
+        @Body thirdPartyAuthRequest: ThirdPartyAuthRequest
     ): Response<SimpleResponse>
 
     @POST("/addSemester")

@@ -96,6 +96,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
         fabCreateCourse.setOnClickListener {
             showCreateCourseDialog()
+
         }
         if (savedInstanceState != null) {
             val addCourseDialog = parentFragmentManager.findFragmentByTag(ADD_COURSE_DIALOG)
@@ -374,3 +375,4 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         }
     }
 }
+

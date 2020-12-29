@@ -11,6 +11,8 @@
     <color name="pink">#FAE5E5</color>
     <color name="itemNotOwnedColor">#80FFFFFF</color>
     <color name="itemOwned">#FFFFFF</color>
+    <color name="fb_color">#1877F2</color>
+    <color name="google_color">#F44336</color>
 
 
 </resources>

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.BestSemesterAdapter.BestSemesterViewHolder
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.utils.Constants.getHighestGrade
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.best_semester_item.view.*
 
@@ -51,9 +52,12 @@ class BestSemesterAdapter : Adapter<BestSemesterViewHolder>() {
             }
             circularProgressBar.apply {
                 semesters.courses.forEach {
-                    it.gradesPoints.forEach { grade ->
-                        val max = grade.APlusGrade
-                        progressMax = max
+                    if (it.gradesPoints.isNotEmpty()) {
+                        val grade = it.gradesPoints[0]
+                        val max = getHighestGrade(grade)
+                        max?.let {
+                            progressMax = max
+                        }
                     }
                 }
                 progress = semesters.getGPA().toFloat()

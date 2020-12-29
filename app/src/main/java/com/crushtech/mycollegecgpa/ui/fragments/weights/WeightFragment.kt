@@ -39,8 +39,9 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
             hideMainActivityUI()
             showAppBar()
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
+            titleBarText.text = getString(R.string.my_weights)
         }
-        requireActivity().titleBarText.text = "My Weights"
+
 
         setUpRecyclerView()
         setUpObservers()

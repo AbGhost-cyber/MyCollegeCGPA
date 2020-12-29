@@ -11,7 +11,6 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.view.WindowManager
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.isEmpty
 import androidx.fragment.app.viewModels
@@ -70,14 +69,11 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
         (activity as MainActivity).apply {
             showAppBar()
+            titleBarText.text = getString(R.string.mysemesters)
+            showMainActivityUI()
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+
         }
-
-        requireActivity().titleBarText.text = getString(R.string.mysemesters)
-
-        (activity as MainActivity).showMainActivityUI()
-
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
 
         val username = "Hello, ${getCurrentUserName(sharedPrefs)}"
         userName.text = username
@@ -170,6 +166,11 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     setDeleteCourseListener { deleteBtnClicked ->
                         if (deleteBtnClicked) {
                             homeViewModel.deleteSemester(semester.id)
+                            showSnackbar(
+                                "semester deleted", null,
+                                R.drawable.ic_baseline_bubble_chart_24,
+                                "", Color.BLACK
+                            )
                         }
                     }
                     setProceedListener {
@@ -204,9 +205,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     }
 
     private fun getBestSemester(semester: List<Semester>): Semester? {
-        return semester.maxBy {
+        return maxByOrNull({
             it.getGPA()
-        }
+        })
     }
 
     private fun subscribeToObservers() {
@@ -257,12 +258,10 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
 
         homeViewModel.addOwnerStatus.observe(viewLifecycleOwner, Observer { event ->
-            val progressBg: LinearLayout = (activity as MainActivity).progressBg
             event?.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
                         addOwnerProgressImage.visibility = GONE
-                        progressBg.visibility = GONE
                         addOwnerProgressBar.visibility = GONE
 
                         showSnackbar(
@@ -275,7 +274,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     }
                     Status.ERROR -> {
                         addOwnerProgressImage.visibility = GONE
-                        progressBg.visibility = GONE
                         addOwnerProgressBar.visibility = GONE
 
                         showSnackbar(
@@ -286,7 +284,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     }
                     Status.LOADING -> {
                         addOwnerProgressImage.visibility = VISIBLE
-                        progressBg.visibility = VISIBLE
                         addOwnerProgressBar.visibility = VISIBLE
                     }
                 }
