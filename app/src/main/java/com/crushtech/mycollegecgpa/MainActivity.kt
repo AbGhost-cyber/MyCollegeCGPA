@@ -1,5 +1,6 @@
 package com.crushtech.mycollegecgpa
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -123,12 +124,12 @@ class MainActivity : AppCompatActivity() {
         )?.show()
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        //listen to callbacks for fragments
-//        for(fragments in supportFragmentManager.fragments){
-//            fragments.onActivityResult(requestCode,resultCode,data)
-//        }
-//        super.onActivityResult(requestCode, resultCode, data)
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //listen to callbacks for fragments
+        for (fragments in supportFragmentManager.fragments) {
+            fragments.onActivityResult(requestCode, resultCode, data)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
 }

@@ -25,14 +25,19 @@ import com.crushtech.mycollegecgpa.utils.Constants.NOT_THIRD_PARTY
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
+import com.crushtech.mycollegecgpa.utils.Constants.RC_SIGN_IN
 import com.crushtech.mycollegecgpa.utils.Status
 import com.facebook.*
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.login_layout.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,15 +45,20 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
+    private val TAG = "google auth"
+
     @Inject
     lateinit var basicAuthInterceptor: BasicAuthInterceptor
 
     private val viewModel: AuthViewModel by viewModels()
     private var loginBtnWasClicked = false
 
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+
     private lateinit var callbackManager: CallbackManager
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var accessTokenTracker: AccessTokenTracker
+    private var credentials: AuthCredential? = null
 
     private var currentEmail: String? = null
     private var currentPassword: String? = null
@@ -100,6 +110,12 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             //call on click on the main fb button
             fb_login_button.callOnClick()
         }
+        GoogleLoginBtn.setOnClickListener {
+            //call on clcik on the main ga button
+            ga_login_button.callOnClick()
+            googleSignIn()
+        }
+
 
         fb_login_button.apply {
             fragment = this@LoginFragment
@@ -112,7 +128,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 override fun onCancel() {
                     showSnackbar(
                         "authentication cancelled",
-                        null, R.drawable.ic_baseline_whatshot_24,
+                        null, R.drawable.ic_clear4,
                         "", Color.BLACK
                     )
                 }
@@ -120,13 +136,14 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 override fun onError(error: FacebookException?) {
                     showSnackbar(
                         "an unknown error occurred",
-                        null, R.drawable.ic_baseline_whatshot_24,
-                        "", Color.BLACK
+                        null, R.drawable.ic_baseline_error_outline_24,
+                        "", Color.RED
                     )
                 }
 
             })
         }
+
 
         accessTokenTracker = object : AccessTokenTracker() {
             override fun onCurrentAccessTokenChanged(
@@ -139,33 +156,24 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             }
 
         }
-
     }
 
 
     private fun handleFacebookToken(token: AccessToken?) {
         token?.let {
-            val credentials = FacebookAuthProvider.getCredential(it.token)
-            firebaseAuth.signInWithCredential(credentials).addOnCompleteListener { task ->
-                if (task.isComplete) {
-                    val user = firebaseAuth.currentUser
-                    user?.let { usr ->
-                        usr.email?.let { email ->
-                            if (currentEmail == NO_EMAIL || currentEmail.isNullOrEmpty()) {
-                                currentEmail = email
-                                this.currentUserName = usr.displayName
-                            }
-                            usr.displayName?.let { username ->
-                                viewModel.loginThirdPartyUser(email, username)
-                            }
-                        }
+            credentials = FacebookAuthProvider.getCredential(it.token)
+            credentials?.let { authCredential ->
+                firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener { task ->
+                    if (task.isComplete) {
+                        val user = firebaseAuth.currentUser
+                        updateUI(user)
+                    } else {
+                        showSnackbar(
+                            "Authentication error", null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
+                        )
                     }
-                } else {
-                    showSnackbar(
-                        "Authentication error", null,
-                        R.drawable.ic_baseline_error_outline_24,
-                        "", Color.RED
-                    )
                 }
             }
         }
@@ -227,9 +235,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
-//                        result.data?.let {
-//                            this.currentUserName = it
-//                        }
                         this.isThirdParty = true
                         val snackBarText = "Welcome back $currentUserName"
                         showSnackbar(
@@ -277,6 +282,64 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             }
         })
     }
+
+
+    private fun createGoogleSignInRequest() {
+        // Configure Google Sign In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+    }
+
+    private fun googleSignIn() {
+        showSnackbar(
+            "Google sign in starts", null,
+            R.drawable.ic_baseline_error_outline_24,
+            "", Color.RED
+        )
+        val signInIntent = mGoogleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        credentials = GoogleAuthProvider.getCredential(idToken, null)
+        credentials?.let { authCredential ->
+            firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Timber.d("signInWithCredential:success")
+                    val user = firebaseAuth.currentUser
+                    updateUI(user)
+                } else {
+                    Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
+                    showSnackbar(
+                        "signInWithCredential:failure", null,
+                        R.drawable.ic_baseline_error_outline_24,
+                        "", Color.RED
+                    )
+                }
+            }
+        }
+    }
+
+    private fun updateUI(user: FirebaseUser?) {
+        user?.let { usr ->
+            usr.email?.let { email ->
+                if (currentEmail == NO_EMAIL || currentEmail.isNullOrEmpty()) {
+                    currentEmail = email
+                    this.currentUserName = usr.displayName
+                }
+                usr.displayName?.let { username ->
+                    viewModel.loginThirdPartyUser(email, username)
+                }
+            }
+        }
+    }
+
 
     private fun authenticateApi(email: String, password: String = "") {
         if (isThirdParty) {
@@ -360,17 +423,41 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createGoogleSignInRequest()
         val onBackPressed = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 requireActivity().finish()
+                //TODO("replace finish with navigation")
             }
 
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressed)
     }
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //facebook call back
         callbackManager.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent()
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val googleAccount = task.getResult(ApiException::class.java)!!
+                Timber.d("firebaseAuthWithGoogle:%s", googleAccount.id)
+                firebaseAuthWithGoogle(googleAccount.idToken!!)
+
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Timber.w(e, "Google sign in failed")
+                showSnackbar(
+                    "Google sign in failed", null,
+                    R.drawable.ic_baseline_error_outline_24,
+                    "", Color.RED
+                )
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data)
     }
 }

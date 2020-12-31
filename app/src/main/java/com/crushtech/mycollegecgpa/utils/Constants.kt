@@ -32,6 +32,7 @@ object Constants {
     const val NO_PASSWORD = "no password"
     const val NO_USERNAME = "no username"
     const val NOT_THIRD_PARTY = false
+    const val RC_SIGN_IN = 1
 
     const val TOTAL_NUMBER_OF_CREDIT_HOURS = "totalNumberOfCreditHours"
     const val TOTAL_NUMBER_OF_COURSES = "totalNumberOfCourses"

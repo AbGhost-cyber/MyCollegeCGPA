@@ -107,7 +107,9 @@ class SemesterRepository @Inject constructor(
     suspend fun loginThirdPartyUser(email: String, username: String) =
         withContext(Dispatchers.IO) {
             try {
-                val response = semesterApi.thirdPartyLogin(ThirdPartyAuthRequest(email, username))
+                val response = semesterApi.thirdPartyLogin(
+                    ThirdPartyAuthRequest(email, username)
+                )
                 if (response.isSuccessful && response.body()!!.success) {
                     Resource.success(response.body()?.message)
                 } else {
@@ -461,3 +463,8 @@ class SemesterRepository @Inject constructor(
         }
     }
 }
+
+
+
+
+

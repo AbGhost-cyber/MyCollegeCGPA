@@ -75,6 +75,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
         }
 
+
         val username = "Hello, ${getCurrentUserName(sharedPrefs)}"
         userName.text = username
         currentDate.text = getFormattedDate()
@@ -496,3 +497,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         super.onAttach(context)
     }
 }
+
+
+
+
+
+
+
+
+

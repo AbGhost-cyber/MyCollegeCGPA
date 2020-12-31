@@ -307,4 +307,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signUpBtn"
         tools:layout_editor_absoluteX="10dp" />
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/ga_signup_button"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:elevation="10dp"
+        android:fontFamily="@font/capriola"
+        android:padding="10dp"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signUpBtn"
+        tools:layout_editor_absoluteX="10dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,10 @@
 package com.crushtech.mycollegecgpa.ui.fragments.auth
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
@@ -19,6 +17,7 @@ import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.mycollegecgpa.ui.BaseFragment
+import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.IS_THIRD_PARTY
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
@@ -30,9 +29,15 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
 import com.crushtech.mycollegecgpa.utils.Status
 import com.facebook.*
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.signup_layout.*
 import timber.log.Timber
@@ -43,7 +48,9 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
-    private val TAG = "Facebook auth"
+    private val TAG = "google auth"
+
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
 
     @Inject
     lateinit var basicAuthInterceptor: BasicAuthInterceptor
@@ -111,23 +118,35 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
         FaceBookSignInBtn.setOnClickListener {
             fb_signup_button.callOnClick()
         }
+        GoogleSignInBtn.setOnClickListener {
+            //call on clcik on the main ga button
+            ga_signup_button.callOnClick()
+            googleSignIn()
+        }
 
         fb_signup_button.apply {
             fragment = this@SignUpFragment
             setReadPermissions("email", "public_profile")
             registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-                @SuppressLint("LogNotTimber")
+
                 override fun onSuccess(result: LoginResult?) {
-                    Log.d(TAG, "on success, $result")
                     handleFacebookToken(result?.accessToken)
                 }
 
                 override fun onCancel() {
-                    Timber.d("$TAG: on cancel")
+                    showSnackbar(
+                        "authentication cancelled",
+                        null, R.drawable.ic_baseline_whatshot_24,
+                        "", Color.BLACK
+                    )
                 }
 
                 override fun onError(error: FacebookException?) {
-                    Timber.d("$TAG: on error, $error")
+                    showSnackbar(
+                        "an unknown error occurred",
+                        null, R.drawable.ic_baseline_whatshot_24,
+                        "", Color.BLACK
+                    )
                 }
 
             })
@@ -155,17 +174,11 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 if (task.isComplete) {
                     Timber.d("$TAG: sign in successfully")
                     val user = firebaseAuth.currentUser
-                    user?.let { usr ->
-                        usr.email?.let { email ->
-                            if (currentEmail == NO_EMAIL || currentEmail.isNullOrEmpty()) {
-                                currentEmail = email
-                            }
-                            usr.displayName?.let { username ->
-                                currentUserName = username
-                                viewModel.registerThirdPartyUser(email, username)
-                            }
-                        }
-                    }
+                    showSnackbar(
+                        "an unknown error occurred",
+                        null, R.drawable.ic_baseline_whatshot_24,
+                        "", Color.BLACK
+                    )
                 } else {
                     Timber.d("$TAG: unknown error occurred")
                     showSnackbar(
@@ -275,6 +288,53 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
         })
     }
 
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Timber.d("signInWithCredential:success")
+                val user = firebaseAuth.currentUser
+                updateUI(user)
+            } else {
+                Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
+                showSnackbar(
+                    "signInWithCredential:failure", null,
+                    R.drawable.ic_baseline_error_outline_24,
+                    "", Color.RED
+                )
+            }
+        }
+    }
+
+    private fun updateUI(user: FirebaseUser?) {
+        user?.let { usr ->
+            usr.email?.let { email ->
+                if (currentEmail == NO_EMAIL || currentEmail.isNullOrEmpty()) {
+                    currentEmail = email
+                    this.currentUserName = usr.displayName
+                }
+                usr.displayName?.let { username ->
+                    viewModel.loginThirdPartyUser(email, username)
+                }
+            }
+        }
+    }
+
+    private fun createGoogleSignInRequest() {
+        // Configure Google Sign In
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+    }
+
+    private fun googleSignIn() {
+        val signInIntent = mGoogleSignInClient.signInIntent
+        requireActivity().startActivityForResult(signInIntent, Constants.RC_SIGN_IN)
+    }
 
     private fun updateUIForSignInButton() {
         if (signInBtnWasClicked) {
@@ -357,6 +417,8 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        createGoogleSignInRequest()
+
         val onBackPressed = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 requireActivity().finish()
@@ -367,7 +429,28 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        //facebook callback
         callbackManager.onActivityResult(requestCode, resultCode, data)
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent()
+        if (requestCode == Constants.RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val googleAccount = task.getResult(ApiException::class.java)!!
+                Timber.d("firebaseAuthWithGoogle:%s", googleAccount.id)
+                firebaseAuthWithGoogle(googleAccount.idToken!!)
+
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Timber.w(e, "Google sign in failed")
+                showSnackbar(
+                    "Google sign in failed", null,
+                    R.drawable.ic_baseline_error_outline_24,
+                    "", Color.RED
+                )
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data)
     }
 }
