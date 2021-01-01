@@ -206,9 +206,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     }
 
     private fun getBestSemester(semester: List<Semester>): Semester? {
-        return maxByOrNull({
+        return semester.maxBy {
             it.getGPA()
-        })
+        }
     }
 
     private fun subscribeToObservers() {

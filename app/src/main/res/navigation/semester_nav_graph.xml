@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_othersFragment_to_weightFragment"
             app:destination="@id/weightFragment" />
+        <action
+            android:id="@+id/action_extrasFragment_to_aboutAppFragment"
+            app:destination="@id/aboutAppFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -47,6 +50,9 @@
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_chooseLoginOrSignUpFragment"
+            app:destination="@id/chooseLoginOrSignUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -59,6 +65,9 @@
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_chooseLoginOrSignUpFragment"
+            app:destination="@id/chooseLoginOrSignUpFragment" />
     </fragment>
     <fragment
         android:id="@+id/courseListFragment"
@@ -99,5 +108,9 @@
         android:name="com.crushtech.mycollegecgpa.ui.fragments.weights.WeightFragment"
         android:label="My Weights"
         tools:layout="@layout/weight_layout" />
+    <fragment
+        android:id="@+id/aboutAppFragment"
+        android:name="com.crushtech.mycollegecgpa.ui.fragments.AboutAppFragment"
+        android:label="AboutAppFragment" />
 
 </navigation>

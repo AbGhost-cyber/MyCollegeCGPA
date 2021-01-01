@@ -119,7 +119,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
             fb_signup_button.callOnClick()
         }
         GoogleSignInBtn.setOnClickListener {
-            //call on clcik on the main ga button
+            //call on click on the main ga button
             ga_signup_button.callOnClick()
             googleSignIn()
         }
@@ -421,7 +421,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
         val onBackPressed = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                requireActivity().finish()
+                findNavController().navigate(R.id.action_signUpFragment_to_chooseLoginOrSignUpFragment)
             }
 
         }

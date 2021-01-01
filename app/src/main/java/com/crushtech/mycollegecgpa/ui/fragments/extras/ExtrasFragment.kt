@@ -12,7 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
-import com.crushtech.mycollegecgpa.dialogs.AboutAppDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.LogoutDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants
@@ -25,7 +24,6 @@ import kotlinx.android.synthetic.main.extras_layout.*
 import javax.inject.Inject
 
 const val LOG_OUT_DIALOG = "log out dialog"
-const val ABOUT_APP_DIALOG = "About app dialog"
 
 @AndroidEntryPoint
 class OthersFragment : BaseFragment(R.layout.extras_layout) {
@@ -146,7 +144,9 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
                         )
                     }
                     1 -> shareAppFunction()
-                    2 -> AboutAppDialogFragment().show(parentFragmentManager, ABOUT_APP_DIALOG)
+                    2 -> findNavController().navigate(
+                        R.id.action_extrasFragment_to_aboutAppFragment
+                    )
                     3 -> rateAppFunction()
                     4 -> {
                         val intent = Intent(Intent.ACTION_VIEW)

@@ -20,7 +20,6 @@
     <string name="cgpa_info_message">Manage and keep track of your college academics performances with ease, sign up and sync across all your devices</string>
     <string name="privacy_policy_message"><![CDATA[By using my college cgpa, you agree to our Terms & Privacy Policy]]></string>
     <string name="about_mycollege_cgpa">my college cgpa app helps college/university students to keep record of their academic performances, it also provides real-time statistics of the student\'s performances in respect to your semester, you can as well download the statistics record as a pdf file, share semesters with friends or families,sign up and sync across multiple devices and guess what, it\'s absolutely free.</string>
-    <string name="how_to_use">to create a semester, click on the floating action button below your thumb in the my semster screen.\nto add courses, click on the just created semester and you will be navigated to a screen, in that same screen, click on + button at the bottom right corner to add courses.\nto log out, navigate to the settings screen, click on the log out button.\nto share your semster, swipe right on the semester item and swipe left to delete.</string>
     <string name="weight_warning_txt">Please Note: Changes will occur when next you create or edit a course</string>
     <string name="tap_to_edit_weights">Tap to edit weights</string>
     <string name="view_stats">view statistics</string>
@@ -71,5 +70,18 @@
     <string name="create_one_acct">Create one</string>
     <string name="or_connect_with">OR CONNECT WITH</string>
     <string name="loading_wait">Loading Please wait</string>
+    <string name="indicates_item_expanded_state">indicates item expanded state</string>
+    <string name="FAQs">FAQs</string>
+    <string name="how_to_create_a_semester">click on the pencil icon beneath your thumb and a dialog will pop-up.</string>
+    <string name="how_to_create_a_course">in the home screen, click on the semester you wish to create a course for, you will be directed to the create course screen, below your thumb, there\'s a pencil icon click on it and don\'t forget to click the save icon.</string>
+    <string name="gpa_limit_per_semester">the limit is 100</string>
+    <string name="what_is_a_gpa">\" GPA assumes a grading scale of A, B, C, D, E/F. Each grade is assigned a number of grade points. Initially an A grade receives 4 points, a B=3, a C=2, a D=1\."</string>
+    <string name="what_is_credit_hours">A credit hour is a way of measuring how much credit a student receives for attending a course which corresponds to the hours per week spent in that course.</string>
+    <string name="what_are_quality_points">Quality points are used to calculate your grade point average (GPA). Quality points are earned on a descending scale where 4 quality points are awarded for an A grade and 0 quality points are awarded for an F grade.</string>
+    <string name="what_happensto_my_data">all our users data are securely stored on our cloud servers, you don\'t need to worry, you can access your data upon re-installation.</string>
+    <string name="how_to_increase_pdf_downloads"><![CDATA[click on view statistics in home screen ->click on the purchase more button ->then google will launch the billing flow.]]></string>
+    <string name="can_i_access_on_multiple_device">Yes, using facebook, google or even email and password sign-in</string>
+    <string name="how_is_my_gpa_calculated">we calculate your gpa by totaling all your credit hours, numerical grade of your grade points and then dividing the total credit hours by the total numerical grade.</string>
+    <string name="how_to_edit_grade_points">No worries, you can edit the default grading to suit your school\'s, simply go to the extras screen, click on edit grade points.</string>
 
 </resources>

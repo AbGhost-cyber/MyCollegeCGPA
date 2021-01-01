@@ -35,6 +35,7 @@ data class Semester(
         return (GPA * 100.0).roundToInt() / 100.0
     }
 
+
     fun getThreeCoursesName(): String {
         val threeCourses = ArrayList<String>()
         courses.forEach {

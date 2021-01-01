@@ -112,7 +112,7 @@ object Constants {
         transformedList.add(gradePoints.DPlusGrade)
         transformedList.add(gradePoints.DGrade)
         transformedList.add(gradePoints.FOrEGrade)
-        return maxOrNull()
+        return transformedList.max()
     }
 }
 

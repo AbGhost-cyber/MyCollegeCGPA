@@ -426,8 +426,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         createGoogleSignInRequest()
         val onBackPressed = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                requireActivity().finish()
-                //TODO("replace finish with navigation")
+                findNavController().navigate(R.id.action_loginFragment_to_chooseLoginOrSignUpFragment)
             }
 
         }
