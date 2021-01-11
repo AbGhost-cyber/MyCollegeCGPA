@@ -10,12 +10,12 @@ import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
+import com.crushtech.mycollegecgpa.databinding.LoginLayoutBinding
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants.IS_THIRD_PARTY
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
@@ -27,6 +27,7 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
 import com.crushtech.mycollegecgpa.utils.Constants.RC_SIGN_IN
 import com.crushtech.mycollegecgpa.utils.Status
+import com.crushtech.mycollegecgpa.utils.viewBinding
 import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -36,12 +37,13 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.login_layout.*
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment(R.layout.login_layout) {
+    private val binding by viewBinding(LoginLayoutBinding::bind)
+
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
@@ -64,6 +66,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
     private var currentPassword: String? = null
     private var currentUserName: String? = null
     private var isThirdParty = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).apply {
@@ -91,14 +94,14 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         subscribeToObservers()
 
-        signUpRedirect.setOnClickListener {
+        binding.signUpRedirect.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
-        LoginBtn.setOnClickListener {
+        binding.LoginBtn.setOnClickListener {
             loginBtnWasClicked = true
             hideKeyboard()
-            val email = editTextEmail1.text.toString()
-            val password = editTextPassword1.text.toString()
+            val email = binding.editTextEmail1.text.toString()
+            val password = binding.editTextPassword1.text.toString()
 
             this.currentEmail = email
             this.currentPassword = password
@@ -106,18 +109,18 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         }
 
 
-        FaceBookLoginBtn.setOnClickListener {
+        binding.FaceBookLoginBtn.setOnClickListener {
             //call on click on the main fb button
-            fb_login_button.callOnClick()
+            binding.fbLoginButton.callOnClick()
         }
-        GoogleLoginBtn.setOnClickListener {
-            //call on clcik on the main ga button
-            ga_login_button.callOnClick()
+        binding.GoogleLoginBtn.setOnClickListener {
+            //call on click on the main ga button
+            binding.galoginButton.callOnClick()
             googleSignIn()
         }
 
 
-        fb_login_button.apply {
+        binding.fbLoginButton.apply {
             fragment = this@LoginFragment
             setReadPermissions("email", "public_profile")
             registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
@@ -126,7 +129,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 }
 
                 override fun onCancel() {
-                    showSnackbar(
+                    showSnackBar(
                         "authentication cancelled",
                         null, R.drawable.ic_clear4,
                         "", Color.BLACK
@@ -134,7 +137,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 }
 
                 override fun onError(error: FacebookException?) {
-                    showSnackbar(
+                    showSnackBar(
                         "an unknown error occurred",
                         null, R.drawable.ic_baseline_error_outline_24,
                         "", Color.RED
@@ -168,7 +171,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         val user = firebaseAuth.currentUser
                         updateUI(user)
                     } else {
-                        showSnackbar(
+                        showSnackBar(
                             "Authentication error", null,
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
@@ -181,7 +184,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
 
 
     private fun subscribeToObservers() {
-        viewModel.loginStatus.observe(viewLifecycleOwner, Observer { result ->
+        viewModel.loginStatus.observe(viewLifecycleOwner, { result ->
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
@@ -191,7 +194,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         this.isThirdParty = false
                         resetUIForLoginButton()
                         val snackBarText = "Welcome back $currentUserName"
-                        showSnackbar(
+                        showSnackBar(
                             snackBarText, null, R.drawable.ic_baseline_whatshot_24,
                             "", Color.BLACK
                         )
@@ -218,7 +221,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                     Status.ERROR -> {
                         resetUIForLoginButton()
                         val snackBarText = result.message
-                        showSnackbar(
+                        showSnackBar(
                             snackBarText ?: "an error occurred", null,
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
@@ -231,13 +234,13 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             }
         })
 
-        viewModel.thirdPartyLoginStatus.observe(viewLifecycleOwner, Observer { result ->
+        viewModel.thirdPartyLoginStatus.observe(viewLifecycleOwner, { result ->
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
                         this.isThirdParty = true
                         val snackBarText = "Welcome back $currentUserName"
-                        showSnackbar(
+                        showSnackBar(
                             snackBarText, null, R.drawable.ic_baseline_whatshot_24,
                             "", Color.BLACK
                         )
@@ -263,14 +266,14 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                     }
                     Status.ERROR -> {
                         val snackBarText = result.message
-                        showSnackbar(
+                        showSnackBar(
                             snackBarText ?: "an error occurred", null,
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
                         )
                     }
                     Status.LOADING -> {
-                        showSnackbar(
+                        showSnackBar(
                             "please hold on for a moment.....",
                             null,
                             R.drawable.ic_baseline_error_outline_24,
@@ -296,14 +299,8 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
     }
 
     private fun googleSignIn() {
-        showSnackbar(
-            "Google sign in starts", null,
-            R.drawable.ic_baseline_error_outline_24,
-            "", Color.RED
-        )
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
-
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
@@ -316,7 +313,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                     updateUI(user)
                 } else {
                     Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
-                    showSnackbar(
+                    showSnackBar(
                         "signInWithCredential:failure", null,
                         R.drawable.ic_baseline_error_outline_24,
                         "", Color.RED
@@ -388,28 +385,28 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
 
     private fun updateUIForLoginButton() {
         if (loginBtnWasClicked) {
-            LoginBtn.isAllCaps = false
-            LoginBtn.text = getString(R.string.loading_wait)
-            LoginProgressBar.visibility = View.VISIBLE
+            binding.LoginBtn.isAllCaps = false
+            binding.LoginBtn.text = getString(R.string.loading_wait)
+            binding.LoginProgressBar.visibility = View.VISIBLE
         }
     }
 
     private fun resetUIForLoginButton() {
-        LoginBtn.isAllCaps = true
-        LoginBtn.text = requireContext().getString(R.string.log_in)
-        LoginProgressBar.visibility = View.GONE
+        binding.LoginBtn.isAllCaps = true
+        binding.LoginBtn.text = requireContext().getString(R.string.log_in)
+        binding.LoginProgressBar.visibility = View.GONE
     }
 
 
     private fun createAnimationsForUIWidgets() {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_left)
-        lin1.startAnimation(animation)
+        binding.lin1.startAnimation(animation)
         val animation1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_right)
-        LoginBtn.startAnimation(animation1)
+        binding.LoginBtn.startAnimation(animation1)
         val animation2 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_slowly)
-        logintxt.startAnimation(animation2)
+        binding.logintxt.startAnimation(animation2)
         val animation3 = AnimationUtils.loadAnimation(requireContext(), R.anim.blink)
-        thirdPartyLoginLayoutParent.startAnimation(animation3)
+        binding.thirdPartyLoginLayoutParent.startAnimation(animation3)
 
     }
 
@@ -450,7 +447,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Timber.w(e, "Google sign in failed")
-                showSnackbar(
+                showSnackBar(
                     "Google sign in failed", null,
                     R.drawable.ic_baseline_error_outline_24,
                     "", Color.RED

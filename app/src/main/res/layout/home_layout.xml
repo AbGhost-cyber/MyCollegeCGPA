@@ -184,17 +184,17 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/semesterLottie"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:visibility="visible"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35000002"
+        app:layout_constraintVertical_bias="0.42000002"
         app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/semester_empty_state" />
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/no_semester" />
 
     <TextView
         android:id="@+id/no_semester_txt"
@@ -210,8 +210,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/swipeRefreshLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/semesterLottie"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/semesterLottie"
+        app:layout_constraintVertical_bias="0.53" />
 
     <TextView
         android:id="@+id/no_semester_desc"
@@ -259,7 +259,7 @@
         android:id="@+id/addSemesterFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/capriola"
         android:textAllCaps="false"
@@ -274,6 +274,6 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.94"
         app:rippleColor="@color/colorPrimary" />
 </androidx.constraintlayout.widget.ConstraintLayout>

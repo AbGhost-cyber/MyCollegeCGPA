@@ -8,44 +8,39 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
+import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.local.entities.Courses
+import com.crushtech.mycollegecgpa.databinding.CreateCourseItemsBinding
 import com.crushtech.mycollegecgpa.utils.SimpleCustomSnackbar
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.course_list_layout.*
 import kotlin.random.Random
 
 @AndroidEntryPoint
 class AddCourseDialogFragment : DialogFragment() {
     private var positiveListener: ((Courses) -> Unit)? = null
-
+    private lateinit var binding: CreateCourseItemsBinding
     fun setPositiveListener(listener: (Courses) -> Unit) {
         positiveListener = listener
 
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val addCourseLayout = LayoutInflater.from(requireContext()).inflate(
-            R.layout.create_course_items,
-            courseContainer,
+        binding = CreateCourseItemsBinding.inflate(
+            LayoutInflater.from(context),
+            null,
             false
-        ) as ConstraintLayout
+        )
         val createCourseDialog = Dialog(requireContext())
-        createCourseDialog.setContentView(addCourseLayout)
+        createCourseDialog.setContentView(binding.root)
 
-
-        val courseNameEditText = addCourseLayout.findViewById<EditText>(R.id.cc_courseName)
-        val creditHoursEditText = addCourseLayout.findViewById<EditText>(R.id.cc_creditHours)
+        val courseNameEditText = binding.ccCourseName
+        val creditHoursEditText = binding.ccCreditHours
         var grade = "F"
-        val createCourse = addCourseLayout.findViewById<MaterialButton>(R.id.btnCreateCourse)
-        val spinner = addCourseLayout.findViewById<Spinner>(R.id.spinnerSelectGrade)
+        val createCourse = binding.btnCreateCourse
+        val spinner = binding.spinnerSelectGrade
 
         val spinnerArrayList: ArrayList<String> = ArrayList()
         spinnerArrayList.add("A+")
@@ -113,7 +108,7 @@ class AddCourseDialogFragment : DialogFragment() {
 
             if (courseName.isEmpty() || creditHours.isEmpty()) {
                 SimpleCustomSnackbar.make(
-                    requireActivity().parent_layout,
+                    MainActivity().activityMainBinding.root,
                     "please input all fields", Snackbar.LENGTH_LONG, null,
                     R.drawable.ic_baseline_error_outline_24, "",
                     Color.RED

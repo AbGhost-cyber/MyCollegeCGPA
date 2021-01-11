@@ -3,16 +3,14 @@ package com.crushtech.mycollegecgpa.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.EditText
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.DialogFragment
 import com.crushtech.mycollegecgpa.R
+import com.crushtech.mycollegecgpa.databinding.EditTextSemesterBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputLayout
-import kotlinx.android.synthetic.main.home_layout.*
 
 class AddSemesterDialogFragment : DialogFragment() {
-
+    private lateinit var binding: EditTextSemesterBinding
     private var positiveListener: ((String) -> Unit)? = null
 
     fun setPositiveListener(listener: (String) -> Unit) {
@@ -21,24 +19,21 @@ class AddSemesterDialogFragment : DialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val addSemesterEditText = LayoutInflater.from(requireContext()).inflate(
-            R.layout.edit_text_semester,
-            semesterContainer,
-            false
-        ) as TextInputLayout
-
+        binding = EditTextSemesterBinding.inflate(
+            LayoutInflater.from(context),
+            null, false
+        )
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle("Create Semester")
             .setMessage("Enter the semester's name you wish to create")
-            .setView(addSemesterEditText)
+            .setView(binding.root)
             .setBackground(
                 ResourcesCompat.getDrawable(
                     resources, R.drawable.dialog_bg, null
                 )
             )
             .setPositiveButton("Create") { _, _ ->
-                val semesterName = addSemesterEditText
-                    .findViewById<EditText>(R.id.etAddSemesterName).text.toString()
+                val semesterName = binding.etAddSemesterName.text.toString()
                 positiveListener?.let { yes ->
                     yes(semesterName)
 

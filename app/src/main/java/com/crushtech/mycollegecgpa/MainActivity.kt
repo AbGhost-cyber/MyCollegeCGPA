@@ -5,54 +5,56 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.crushtech.mycollegecgpa.databinding.ActivityMainBinding
+import com.crushtech.mycollegecgpa.utils.Constants.viewBinding
 import com.crushtech.mycollegecgpa.utils.NetworkUtils
 import com.crushtech.mycollegecgpa.utils.SimpleCustomSnackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private var successBarShown = false
     private var errorBarShown = false
+    private var appBarConfig: AppBarConfiguration? = null
 
+    val activityMainBinding by viewBinding(ActivityMainBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(mainLayoutToolbar)
+        setContentView(activityMainBinding.root)
+        setSupportActionBar(activityMainBinding.mainLayoutToolbar)
         supportActionBar?.apply {
             setDisplayShowTitleEnabled(false)
         }
 
-
         navController = Navigation.findNavController(this, R.id.gradesNavHostFragment)
 
-        bottomNavigationView.setOnNavigationItemReselectedListener {
+        activityMainBinding.bottomNavigationView.setOnNavigationItemReselectedListener {
         }
-        bottomNavigationView.setOnNavigationItemSelectedListener {
-            if (it.itemId != bottomNavigationView.selectedItemId) {
+        activityMainBinding.bottomNavigationView.setOnNavigationItemSelectedListener {
+            if (it.itemId != activityMainBinding.bottomNavigationView.selectedItemId) {
                 NavigationUI.onNavDestinationSelected(it, navController)
             }
             true
         }
-        NavigationUI.setupWithNavController(bottomNavigationView, navController)
+        NavigationUI.setupWithNavController(activityMainBinding.bottomNavigationView, navController)
 
 
-        val appBarConfig = AppBarConfiguration(
+        appBarConfig = AppBarConfiguration(
             setOf(
                 R.id.homeFragment,
                 R.id.extrasFragment
             )
         )
-        setupActionBarWithNavController(navController, appBarConfig)
+        setupActionBarWithNavController(navController, appBarConfig!!)
 
 
 
@@ -66,28 +68,28 @@ class MainActivity : AppCompatActivity() {
 
     fun hideAppBar() {
         supportActionBar?.hide()
-        appBarLayout.visibility = View.GONE
+        activityMainBinding.appBarLayout.visibility = View.GONE
     }
 
     fun showAppBar() {
         supportActionBar?.show()
-        appBarLayout.visibility = View.VISIBLE
+        activityMainBinding.appBarLayout.visibility = View.VISIBLE
     }
 
     fun hideMainActivityUI() {
-        bottomNavigationView.visibility = View.GONE
+        activityMainBinding.bottomNavigationView.visibility = View.GONE
     }
 
     fun showMainActivityUI() {
-        bottomNavigationView.visibility = View.VISIBLE
+        activityMainBinding.bottomNavigationView.visibility = View.VISIBLE
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp()
+        return navController.navigateUp(appBarConfig!!) || super.onSupportNavigateUp()
     }
 
     private fun handleNetworkChanges(errorMessage: String, successMessage: String) {
-        NetworkUtils.getNetworkLiveData(applicationContext).observe(this, Observer {
+        NetworkUtils.getNetworkLiveData(applicationContext).observe(this, {
             it?.let { event ->
                 val isConnected = event.peekContent()
                 if (isConnected && successBarShown) {
@@ -117,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         bgColor: Int
     ) {
         SimpleCustomSnackbar.make(
-            parent_layout,
+            activityMainBinding.root,
             text, LENGTH_LONG, listener,
             iconId, this,
             bgColor

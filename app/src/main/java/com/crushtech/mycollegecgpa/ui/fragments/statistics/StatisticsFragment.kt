@@ -20,28 +20,23 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.android.billingclient.api.*
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.local.entities.UserPdfDownloads
+import com.crushtech.mycollegecgpa.databinding.StatisticsFragmentBinding
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.ui.fragments.home.HomeViewModel
-import com.crushtech.mycollegecgpa.utils.Constants
+import com.crushtech.mycollegecgpa.utils.*
 import com.crushtech.mycollegecgpa.utils.Constants.STATISTICS_FIRST_TIME_OPEN
 import com.crushtech.mycollegecgpa.utils.Constants.TOTAL_NUMBER_OF_COURSES
 import com.crushtech.mycollegecgpa.utils.Constants.TOTAL_NUMBER_OF_CREDIT_HOURS
-import com.crushtech.mycollegecgpa.utils.CustomMarkerView
-import com.crushtech.mycollegecgpa.utils.NetworkUtils
-import com.crushtech.mycollegecgpa.utils.Status
 import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.statistics_fragment.*
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.File
@@ -68,16 +63,17 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
     private lateinit var billingClient: BillingClient
     private var userPdfDownloadsCount: UserPdfDownloads? = null
     private val skuList = listOf("stats_download_coins")
+    private val binding by viewBinding(StatisticsFragmentBinding::bind)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         if (!(sharedPrefs.contains(STATISTICS_FIRST_TIME_OPEN))) {
             firsTimeOpen = true
             sharedPrefs.edit().putBoolean(STATISTICS_FIRST_TIME_OPEN, true).apply()
         }
-        return inflater.inflate(R.layout.statistics_fragment, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,10 +83,9 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         (activity as MainActivity).apply {
             showAppBar()
             hideMainActivityUI()
-
-            mainLayoutToolbar.setNavigationIcon(R.drawable.ic_baseline_chevron_left_24)
+            activityMainBinding.titleBarText.text = getString(R.string.my_stats)
+            activityMainBinding.mainLayoutToolbar.setNavigationIcon(R.drawable.ic_baseline_chevron_left_24)
         }
-        requireActivity().titleBarText.text = getString(R.string.my_stats)
         setUpObservers()
         setUpBarCharts()
         setupSwipeRefreshLayout()
@@ -100,19 +95,19 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         val totalCC = sharedPrefs
             .getInt(TOTAL_NUMBER_OF_COURSES, 0)
 
-        totalCourseChange.observe(viewLifecycleOwner, Observer {
+        totalCourseChange.observe(viewLifecycleOwner, {
             when {
                 it == totalCC -> {
-                    courseChange.text = "0"
+                    binding.courseChange.text = "0"
                 }
                 it > totalCC -> {
 
                     val result = it - totalCC
-                    courseChange.text = result.toString()
+                    binding.courseChange.text = result.toString()
                 }
                 else -> {
                     val result = it - totalCC
-                    courseChange.text = result.toString()
+                    binding.courseChange.text = result.toString()
                 }
             }
             if (firsTimeOpen) {
@@ -126,30 +121,40 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
             }
 
 
-            if (courseChange.text.contains("-")) {
-                courseChange.setCompoundDrawablesWithIntrinsicBounds(
+            if (binding.courseChange.text.contains("-")) {
+                binding.courseChange.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_round_arrow_drop_down_24, 0, 0, 0
                 )
-                courseChange.setTextColor(getColor(requireContext(), android.R.color.holo_red_dark))
+                binding.courseChange.setTextColor(
+                    getColor(
+                        requireContext(),
+                        android.R.color.holo_red_dark
+                    )
+                )
             } else {
-                courseChange.setCompoundDrawablesWithIntrinsicBounds(
+                binding.courseChange.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_baseline_arrow_drop_up_24, 0, 0, 0
                 )
-                courseChange.setTextColor(getColor(requireContext(), R.color.progress_color))
+                binding.courseChange.setTextColor(
+                    getColor(
+                        requireContext(),
+                        R.color.progress_color
+                    )
+                )
             }
         })
-        totalCreditHoursChange.observe(viewLifecycleOwner, Observer {
+        totalCreditHoursChange.observe(viewLifecycleOwner, {
             when {
                 it == totalCH -> {
-                    creditHoursChange.text = "0"
+                    binding.creditHoursChange.text = "0"
                 }
                 it > totalCH -> {
                     val result = it - totalCH
-                    creditHoursChange.text = result.toString()
+                    binding.creditHoursChange.text = result.toString()
                 }
                 totalCH > it -> {
                     val result = it - totalCH
-                    creditHoursChange.text = result.toString()
+                    binding.creditHoursChange.text = result.toString()
                 }
             }
             if (firsTimeOpen) {
@@ -164,37 +169,42 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
 
 
-            if (creditHoursChange.text.contains("-")) {
-                creditHoursChange.setCompoundDrawablesWithIntrinsicBounds(
+            if (binding.creditHoursChange.text.contains("-")) {
+                binding.creditHoursChange.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_round_arrow_drop_down_24, 0, 0, 0
                 )
-                creditHoursChange.setTextColor(
+                binding.creditHoursChange.setTextColor(
                     getColor(
                         requireContext(),
                         android.R.color.holo_red_dark
                     )
                 )
             } else {
-                creditHoursChange.setCompoundDrawablesWithIntrinsicBounds(
+                binding.creditHoursChange.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_baseline_arrow_drop_up_24, 0, 0, 0
                 )
-                creditHoursChange.setTextColor(getColor(requireContext(), R.color.progress_color))
+                binding.creditHoursChange.setTextColor(
+                    getColor(
+                        requireContext(),
+                        R.color.progress_color
+                    )
+                )
             }
         })
         NetworkUtils.getNetworkLiveData(requireContext()).observe(viewLifecycleOwner,
-            Observer { content ->
+            { content ->
                 val isConnected = content.peekContent()
                 if (isConnected) {
                     pdfDownloadsViewModel.getUserPdfDownloads()
                 }
-                saveAsPdf.setOnClickListener {
+                binding.saveAsPdf.setOnClickListener {
                     if (isConnected) {
-                        if (viewPdf.isVisible) {
-                            viewPdf.visibility = View.GONE
+                        if (binding.viewPdf.isVisible) {
+                            binding.viewPdf.visibility = View.GONE
                         }
                         userPdfDownloadsCount?.let { downloads ->
                             if (downloads.noOfPdfDownloads <= 0) {
-                                showSnackbar(
+                                showSnackBar(
                                     "you've ran out of download points, please purchase", null,
                                     R.drawable.ic_baseline_error_outline_24,
                                     "", Color.RED
@@ -204,7 +214,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                             }
                         }
                     } else {
-                        showSnackbar(
+                        showSnackBar(
                             "internet connection is required for this feature",
                             null,
                             R.drawable.ic_baseline_error_outline_24,
@@ -220,7 +230,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
     }
 
     private fun setUpObservers() {
-        viewModel.allSemesters.observe(viewLifecycleOwner, Observer {
+        viewModel.allSemesters.observe(viewLifecycleOwner, {
             it?.let { content ->
                 val result = content.peekContent()
                 val semester = result.data
@@ -234,7 +244,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                         } else {
                             "$totalNumberOfCourses courses"
                         }
-                        totalCoursesOffered.text = courseString
+                        binding.totalCoursesOffered.text = courseString
                         sem.courses.forEach { course ->
                             totalNumberOfCreditHours += course.creditHours
                             val creditHoursString = if (totalNumberOfCreditHours <= 1) {
@@ -242,7 +252,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                             } else {
                                 "$totalNumberOfCreditHours hours"
                             }
-                            tvCHours.text = creditHoursString
+                            binding.tvCHours.text = creditHoursString
                         }
 
                         totalCourseChange.postValue(totalNumberOfCourses)
@@ -274,35 +284,35 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
                     }
 
-                    barChart.data = BarData(barDataSet)
-                    barChart.invalidate()
-                    barChart.marker =
+                    binding.barChart.data = BarData(barDataSet)
+                    binding.barChart.invalidate()
+                    binding.barChart.marker =
                         CustomMarkerView(semesters, requireContext(), R.layout.marker_view)
-                    barChart.description.isEnabled = false
+                    binding.barChart.description.isEnabled = false
                 }
             }
 
         })
 
-        pdfDownloadsViewModel.pdfDownloads.observe(viewLifecycleOwner, Observer { results ->
+        pdfDownloadsViewModel.pdfDownloads.observe(viewLifecycleOwner, { results ->
             when (results.status) {
                 Status.SUCCESS -> {
                     val downloads = results.data!!
-                    pdfDownloadCounts.text = downloads.noOfPdfDownloads.toString()
+                    binding.pdfDownloadCounts.text = downloads.noOfPdfDownloads.toString()
                     userPdfDownloadsCount = downloads
-                    statsRefreshLayout.isRefreshing = false
+                    binding.statsRefreshLayout.isRefreshing = false
                     pdfDownloadsViewModel.getUserPdfDownloads()
 
                 }
                 Status.ERROR -> {
-                    showSnackbar(
+                    showSnackBar(
                         results.message ?: "an error occurred", null,
                         R.drawable.ic_baseline_error_outline_24,
                         "", Color.RED
                     )
                 }
                 Status.LOADING -> {
-                    statsRefreshLayout.isRefreshing = false
+                    binding.statsRefreshLayout.isRefreshing = false
                 }
             }
         })
@@ -312,20 +322,20 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
 
     private fun setUpBarCharts() {
-        barChart.xAxis.apply {
+        binding.barChart.xAxis.apply {
             position = XAxisPosition.BOTTOM
             setDrawLabels(false)
             axisLineColor = Color.BLACK
             textColor = Color.BLACK
             setDrawGridLines(false)
         }
-        barChart.axisLeft.apply {
+        binding.barChart.axisLeft.apply {
             axisLineColor = Color.BLACK
             textColor = Color.BLACK
             setDrawGridLines(false)
 
         }
-        barChart.axisRight.apply {
+        binding.barChart.axisRight.apply {
             axisLineColor = Color.BLACK
             textColor = Color.BLACK
             setDrawGridLines(false)
@@ -355,18 +365,18 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
         content.measure(measureWidth, measuredHeight)
         content.layout(0, 0, page.canvas.width, page.canvas.height)
-        tCHParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
-        tCCParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
-        saveAsPdf.visibility = View.INVISIBLE
-        pdfDownloadParent.visibility = View.GONE
-        sponsored.visibility = View.VISIBLE
+        binding.tCHParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
+        binding.tCCParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
+        binding.saveAsPdf.visibility = View.INVISIBLE
+        binding.pdfDownloadParent.visibility = View.GONE
+        binding.sponsored.visibility = View.VISIBLE
         val username = " For ${Constants.getCurrentUserName(sharedPrefs)}"
-        user_name.text = username
-        user_name.visibility = View.VISIBLE
+        binding.userName.text = username
+        binding.userName.visibility = View.VISIBLE
 
         //if barchart markerview was visible, then hide it while creating the pdf
         try {
-            barChart.highlightValue(null)
+            binding.barChart.highlightValue(null)
         } catch (e: Exception) {
         }
 
@@ -392,7 +402,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         val output: OutputStream = FileOutputStream(myFile)
 
         GlobalScope.launch(Dispatchers.Main) {
-            pdf_pb.apply {
+            binding.pdfPb.apply {
                 progressMax = 100F
                 visibility = View.VISIBLE
                 indeterminateMode = true
@@ -409,28 +419,28 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                 }
 
             }
-            pdf_pb.visibility = View.GONE
+            binding.pdfPb.visibility = View.GONE
             if (pdfHasBeenCreated) {
                 userPdfDownloadsCount?.let {
                     it.noOfPdfDownloads--
                     pdfDownloadsViewModel.upsertUserPdfDownloads(it)
                     pdfHasBeenCreated = false
                 }
-                showSnackbar(
+                showSnackBar(
                     "Pdf created: please check ${myFile.parent} ", null,
                     R.drawable.ic_baseline_bubble_chart_24,
                     "", Color.BLACK, Snackbar.LENGTH_SHORT
                 )
-                viewPdf.visibility = View.VISIBLE
+                binding.viewPdf.visibility = View.VISIBLE
 
-                viewPdf.setOnClickListener {
+                binding.viewPdf.setOnClickListener {
                     checkReadPermissionsAndOpenPdf(fileNamePath)
                 }
                 val countDown = 6000L
                 val countDownTimer = object : CountDownTimer(countDown, 1000) {
                     override fun onFinish() {
                         try {
-                            viewPdf.visibility = View.GONE
+                            binding.viewPdf.visibility = View.GONE
                         } catch (e: Exception) {
                         }
                     }
@@ -438,36 +448,36 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                     override fun onTick(p0: Long) {
                         val text = "View Pdf ${p0 / 1000}"
                         try {
-                            viewPdf.text = text
+                            binding.viewPdf.text = text
                         } catch (e: Exception) {
                         }
                     }
 
                 }
-                if (viewPdf.visibility == View.VISIBLE) {
+                if (binding.viewPdf.visibility == View.VISIBLE) {
                     countDownTimer.start()
                 }
 
-                saveAsPdf.visibility = View.VISIBLE
-                pdfDownloadParent.visibility = View.VISIBLE
+                binding.saveAsPdf.visibility = View.VISIBLE
+                binding.pdfDownloadParent.visibility = View.VISIBLE
                 content.updateLayoutParams {
                     width = ViewGroup.LayoutParams.MATCH_PARENT
                     height = ViewGroup.LayoutParams.WRAP_CONTENT
                 }
-                sponsored.visibility = View.INVISIBLE
-                user_name.visibility = View.INVISIBLE
+                binding.sponsored.visibility = View.INVISIBLE
+                binding.userName.visibility = View.INVISIBLE
             } else {
-                showSnackbar(
+                showSnackBar(
                     "an unknown error occurred, please try again", null,
                     R.drawable.ic_baseline_error_outline_24, "", Color.RED
                 )
-                saveAsPdf.visibility = View.VISIBLE
+                binding.saveAsPdf.visibility = View.VISIBLE
                 content.updateLayoutParams {
                     width = ViewGroup.LayoutParams.MATCH_PARENT
                     height = ViewGroup.LayoutParams.WRAP_CONTENT
                 }
-                sponsored.visibility = View.INVISIBLE
-                user_name.visibility = View.INVISIBLE
+                binding.sponsored.visibility = View.INVISIBLE
+                binding.userName.visibility = View.INVISIBLE
             }
 
         }
@@ -496,7 +506,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             startActivity(intent)
         } else {
-            showSnackbar(
+            showSnackBar(
                 "please accept external read permissions", null,
                 R.drawable.ic_baseline_error_outline_24, "", Color.RED
             )
@@ -516,7 +526,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         ) {
             processPdf()
         } else {
-            showSnackbar(
+            showSnackBar(
                 "please accept external write permissions",
                 null,
                 R.drawable.ic_baseline_error_outline_24, "",
@@ -526,7 +536,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
     }
 
     private fun setupSwipeRefreshLayout() {
-        statsRefreshLayout.setOnRefreshListener {
+        binding.statsRefreshLayout.setOnRefreshListener {
             pdfDownloadsViewModel.getUserPdfDownloads()
         }
     }
@@ -545,7 +555,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         billingClient.startConnection(object : BillingClientStateListener {
 
             override fun onBillingServiceDisconnected() {
-                showSnackbar(
+                showSnackBar(
                     "an error occurred, please retry again",
                     null,
                     R.drawable.ic_baseline_error_outline_24, "",
@@ -576,7 +586,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                     for (skuDetails in skuDetailsList) {
                         //this will return both the SKUs from Google Play Console
                         if (skuDetails.sku == skuList[0])
-                            pdfDownloadParent.setOnClickListener {
+                            binding.pdfDownloadParent.setOnClickListener {
                                 val billingFlowParams = BillingFlowParams
                                     .newBuilder()
                                     .setSkuDetails(skuDetails)
@@ -606,7 +616,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                 acknowledgePurchaseAndMarkAsConsumed(purchase.purchaseToken)
             }
         } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-            showSnackbar(
+            showSnackBar(
                 "purchase cancelled",
                 null,
                 R.drawable.ic_baseline_error_outline_24, "",

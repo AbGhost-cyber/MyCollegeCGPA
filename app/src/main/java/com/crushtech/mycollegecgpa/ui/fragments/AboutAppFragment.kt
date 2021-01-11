@@ -1,6 +1,5 @@
 package com.crushtech.mycollegecgpa.ui.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -9,15 +8,17 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.AboutAppAdapter
+import com.crushtech.mycollegecgpa.databinding.AboutAppLayoutBinding
 import com.crushtech.mycollegecgpa.ui.BaseFragment
-import kotlinx.android.synthetic.main.about_app_layout.*
-import kotlinx.android.synthetic.main.activity_main.*
+import com.crushtech.mycollegecgpa.utils.viewBinding
 
- class AboutAppItems(val title: String, val subItem: String){
-     var isExpanded = false
- }
+class AboutAppItems(val title: String, val subItem: String) {
+    var isExpanded = false
+}
 
 class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
+    private val binding by viewBinding(AboutAppLayoutBinding::bind)
+
     private lateinit var aboutAppItemsAdapter: AboutAppAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -26,16 +27,15 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
             hideMainActivityUI()
             showAppBar()
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
-            titleBarText.text = getString(R.string.FAQs)
+            activityMainBinding.titleBarText.text = getString(R.string.FAQs)
 
             setUpRecyclerview()
         }
         aboutAppItemsAdapter.setOnItemClickListener {
-
         }
     }
 
-    private fun setUpRecyclerview() = aboutAppRv.apply {
+    private fun setUpRecyclerview() = binding.aboutAppRv.apply {
         aboutAppItemsAdapter = AboutAppAdapter()
         adapter = aboutAppItemsAdapter
         (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false

@@ -3,11 +3,11 @@ package com.crushtech.mycollegecgpa.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.databinding.MarkerViewBinding
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
-import kotlinx.android.synthetic.main.marker_view.view.*
 
 
 @SuppressLint("ViewConstructor")
@@ -16,6 +16,7 @@ class CustomMarkerView(
     c: Context,
     layoutId: Int
 ) : MarkerView(c, layoutId) {
+    private var binding: MarkerViewBinding = MarkerViewBinding.bind(this)
 
     override fun getOffset(): MPPointF {
         return MPPointF(-width / 2f, -height.toFloat())
@@ -31,7 +32,7 @@ class CustomMarkerView(
 
 
         val semesterName = currentSemester.semesterName
-        tvSemesterName.setText(semesterName)
+        binding.tvSemesterName.setText(semesterName)
 
     }
 }

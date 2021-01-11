@@ -15,21 +15,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.CourseAdapter.CourseViewHolder
 import com.crushtech.mycollegecgpa.data.local.entities.Courses
+import com.crushtech.mycollegecgpa.databinding.CourseItemsBinding
 import com.crushtech.mycollegecgpa.dialogs.AddCourseDialogFragment
 import com.crushtech.mycollegecgpa.ui.fragments.course.ADD_COURSE_DIALOG
 import com.crushtech.mycollegecgpa.ui.fragments.course.CourseListFragment
-import kotlinx.android.synthetic.main.course_items.view.*
 
 class CourseAdapter(private val courseListFragment: CourseListFragment) :
     RecyclerView.Adapter<CourseViewHolder>() {
 
-    var itemView: View? = null
+    lateinit var binding: CourseItemsBinding
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
-        return CourseViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.course_items, parent, false
-            )
+        binding = CourseItemsBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent, false
         )
+        return CourseViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -39,10 +40,9 @@ class CourseAdapter(private val courseListFragment: CourseListFragment) :
 
     override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
         holder.itemView.apply {
-            itemView = this
 
             val courses = differ.currentList[position]
-            tvCourseName.text = courses.courseName
+            binding.tvCourseName.text = courses.courseName
 
 
             val creditHours = if (courses.creditHours <= 1) {
@@ -51,44 +51,49 @@ class CourseAdapter(private val courseListFragment: CourseListFragment) :
                 "${courses.creditHours} credit hours"
             }
 
-            tvCreditHours.text = creditHours
+            binding.tvCreditHours.text = creditHours
 
             if (courses.grade.equals("F", true) ||
                 courses.grade.equals("D+", true) ||
                 courses.grade.equals("D", true)
             ) {
 
-                tvGrade.setTextColor(Color.RED)
+                binding.tvGrade.setTextColor(Color.RED)
             } else {
-                tvGrade.setTextColor(Color.parseColor("#4A56E2"))
+                binding.tvGrade.setTextColor(Color.parseColor("#4A56E2"))
             }
-            tvGrade.text = courses.grade
+            binding.tvGrade.text = courses.grade
 
-            others_iv.setOnClickListener {
-                actionsLayout.visibility = View.VISIBLE
-                actionsLayout.layoutParams.height = itemsLayout.height / 2
-                val margins = actionsLayout.layoutParams as ViewGroup.MarginLayoutParams
+            binding.othersIv.setOnClickListener {
+                binding.actionsLayout.visibility = View.VISIBLE
+                binding.actionsLayout.layoutParams.height = binding.itemsLayout.height / 2
+                val margins = binding.actionsLayout.layoutParams as ViewGroup.MarginLayoutParams
                 margins.setMargins(8, 8, 8, 8)
                 ObjectAnimator.ofFloat(
-                    itemsLayout, "translationX",
+                    binding.itemsLayout, "translationX",
                     -400F
                 ).apply {
                     duration = 50
                     start()
                 }
-                enableViews(listOf(edit_course, delete_course, close_view))
+                enableViews(listOf(binding.editCourse, binding.deleteCourse, binding.closeView))
             }
-            close_view.setOnClickListener {
-                actionsLayout.layoutParams.height = ConstraintLayout.LayoutParams.WRAP_CONTENT
-                val margins = actionsLayout.layoutParams as ViewGroup.MarginLayoutParams
+            binding.closeView.setOnClickListener {
+                binding.actionsLayout.layoutParams.height =
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT
+                val margins = binding.actionsLayout.layoutParams as ViewGroup.MarginLayoutParams
                 margins.setMargins(8, 8, 8, 8)
-                ObjectAnimator.ofFloat(itemsLayout, "translationX", 0F).apply {
+                ObjectAnimator.ofFloat(
+                    binding.itemsLayout,
+                    "translationX",
+                    0F
+                ).apply {
                     duration = 50
                     start()
                 }
-                disableViews(listOf(edit_course, delete_course, close_view))
+                disableViews(listOf(binding.editCourse, binding.deleteCourse, binding.closeView))
             }
-            edit_course.setOnClickListener {
+            binding.editCourse.setOnClickListener {
                 if (courseListFragment.isOwner) {
                     val bundle = Bundle()
                     bundle.putSerializable("courses", courses)
@@ -97,29 +102,41 @@ class CourseAdapter(private val courseListFragment: CourseListFragment) :
                         setPositiveListener {
                             courseListFragment.updateCourse(it, "course updated", position)
                             ObjectAnimator.ofFloat(
-                                itemsLayout, "translationX",
+                                binding.itemsLayout, "translationX",
                                 0F
                             ).apply {
                                 duration = 50
                                 start()
                             }
-                            disableViews(listOf(edit_course, delete_course, close_view))
+                            disableViews(
+                                listOf(
+                                    binding.editCourse,
+                                    binding.deleteCourse,
+                                    binding.closeView
+                                )
+                            )
                         }
                     }.show(courseListFragment.parentFragmentManager, ADD_COURSE_DIALOG)
                 }
             }
 
-            delete_course.setOnClickListener {
+            binding.deleteCourse.setOnClickListener {
                 if (courseListFragment.isOwner) {
                     courseListFragment.showDeleteCourseDialog(courses)
                     ObjectAnimator.ofFloat(
-                        itemsLayout, "translationX",
+                        binding.itemsLayout, "translationX",
                         0F
                     ).apply {
                         duration = 50
                         start()
                     }
-                    disableViews(listOf(edit_course, delete_course, close_view))
+                    disableViews(
+                        listOf(
+                            binding.editCourse,
+                            binding.deleteCourse,
+                            binding.closeView
+                        )
+                    )
                 }
             }
 
@@ -131,7 +148,7 @@ class CourseAdapter(private val courseListFragment: CourseListFragment) :
                 val wrappedDrawable = DrawableCompat.wrap(it)
                 val color = Color.parseColor("#${courses.color}")
                 DrawableCompat.setTint(wrappedDrawable, color)
-                viewCourseColor.background = wrappedDrawable
+                binding.viewCourseColor.background = wrappedDrawable
             }
             setOnClickListener {
                 onItemClickListener?.let { click ->
@@ -176,7 +193,8 @@ class CourseAdapter(private val courseListFragment: CourseListFragment) :
 
     val differ = AsyncListDiffer(this, diffUtilCallBack)
 
-    inner class CourseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class CourseViewHolder(binding: CourseItemsBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
 }
 

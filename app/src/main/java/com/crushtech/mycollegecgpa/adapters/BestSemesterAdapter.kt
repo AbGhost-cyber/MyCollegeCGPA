@@ -1,9 +1,9 @@
 package com.crushtech.mycollegecgpa.adapters
 
+
 import android.graphics.Color.RED
 import android.graphics.Color.parseColor
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.BestSemesterAdapter.BestSemesterViewHolder
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.databinding.BestSemesterItemBinding
 import com.crushtech.mycollegecgpa.utils.Constants.getHighestGrade
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.best_semester_item.view.*
 
 class BestSemesterAdapter : Adapter<BestSemesterViewHolder>() {
+    lateinit var binding: BestSemesterItemBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BestSemesterViewHolder {
-        return BestSemesterViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.best_semester_item, parent, false
-            )
+        binding = BestSemesterItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent, false
         )
+        return BestSemesterViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -34,23 +35,23 @@ class BestSemesterAdapter : Adapter<BestSemesterViewHolder>() {
 
         holder.itemView.apply {
             Picasso.get().load(R.drawable.best_semester).fit().centerCrop()
-                .into(best_semester_image)
-            semesterName.text = semesters.semesterName
+                .into(binding.bestSemesterImage)
+            binding.semesterName.text = semesters.semesterName
             if (semesters.courses.isNullOrEmpty()) {
-                coursesNames.text = context.getString(R.string.empty_list)
+                binding.coursesNames.text = context.getString(R.string.empty_list)
             } else {
-                coursesNames.text = semesters.getThreeCoursesName()
+                binding.coursesNames.text = semesters.getThreeCoursesName()
             }
 
-            gpa.text = semesters.getGPA().toString()
+            binding.gpa.text = semesters.getGPA().toString()
             if (!semesters.isSynced) {
-                ivSynced.setImageResource(R.drawable.ic_cross)
-                tvSynced1.text = context.getString(R.string.notSynced)
+                binding.ivSynced.setImageResource(R.drawable.ic_cross)
+                binding.tvSynced1.text = context.getString(R.string.notSynced)
             } else {
-                ivSynced.setImageResource(R.drawable.ic_check)
-                tvSynced1.text = context.getString(R.string.isSynced)
+                binding.ivSynced.setImageResource(R.drawable.ic_check)
+                binding.tvSynced1.text = context.getString(R.string.isSynced)
             }
-            circularProgressBar.apply {
+            binding.circularProgressBar.apply {
                 semesters.courses.forEach {
                     if (it.gradesPoints.isNotEmpty()) {
                         val grade = it.gradesPoints[0]
@@ -64,18 +65,12 @@ class BestSemesterAdapter : Adapter<BestSemesterViewHolder>() {
                 setProgressWithAnimation(progress, 6000)
                 backgroundProgressBarWidth = 3f
             }
-            if (circularProgressBar.progress < 3) {
-                circularProgressBar.progressBarColorEnd = RED
-                circularProgressBar.progressBarColorStart = RED
+            if (binding.circularProgressBar.progress < 3) {
+                binding.circularProgressBar.progressBarColorEnd = RED
+                binding.circularProgressBar.progressBarColorStart = RED
             } else {
-                circularProgressBar.progressBarColorEnd = parseColor("#64DD17")
-                circularProgressBar.progressBarColorStart = parseColor("#64DD17")
-            }
-            setOnClickListener {
-                onItemClickListener?.let { click ->
-                    click(semesters)
-
-                }
+                binding.circularProgressBar.progressBarColorEnd = parseColor("#64DD17")
+                binding.circularProgressBar.progressBarColorStart = parseColor("#64DD17")
             }
         }
     }
@@ -91,17 +86,10 @@ class BestSemesterAdapter : Adapter<BestSemesterViewHolder>() {
 
     }
 
-    private var onItemClickListener: ((Semester) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (Semester) -> Unit) {
-        this.onItemClickListener = listener
-    }
-
-
     val differ = AsyncListDiffer(this, diffUtilCallBack)
 
 
-    inner class BestSemesterViewHolder(itemView: View) : ViewHolder(itemView)
+    inner class BestSemesterViewHolder(binding: BestSemesterItemBinding) : ViewHolder(binding.root)
 
 
 }

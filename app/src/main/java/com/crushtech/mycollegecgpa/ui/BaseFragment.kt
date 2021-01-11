@@ -7,15 +7,16 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import com.crushtech.mycollegecgpa.utils.SimpleCustomSnackbar
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
+
 
 abstract class BaseFragment(layoutId: Int) : Fragment(layoutId) {
-    fun showSnackbar(
+
+    fun showSnackBar(
         text: String, listener: View.OnClickListener?, iconId: Int,
         actionLabel: String, bgColor: Int, length: Int = Snackbar.LENGTH_LONG
     ) {
         SimpleCustomSnackbar.make(
-            requireActivity().parent_layout,
+            requireView(),
             text, length, listener,
             iconId, actionLabel,
             bgColor

@@ -286,7 +286,7 @@ class SemesterRepository @Inject constructor(
         semesterDao.insertGrades(gradePoints)
     }
 
-    suspend fun resetGradesPoints() {
+    suspend fun resetGradesPoints() = withContext(Dispatchers.IO) {
         val response = try {
             semesterApi.resetUserGradePoints()
         } catch (e: Exception) {

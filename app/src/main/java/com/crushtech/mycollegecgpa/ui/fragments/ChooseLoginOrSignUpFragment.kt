@@ -24,6 +24,7 @@ import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.R.id.action_chooseLoginOrSignUpFragment_to_loginFragment
 import com.crushtech.mycollegecgpa.R.id.action_chooseLoginOrSignUpFragment_to_signUpFragment
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
+import com.crushtech.mycollegecgpa.databinding.ChooseLoginSignupLayoutBinding
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.ui.fragments.ChooseLoginOrSignUpFragmentDirections.Companion.actionChooseLoginOrSignUpFragmentToHomeFragment
 import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
@@ -32,12 +33,14 @@ import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
+import com.crushtech.mycollegecgpa.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.choose_login_signup_layout.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChooseLoginOrSignUpFragment : BaseFragment(R.layout.choose_login_signup_layout) {
+    private val binding by viewBinding(ChooseLoginSignupLayoutBinding::bind)
+
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
@@ -70,17 +73,17 @@ class ChooseLoginOrSignUpFragment : BaseFragment(R.layout.choose_login_signup_la
             basicAuthInterceptor.password = currentPassword
             redirectLogin()
         }
-        privacyPolicy.makeLinks(Pair("Terms & Privacy Policy", View.OnClickListener {
+        binding.privacyPolicy.makeLinks(Pair("Terms & Privacy Policy", View.OnClickListener {
             val intent = Intent(ACTION_VIEW)
             intent.data = Uri.parse(PRIVACY_POLICY)
             startActivity(intent)
         }))
-        signUpScreen.setOnClickListener {
+        binding.signUpScreen.setOnClickListener {
             findNavController().navigate(
                 action_chooseLoginOrSignUpFragment_to_signUpFragment
             )
         }
-        loginScreen.setOnClickListener {
+        binding.loginScreen.setOnClickListener {
             findNavController().navigate(
                 action_chooseLoginOrSignUpFragment_to_loginFragment
             )

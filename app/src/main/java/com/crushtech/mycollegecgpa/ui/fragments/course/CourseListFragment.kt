@@ -17,20 +17,18 @@ import com.crushtech.mycollegecgpa.adapters.CourseAdapter
 import com.crushtech.mycollegecgpa.data.local.entities.Courses
 import com.crushtech.mycollegecgpa.data.local.entities.GradeClass
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.databinding.CourseListLayoutBinding
 import com.crushtech.mycollegecgpa.dialogs.AddCourseDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.DeleteCourseDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.ui.fragments.weights.WeightViewModel
 import com.crushtech.mycollegecgpa.utils.Constants
-import com.crushtech.mycollegecgpa.utils.Constants.GPA_MAX
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.customRecyclerViewScrollListener
 import com.crushtech.mycollegecgpa.utils.Status
+import com.crushtech.mycollegecgpa.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.course_items.view.*
-import kotlinx.android.synthetic.main.course_list_layout.*
 import java.util.*
 import javax.inject.Inject
 
@@ -40,6 +38,7 @@ const val DELETE_COURSE_DIALOG = "delete course dialog"
 
 @AndroidEntryPoint
 class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
+    val binding by viewBinding(CourseListLayoutBinding::bind)
     private val args: CourseListFragmentArgs by navArgs()
 
     private val viewModel: CourseViewModel by viewModels()
@@ -68,7 +67,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             firsTimeOpen = true
             sharedPrefs.edit().putBoolean(Constants.COURSE_FIRST_TIME_OPEN, true).apply()
         }
-        return inflater.inflate(R.layout.course_list_layout, container, false)
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     @ExperimentalStdlibApi
@@ -83,9 +82,9 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             hideMainActivityUI()
             showAppBar()
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
+            activityMainBinding.titleBarText.text = args.semesterName.capitalize(Locale.ROOT)
         }
-        requireActivity().titleBarText.text = args.semesterName.capitalize(Locale.ROOT)
-        semesterName.setText(args.semesterName)
+        binding.semesterName.setText(args.semesterName)
 
         if (args.semesterId.isNotEmpty()) {
             viewModel.getSemesterById(args.semesterId)
@@ -94,7 +93,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             subscribeToObservers()
         }
 
-        fabCreateCourse.setOnClickListener {
+        binding.fabCreateCourse.setOnClickListener {
             showCreateCourseDialog()
 
         }
@@ -118,7 +117,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                     }
                 }.show(parentFragmentManager, ADD_COURSE_DIALOG)
             } else {
-                showSnackbar(
+                showSnackBar(
                     "can't edit, this course is view only!", null,
                     R.drawable.ic_baseline_error_outline_24,
                     "", Color.RED
@@ -127,29 +126,20 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
         }
 
-        fabSaveCourse.setOnClickListener {
-            currentSemester?.let {
-                if (it.getGPA() > GPA_MAX) {
-                    showSnackbar(
-                        "it seems your gpa is much higher than required, please edit", null,
-                        R.drawable.ic_baseline_error_outline_24,
-                        "", Color.RED
-                    )
-                }
-            }
+        binding.fabSaveCourse.setOnClickListener {
             saveSemester()
         }
     }
 
     private fun setupRecyclerView() {
-        courseRv.apply {
+        binding.courseRv.apply {
             //  itemAnimator = null
             courseAdapter = CourseAdapter(this@CourseListFragment)
             adapter = courseAdapter
             layoutManager = LinearLayoutManager(requireContext())
             addOnScrollListener(
                 customRecyclerViewScrollListener(
-                    listOf(fabCreateCourse, fabSaveCourse)
+                    listOf(binding.fabCreateCourse, binding.fabSaveCourse)
                 )
             )
         }
@@ -171,7 +161,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                         currentGradePoints = gradePoints
                     }
                     Status.ERROR -> {
-                        showSnackbar(
+                        showSnackBar(
                             result.message ?: "course not found", null,
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
@@ -185,7 +175,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
         })
 
-        viewModel.semester.observe(viewLifecycleOwner, Observer {
+        viewModel.semester.observe(viewLifecycleOwner, {
             //return our semester resource for the first time if not handled
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
@@ -206,32 +196,32 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                                     authEmail
                                 )
                             ) {
-                                fabSaveCourse.visibility = View.VISIBLE
-                                fabCreateCourse.visibility = View.VISIBLE
+                                binding.fabSaveCourse.visibility = View.VISIBLE
+                                binding.fabCreateCourse.visibility = View.VISIBLE
                                 isOwner = true
                             } else {
-                                fabSaveCourse.visibility = View.GONE
-                                fabCreateCourse.visibility = View.GONE
+                                binding.fabSaveCourse.visibility = View.GONE
+                                binding.fabCreateCourse.visibility = View.GONE
                                 isOwner = false
                             }
                         }
                     }
                     Status.ERROR -> {
-                        showSnackbar(
+                        showSnackBar(
                             result.message ?: "semester not found", null,
                             R.drawable.ic_baseline_error_outline_24, "", Color.RED
                         )
                     }
                     Status.LOADING -> {
-                        no_course.visibility = View.GONE
-                        lottieAnimationView.visibility = View.GONE
-                        no_course_des.visibility = View.GONE
+                        binding.noCourse.visibility = View.GONE
+                        binding.lottieAnimationView.visibility = View.GONE
+                        binding.noCourseDes.visibility = View.GONE
                     }
                 }
             }
         })
 
-        viewModel.courses.observe(viewLifecycleOwner, Observer {
+        viewModel.courses.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
@@ -240,25 +230,25 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                             currentSemester?.courses = courses
                             viewModel.getCourseList(args.semesterId)
                             if (result.data.isEmpty()) {
-                                no_course.visibility = View.VISIBLE
-                                lottieAnimationView.visibility = View.VISIBLE
-                                no_course_des.visibility = View.VISIBLE
+                                binding.noCourse.visibility = View.VISIBLE
+                                binding.lottieAnimationView.visibility = View.VISIBLE
+                                binding.noCourseDes.visibility = View.VISIBLE
                             } else {
-                                no_course.visibility = View.GONE
-                                lottieAnimationView.visibility = View.GONE
-                                no_course_des.visibility = View.GONE
+                                binding.noCourse.visibility = View.GONE
+                                binding.lottieAnimationView.visibility = View.GONE
+                                binding.noCourseDes.visibility = View.GONE
                             }
                         }
 
                     }
                     Status.ERROR -> {
-                        showSnackbar(
+                        showSnackBar(
                             result.message ?: "course not found", null,
                             R.drawable.ic_baseline_error_outline_24, "", Color.RED
                         )
-                        no_course.visibility = View.GONE
-                        lottieAnimationView.visibility = View.GONE
-                        no_course_des.visibility = View.GONE
+                        binding.noCourse.visibility = View.GONE
+                        binding.lottieAnimationView.visibility = View.GONE
+                        binding.noCourseDes.visibility = View.GONE
                     }
                     Status.LOADING -> {
                     }
@@ -275,7 +265,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             NO_EMAIL
         ) ?: NO_EMAIL
 
-        val semesterName = semesterName.text.toString()
+        val semesterName = binding.semesterName.text.toString()
 
         if (semesterName.isEmpty()) {
             return
@@ -297,20 +287,18 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         if (semester != null) {
             viewModel.insertSemester(semester)
         }
-        showSnackbar(
+        showSnackBar(
             "semester updated", null,
             R.drawable.ic_baseline_bubble_chart_24, "", Color.BLACK
         )
         //close view if open
-        courseAdapter.itemView?.let {
             ObjectAnimator.ofFloat(
-                it.itemsLayout, "translationX",
+                courseAdapter.binding.itemsLayout, "translationX",
                 0F
             ).apply {
                 duration = 50
                 start()
             }
-        }
     }
 
     private fun showCreateCourseDialog() {
@@ -329,7 +317,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         }
         viewModel.insertCourse(course, semesterId)
 
-        showSnackbar(
+        showSnackBar(
             message, null,
             R.drawable.ic_baseline_bubble_chart_24,
             "", Color.BLACK
@@ -344,7 +332,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         }
         viewModel.updateCourse(course, semesterId, coursePosition)
 
-        showSnackbar(
+        showSnackBar(
             message, null,
             R.drawable.ic_baseline_bubble_chart_24,
             "", Color.BLACK
@@ -359,7 +347,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             setPositiveListener { deleted ->
                 if (deleted) {
                     deleteCourse(course)
-                    showSnackbar(
+                    showSnackBar(
                         "course deleted", null,
                         R.drawable.ic_baseline_bubble_chart_24,
                         "", Color.BLACK

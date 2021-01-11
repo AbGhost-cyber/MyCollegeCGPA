@@ -3,7 +3,6 @@ package com.crushtech.mycollegecgpa.adapters
 import android.graphics.Color.RED
 import android.graphics.Color.parseColor
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -15,21 +14,23 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.SemesterAdapter.SemesterViewHolder
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
+import com.crushtech.mycollegecgpa.databinding.SemesterItemsBinding
 import com.crushtech.mycollegecgpa.utils.Constants.getHighestGrade
-import kotlinx.android.synthetic.main.semester_items.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
 class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolder>(), Filterable {
     private var filteredList = ArrayList<Semester>()
     lateinit var actualList: List<Semester>
+    lateinit var binding: SemesterItemsBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SemesterViewHolder {
         actualList = differ.currentList
-        return SemesterViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.semester_items, parent, false
-            )
+
+        binding = SemesterItemsBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent, false
         )
+        return SemesterViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -42,14 +43,14 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
         holder.itemView.apply {
             if (!semesters.owners.isNullOrEmpty()) {
                 if (semesters.owners[0] == authEmail || semesters.owners == listOf(authEmail)) {
-                    materialCardView.setBackgroundColor(
+                    binding.materialCardView.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
                             R.color.itemOwned
                         )
                     )
                 } else {
-                    materialCardView.setBackgroundColor(
+                    binding.materialCardView.setBackgroundColor(
                         ContextCompat.getColor(
                             context,
                             R.color.itemNotOwnedColor
@@ -57,23 +58,23 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
                     )
                 }
             }
-            semesterName.text = semesters.semesterName
+            binding.semesterName.text = semesters.semesterName
             if (semesters.courses.isNullOrEmpty()) {
-                coursesNames.text = context.getString(R.string.empty_list)
+                binding.coursesNames.text = context.getString(R.string.empty_list)
             } else {
-                coursesNames.text = semesters.getThreeCoursesName()
+                binding.coursesNames.text = semesters.getThreeCoursesName()
             }
 
-            gpa.text = semesters.getGPA().toString()
+            binding.gpa.text = semesters.getGPA().toString()
             if (!semesters.isSynced) {
-                ivSynced.setImageResource(R.drawable.ic_cross)
-                tvSynced1.text = context.getString(R.string.notSynced)
+                binding.ivSynced.setImageResource(R.drawable.ic_cross)
+                binding.tvSynced1.text = context.getString(R.string.notSynced)
             } else {
-                ivSynced.setImageResource(R.drawable.ic_check)
-                tvSynced1.text = context.getString(R.string.isSynced)
+                binding.ivSynced.setImageResource(R.drawable.ic_check)
+                binding.tvSynced1.text = context.getString(R.string.isSynced)
             }
 
-            circularProgressBar.apply {
+            binding.circularProgressBar.apply {
                 semesters.courses.forEach {
                     if (it.gradesPoints.isNotEmpty()) {
                         val grade = it.gradesPoints[0]
@@ -88,16 +89,16 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
                 setProgressWithAnimation(progress, 5000)
                 backgroundProgressBarWidth = 3f
             }
-            if (circularProgressBar.progress > 0 && circularProgressBar.progress < 3) {
-                circularProgressBar.progressBarColorEnd = RED
-                circularProgressBar.progressBarColorStart = RED
-            } else if (circularProgressBar.progress == 0F) {
+            if (binding.circularProgressBar.progress > 0 && binding.circularProgressBar.progress < 3) {
+                binding.circularProgressBar.progressBarColorEnd = RED
+                binding.circularProgressBar.progressBarColorStart = RED
+            } else if (binding.circularProgressBar.progress == 0F) {
                 //set progress to 4 to clear circular progressBarColorEnd
                 // and progressBarColorStart color for that item
-                circularProgressBar.progressMax = 4F
+                binding.circularProgressBar.progressMax = 4F
             } else {
-                circularProgressBar.progressBarColorEnd = parseColor("#64DD17")
-                circularProgressBar.progressBarColorStart = parseColor("#64DD17")
+                binding.circularProgressBar.progressBarColorEnd = parseColor("#64DD17")
+                binding.circularProgressBar.progressBarColorStart = parseColor("#64DD17")
             }
 
             setOnClickListener {
@@ -131,7 +132,7 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
     val differ = AsyncListDiffer(this, diffUtilCallBack)
 
 
-    inner class SemesterViewHolder(itemView: View) : ViewHolder(itemView)
+    inner class SemesterViewHolder(itemView: SemesterItemsBinding) : ViewHolder(itemView.root)
 
 
     override fun getFilter(): Filter {

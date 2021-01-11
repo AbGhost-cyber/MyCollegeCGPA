@@ -8,6 +8,13 @@
     android:background="@color/colorPrimaryDark"
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/mainActivityTransBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_trans"
+        android:orientation="vertical"
+        android:visibility="gone" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -65,7 +72,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="65dp"
         android:background="@drawable/nav_background"
         app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
         app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"

@@ -20,7 +20,6 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageView
-
                 android:id="@+id/im_action_left"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -41,7 +40,6 @@
                 android:gravity="start"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="article saved successfully"
                 android:textColor="@android:color/white"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -58,7 +56,6 @@
                 android:layout_marginEnd="10dp"
                 android:fontFamily="@font/capriola"
                 android:gravity="start"
-                android:text="View"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="16sp"
                 android:textStyle="bold"

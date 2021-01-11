@@ -3,8 +3,11 @@ package com.crushtech.mycollegecgpa.utils
 import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
+import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.local.entities.GradeClass
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -20,7 +23,7 @@ object Constants {
 
     const val BASE_URL = "https://mycollegecgpa.xyz/"
 
-    const val GPA_MAX = 100
+    const val WEIGHT_MAX = 20
 
     const val ENCRYPTED_SHARED_PREF_NAME = "enc_shared_pref"
 
@@ -112,8 +115,15 @@ object Constants {
         transformedList.add(gradePoints.DPlusGrade)
         transformedList.add(gradePoints.DGrade)
         transformedList.add(gradePoints.FOrEGrade)
-        return transformedList.max()
+        return transformedList.maxOrNull()
     }
+
+    inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
+        crossinline bindingInflater: (LayoutInflater) -> T
+    ) =
+        lazy(LazyThreadSafetyMode.NONE) {
+            bindingInflater.invoke(layoutInflater)
+        }
 }
 
 

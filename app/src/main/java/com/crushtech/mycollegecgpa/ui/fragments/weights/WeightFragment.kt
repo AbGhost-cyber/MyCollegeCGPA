@@ -8,7 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.crushtech.mycollegecgpa.MainActivity
@@ -16,13 +15,13 @@ import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.WeightItemsAdapter
 import com.crushtech.mycollegecgpa.data.local.entities.GradeClass
 import com.crushtech.mycollegecgpa.data.local.entities.GradeSimplified
+import com.crushtech.mycollegecgpa.databinding.WeightLayoutBinding
 import com.crushtech.mycollegecgpa.dialogs.EditWeightDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.ResetWeightDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Status
+import com.crushtech.mycollegecgpa.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.weight_layout.*
 
 const val EDIT_WEIGHT_DIALOG = "edit weight dialog"
 const val RESET_WEIGHT_DIALOG = "reset weight dialog"
@@ -32,14 +31,14 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
     private lateinit var weightItemsAdapter: WeightItemsAdapter
     private val weightViewModel: WeightViewModel by viewModels()
     private var currentGradePoint: GradeClass? = null
-
+    val binding by viewBinding(WeightLayoutBinding::bind)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).apply {
             hideMainActivityUI()
             showAppBar()
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
-            titleBarText.text = getString(R.string.my_weights)
+            activityMainBinding.titleBarText.text = getString(R.string.my_weights)
         }
 
 
@@ -47,7 +46,7 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
         setUpObservers()
         syncWeight()
 
-        weight_warning_tv.apply {
+        binding.weightWarningTv.apply {
             ellipsize = TextUtils.TruncateAt.MARQUEE
             isSingleLine = true
             isSelected = true
@@ -55,8 +54,17 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
         if (savedInstanceState != null) {
             val editWeightDialog = parentFragmentManager.findFragmentByTag(EDIT_WEIGHT_DIALOG)
                     as EditWeightDialogFragment?
-            editWeightDialog?.setPositiveListener { gradeSimplified ->
-                updateWeight(gradeSimplified)
+            editWeightDialog?.setPositiveListener { weightOverflowed, weights ->
+                if (weightOverflowed) {
+                    showSnackBar(
+                        "can't update: weights should be between 0 and 20",
+                        null,
+                        R.drawable.ic_baseline_error_outline_24,
+                        "", Color.RED
+                    )
+                } else {
+                    updateWeight(weights)
+                }
             }
             val resetWeightDialog = parentFragmentManager.findFragmentByTag(RESET_WEIGHT_DIALOG)
                     as ResetWeightDialogFragment?
@@ -74,8 +82,18 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
             bundle.putSerializable("GradeSimplified", it)
             EditWeightDialogFragment().apply {
                 arguments = bundle
-                setPositiveListener { gradeSimplified ->
-                    updateWeight(gradeSimplified)
+                setPositiveListener { weightOverflowed, weights ->
+                    if (weightOverflowed) {
+                        showSnackBar(
+                            "can't update: weights should be between 0 and 20",
+                            null,
+                            R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
+                        )
+                    } else {
+                        updateWeight(weights)
+                    }
+
                 }
             }.show(parentFragmentManager, EDIT_WEIGHT_DIALOG)
         }
@@ -84,7 +102,7 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
     }
 
 
-    private fun setUpRecyclerView() = weightRecView.apply {
+    private fun setUpRecyclerView() = binding.weightRecView.apply {
         weightItemsAdapter = WeightItemsAdapter()
         adapter = weightItemsAdapter
         layoutManager = LinearLayoutManager(requireContext())
@@ -93,12 +111,12 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
 
 
     private fun setUpObservers() {
-        weightViewModel.allGradePoints.observe(viewLifecycleOwner, Observer {
+        weightViewModel.allGradePoints.observe(viewLifecycleOwner, {
             val result = it.peekContent()
             when (result.status) {
                 Status.SUCCESS -> {
-                    weightSwipeRefresh.isRefreshing = false
-                    weightPb.visibility = View.GONE
+                    binding.weightSwipeRefresh.isRefreshing = false
+                    binding.weightPb.visibility = View.GONE
                     val gradePoints = result.data ?: GradeClass()
                     currentGradePoint = gradePoints
                     val gradeList = mutableListOf<GradeSimplified>()
@@ -126,9 +144,9 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
 
                 }
                 Status.ERROR -> {
-                    weightSwipeRefresh.isRefreshing = false
-                    weightPb.visibility = View.GONE
-                    showSnackbar(
+                    binding.weightSwipeRefresh.isRefreshing = false
+                    binding.weightPb.visibility = View.GONE
+                    showSnackBar(
                         result.message ?: "an unknown error occurred",
                         null,
                         R.drawable.ic_baseline_error_outline_24,
@@ -136,8 +154,8 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                     )
                 }
                 Status.LOADING -> {
-                    weightSwipeRefresh.isRefreshing = true
-                    weightPb.visibility = View.VISIBLE
+                    binding.weightSwipeRefresh.isRefreshing = true
+                    binding.weightPb.visibility = View.VISIBLE
                 }
             }
         })
@@ -188,14 +206,20 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                 }
             }
             weightViewModel.insertGradesPoints(gradePoint)
+            showSnackBar(
+                "weights updated",
+                null,
+                R.drawable.ic_baseline_bubble_chart_24,
+                "", Color.BLACK
+            )
         }
 
     }
 
     private fun syncWeight() {
-        weightSwipeRefresh.setOnRefreshListener {
+        binding.weightSwipeRefresh.setOnRefreshListener {
             weightViewModel.syncGradePoints()
-            showSnackbar(
+            showSnackBar(
                 "all caught up",
                 null,
                 R.drawable.ic_baseline_bubble_chart_24,
@@ -210,14 +234,14 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
         }
         currentGradePoint?.let {
             if (it == GradeClass(id = it.id)) {
-                showSnackbar(
+                showSnackBar(
                     "no changes detected",
                     null,
                     R.drawable.ic_baseline_emoji_emotions_24,
                     "", Color.BLACK
                 )
             } else {
-                showSnackbar(
+                showSnackBar(
                     "your weights has been set to default",
                     null,
                     R.drawable.ic_baseline_bubble_chart_24,

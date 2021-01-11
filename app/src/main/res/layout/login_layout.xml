@@ -198,7 +198,7 @@
 
 
     <com.facebook.login.widget.LoginButton
-        android:id="@+id/fb_login_button"
+        android:id="@+id/fb_loginButton"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:elevation="10dp"
@@ -212,7 +212,7 @@
         tools:layout_editor_absoluteX="10dp" />
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/ga_login_button"
+        android:id="@+id/galoginButton"
         android:layout_width="match_parent"
         android:layout_height="65dp"
         android:elevation="10dp"

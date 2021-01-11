@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import com.crushtech.mycollegecgpa.R
+import com.crushtech.mycollegecgpa.databinding.CustomViewInflationBinding
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import timber.log.Timber
 
@@ -12,8 +12,6 @@ class SimpleCustomSnackbar(
     parent: ViewGroup,
     content: SimpleCustomSnackbarView
 ) : BaseTransientBottomBar<SimpleCustomSnackbar>(parent, content, content) {
-
-
     init {
         getView().setBackgroundColor(
             ContextCompat.getColor(
@@ -25,7 +23,6 @@ class SimpleCustomSnackbar(
     }
 
     companion object {
-
         fun make(
             view: View,
             message: String, duration: Int,
@@ -39,30 +36,34 @@ class SimpleCustomSnackbar(
 
             // We inflate our custom view
             try {
-                val customView = LayoutInflater.from(view.context).inflate(
-                    R.layout.custom_view_inflation,
-                    parent,
-                    false
-                ) as SimpleCustomSnackbarView
+                val binding: CustomViewInflationBinding = CustomViewInflationBinding.inflate(
+                    LayoutInflater.from(view.context), parent, false
+                )
+//                val customView = LayoutInflater.from(view.context).inflate(
+//                    R.layout.custom_view_inflation,
+//                    parent,
+//                    false
+//                ) as SimpleCustomSnackbarView
                 // We create and return our Snackbar
-                customView.tvMsg.text = message
+                binding.root.tvMsg.text = message
+                // binding.tvMsg.text = message
                 action_label?.let {
-                    customView.tvAction.text = action_label
-                    customView.tvAction.setOnClickListener {
-                        listener?.onClick(customView.tvAction)
+                    binding.root.tvAction.text = action_label
+                    binding.root.tvAction.setOnClickListener {
+                        listener?.onClick(binding.root.tvAction)
                         //hide snack bar if action label is clicked
-                        customView.visibility = View.GONE
+                        binding.root.visibility = View.GONE
                     }
                 }
-                customView.imLeft.setImageResource(icon)
+                binding.root.imLeft.setImageResource(icon)
                 if (bg_color != null) {
-                    customView.layRoot.setCardBackgroundColor(bg_color)
+                    binding.root.layRoot.setCardBackgroundColor(bg_color)
                 }
 
 
                 return SimpleCustomSnackbar(
                     parent,
-                    customView
+                    binding.root
                 ).setDuration(duration)
             } catch (e: Exception) {
                 e.message?.let { Timber.tag("exception ").v(it) }

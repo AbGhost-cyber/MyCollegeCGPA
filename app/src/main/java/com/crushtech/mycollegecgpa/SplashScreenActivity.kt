@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import androidx.appcompat.app.AppCompatActivity
+import com.crushtech.mycollegecgpa.databinding.SplashScreenLayoutBinding
+import com.crushtech.mycollegecgpa.utils.Constants.viewBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -15,11 +17,12 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setTheme(R.style.splashScreenTheme)
+        val binding by viewBinding(SplashScreenLayoutBinding::inflate)
         window.setFlags(
             FLAG_FULLSCREEN,
             FLAG_FULLSCREEN
         )
-        setContentView(R.layout.splash_screen_layout)
+        setContentView(binding.root)
 
 
         val intent = Intent(this, MainActivity::class.java)
@@ -29,4 +32,5 @@ class SplashScreenActivity : AppCompatActivity() {
             finish()
         }
     }
+
 }

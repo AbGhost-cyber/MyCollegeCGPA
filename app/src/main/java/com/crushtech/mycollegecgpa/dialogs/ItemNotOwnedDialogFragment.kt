@@ -3,18 +3,15 @@ package com.crushtech.mycollegecgpa.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
-import com.crushtech.mycollegecgpa.R
-import com.google.android.material.button.MaterialButton
+import com.crushtech.mycollegecgpa.databinding.ItemNotOwnedDialogBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlinx.android.synthetic.main.home_layout.*
 
 
 class ItemNotOwnedDialogFragment : DialogFragment() {
     private var deleteCourseListener: ((Boolean) -> Unit)? = null
     private var proceedListener: ((Boolean) -> Unit)? = null
+    private lateinit var binding: ItemNotOwnedDialogBinding
 
     fun setDeleteCourseListener(listener: (Boolean) -> Unit) {
         deleteCourseListener = listener
@@ -25,31 +22,31 @@ class ItemNotOwnedDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val semesterParent = LayoutInflater.from(requireContext()).inflate(
-            R.layout.item_not_owned_dialog,
-            semesterContainer,
+        binding = ItemNotOwnedDialogBinding.inflate(
+            LayoutInflater.from(context),
+            null,
             false
-        ) as ConstraintLayout
+        )
         val semesterOwner = arguments?.getString("owner")
 
-        val notOwnerText = semesterParent.findViewById<TextView>(R.id.item_not_owned_message)
+        val notOwnerText = binding.itemNotOwnedMessage
         val text = "this semester belongs to $semesterOwner and it's view only"
         notOwnerText.text = text
 
-        semesterParent.findViewById<MaterialButton>(R.id.proceed_btn).setOnClickListener {
+        binding.proceedBtn.setOnClickListener {
             proceedListener?.let { proceed ->
                 proceed(true)
             }
             dialog?.dismiss()
         }
-        semesterParent.findViewById<TextView>(R.id.delete_item_not_owned).setOnClickListener {
+        binding.deleteItemNotOwned.setOnClickListener {
             deleteCourseListener?.let { clicked ->
                 clicked(true)
             }
             dialog?.dismiss()
         }
         return MaterialAlertDialogBuilder(requireContext())
-            .setView(semesterParent)
+            .setView(binding.root)
             .create()
     }
 }

@@ -74,7 +74,7 @@
     <string name="FAQs">FAQs</string>
     <string name="how_to_create_a_semester">click on the pencil icon beneath your thumb and a dialog will pop-up.</string>
     <string name="how_to_create_a_course">in the home screen, click on the semester you wish to create a course for, you will be directed to the create course screen, below your thumb, there\'s a pencil icon click on it and don\'t forget to click the save icon.</string>
-    <string name="gpa_limit_per_semester">the limit is 100</string>
+    <string name="gpa_limit_per_semester">the limit is 20</string>
     <string name="what_is_a_gpa">\" GPA assumes a grading scale of A, B, C, D, E/F. Each grade is assigned a number of grade points. Initially an A grade receives 4 points, a B=3, a C=2, a D=1\."</string>
     <string name="what_is_credit_hours">A credit hour is a way of measuring how much credit a student receives for attending a course which corresponds to the hours per week spent in that course.</string>
     <string name="what_are_quality_points">Quality points are used to calculate your grade point average (GPA). Quality points are earned on a descending scale where 4 quality points are awarded for an A grade and 0 quality points are awarded for an F grade.</string>

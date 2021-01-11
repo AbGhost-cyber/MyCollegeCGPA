@@ -1,23 +1,23 @@
 package com.crushtech.mycollegecgpa.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.WeightItemsAdapter.WeightViewHolder
 import com.crushtech.mycollegecgpa.data.local.entities.GradeSimplified
-import kotlinx.android.synthetic.main.weight_items.view.*
+import com.crushtech.mycollegecgpa.databinding.WeightItemsBinding
 
 class WeightItemsAdapter : RecyclerView.Adapter<WeightViewHolder>() {
+    lateinit var binding: WeightItemsBinding
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeightViewHolder {
-        return WeightViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.weight_items, parent, false
-            )
+
+        binding = WeightItemsBinding.inflate(
+            LayoutInflater.from(parent.context), parent,
+            false
         )
+        return WeightViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -27,8 +27,8 @@ class WeightItemsAdapter : RecyclerView.Adapter<WeightViewHolder>() {
     override fun onBindViewHolder(holder: WeightViewHolder, position: Int) {
         val grade = differ.currentList[position]
         holder.itemView.apply {
-            tvGrade.text = grade.name
-            tvGradePoint.text = grade.gradePoint.toString()
+            binding.tvGrade.text = grade.name
+            binding.tvGradePoint.text = grade.gradePoint.toString()
 
             setOnClickListener {
                 onItemClickListener?.let { click ->
@@ -60,5 +60,6 @@ class WeightItemsAdapter : RecyclerView.Adapter<WeightViewHolder>() {
         this.onItemClickListener = listener
     }
 
-    inner class WeightViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class WeightViewHolder(itemView: WeightItemsBinding) :
+        RecyclerView.ViewHolder(itemView.root)
 }

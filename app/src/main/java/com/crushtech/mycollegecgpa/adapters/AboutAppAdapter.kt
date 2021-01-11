@@ -10,19 +10,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.AboutAppAdapter.AboutAppViewHolder
+import com.crushtech.mycollegecgpa.databinding.AboutAppItemsBinding
 import com.crushtech.mycollegecgpa.ui.fragments.AboutAppItems
-import kotlinx.android.synthetic.main.about_app_items.view.*
 
 
 class AboutAppAdapter : RecyclerView.Adapter<AboutAppViewHolder>() {
     private var counter = 0
+    private var binding: AboutAppItemsBinding? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutAppViewHolder {
-        return AboutAppViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.about_app_items, parent,
-                false
-            )
+
+        binding = AboutAppItemsBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent, false
         )
+        return AboutAppViewHolder(binding!!)
     }
 
     override fun getItemCount(): Int {
@@ -32,35 +33,37 @@ class AboutAppAdapter : RecyclerView.Adapter<AboutAppViewHolder>() {
     override fun onBindViewHolder(holder: AboutAppViewHolder, position: Int) {
         val items = differ.currentList[position]
         holder.itemView.apply {
-            aboutAppTv.text = items.title
-            sub_item.text = items.subItem
-            ivExpandedAbApp.setImageDrawable(
-                getDrawable(
-                    context,
-                    R.drawable.vector_animation
+            binding?.let { bind ->
+                bind.aboutAppTv.text = items.title
+                bind.subItem.text = items.subItem
+                bind.ivExpandedAbApp.setImageDrawable(
+                    getDrawable(
+                        context,
+                        R.drawable.vector_animation
+                    )
                 )
-            )
-
-            setOnClickListener {
-                onItemClickListener?.let { click ->
-                    items.isExpanded = true
-                    if(items.isExpanded && counter % 2 == 0){
-                        ivExpandedAbApp.setImageDrawable(
-                            getDrawable(context,R.drawable.vector_animation)
-                        )
-                        val frameAnimation = ivExpandedAbApp.drawable as AnimationDrawable
-                        frameAnimation.start()
-                        sub_item.visibility = View.VISIBLE
-                    }else{
-                        ivExpandedAbApp.setImageDrawable(
-                            getDrawable(context,R.drawable.vector_animation1)
-                        )
-                        val frameAnim = ivExpandedAbApp.drawable as AnimationDrawable
-                        frameAnim.start()
-                        sub_item.visibility = View.GONE
+                setOnClickListener {
+                    onItemClickListener?.let { click ->
+                        items.isExpanded = true
+                        if (items.isExpanded && counter % 2 == 0) {
+                            bind.ivExpandedAbApp.setImageDrawable(
+                                getDrawable(context, R.drawable.vector_animation)
+                            )
+                            val frameAnimation =
+                                bind.ivExpandedAbApp.drawable as AnimationDrawable
+                            frameAnimation.start()
+                            bind.subItem.visibility = View.VISIBLE
+                        } else {
+                            bind.ivExpandedAbApp.setImageDrawable(
+                                getDrawable(context, R.drawable.vector_animation1)
+                            )
+                            val frameAnim = bind.ivExpandedAbApp.drawable as AnimationDrawable
+                            frameAnim.start()
+                            bind.subItem.visibility = View.GONE
+                        }
+                        click(items)
+                        counter++
                     }
-                    click(items)
-                    counter++
                 }
             }
         }
@@ -86,5 +89,6 @@ class AboutAppAdapter : RecyclerView.Adapter<AboutAppViewHolder>() {
     }
 
 
-    inner class AboutAppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class AboutAppViewHolder(binding: AboutAppItemsBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

@@ -10,12 +10,12 @@ import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.data.remote.BasicAuthInterceptor
+import com.crushtech.mycollegecgpa.databinding.SignupLayoutBinding
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.IS_THIRD_PARTY
@@ -27,6 +27,7 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
 import com.crushtech.mycollegecgpa.utils.Status
+import com.crushtech.mycollegecgpa.utils.viewBinding
 import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -39,12 +40,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.signup_layout.*
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignUpFragment : BaseFragment(R.layout.signup_layout) {
+    private val binding by viewBinding(SignupLayoutBinding::bind)
+
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
@@ -94,19 +96,19 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
             redirectLogin()
         }
         subscribeToObservers()
-        loginRedirect.setOnClickListener {
+        binding.loginRedirect.setOnClickListener {
             findNavController().navigate(R.id.action_signUpFragment_to_loginFragment)
         }
 
 
 
-        signUpBtn.setOnClickListener {
+        binding.signUpBtn.setOnClickListener {
             signInBtnWasClicked = true
             hideKeyboard()
-            val email = editTextEmail.text.toString()
-            val password = editTextPassword.text.toString()
-            val reEnterPassword = editTextReEnterPassword.text.toString()
-            val username = editTextUsername.text.toString()
+            val email = binding.editTextEmail.text.toString()
+            val password = binding.editTextPassword.text.toString()
+            val reEnterPassword = binding.editTextReEnterPassword.text.toString()
+            val username = binding.editTextUsername.text.toString()
 
             this.currentEmail = email
             this.currentPassword = password
@@ -115,16 +117,16 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
             viewModel.register(email, password, reEnterPassword, username)
         }
 
-        FaceBookSignInBtn.setOnClickListener {
-            fb_signup_button.callOnClick()
+        binding.FaceBookSignInBtn.setOnClickListener {
+            binding.fbSignupButton.callOnClick()
         }
-        GoogleSignInBtn.setOnClickListener {
+        binding.GoogleSignInBtn.setOnClickListener {
             //call on click on the main ga button
-            ga_signup_button.callOnClick()
+            binding.gaSignupButton.callOnClick()
             googleSignIn()
         }
 
-        fb_signup_button.apply {
+        binding.fbSignupButton.apply {
             fragment = this@SignUpFragment
             setReadPermissions("email", "public_profile")
             registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
@@ -134,7 +136,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 }
 
                 override fun onCancel() {
-                    showSnackbar(
+                    showSnackBar(
                         "authentication cancelled",
                         null, R.drawable.ic_baseline_whatshot_24,
                         "", Color.BLACK
@@ -142,7 +144,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 }
 
                 override fun onError(error: FacebookException?) {
-                    showSnackbar(
+                    showSnackBar(
                         "an unknown error occurred",
                         null, R.drawable.ic_baseline_whatshot_24,
                         "", Color.BLACK
@@ -174,14 +176,15 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 if (task.isComplete) {
                     Timber.d("$TAG: sign in successfully")
                     val user = firebaseAuth.currentUser
-                    showSnackbar(
+                    updateUI(user)
+                    showSnackBar(
                         "an unknown error occurred",
                         null, R.drawable.ic_baseline_whatshot_24,
                         "", Color.BLACK
                     )
                 } else {
                     Timber.d("$TAG: unknown error occurred")
-                    showSnackbar(
+                    showSnackBar(
                         "Authentication error", null,
                         R.drawable.ic_baseline_error_outline_24,
                         "", Color.RED
@@ -192,12 +195,12 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     }
 
     private fun subscribeToObservers() {
-        viewModel.registerStatus.observe(viewLifecycleOwner, Observer { result ->
+        viewModel.registerStatus.observe(viewLifecycleOwner, { result ->
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
                         resetUIForLoginButton()
-                        showSnackbar(
+                        showSnackBar(
                             "Successfully registered", null,
                             R.drawable.ic_baseline_emoji_emotions_24,
                             "", Color.GREEN
@@ -223,7 +226,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                     }
                     Status.ERROR -> {
                         resetUIForLoginButton()
-                        showSnackbar(
+                        showSnackBar(
                             result.message ?: "an error occurred", null,
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
@@ -236,12 +239,12 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
             }
         })
 
-        viewModel.thirdPartyRegisterStatus.observe(viewLifecycleOwner, Observer { result ->
+        viewModel.thirdPartyRegisterStatus.observe(viewLifecycleOwner, { result ->
             result?.let {
                 when (result.status) {
                     Status.SUCCESS -> {
                         this.isThirdParty = true
-                        showSnackbar(
+                        showSnackBar(
                             "Successfully registered",
                             null, R.drawable.ic_baseline_whatshot_24,
                             "", Color.BLACK
@@ -268,14 +271,14 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                     }
                     Status.ERROR -> {
                         val snackBarText = result.message
-                        showSnackbar(
+                        showSnackBar(
                             snackBarText ?: "an error occurred", null,
                             R.drawable.ic_baseline_error_outline_24,
                             "", Color.RED
                         )
                     }
                     Status.LOADING -> {
-                        showSnackbar(
+                        showSnackBar(
                             "please hold on for a moment.....",
                             null,
                             R.drawable.ic_baseline_error_outline_24,
@@ -297,7 +300,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 updateUI(user)
             } else {
                 Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
-                showSnackbar(
+                showSnackBar(
                     "signInWithCredential:failure", null,
                     R.drawable.ic_baseline_error_outline_24,
                     "", Color.RED
@@ -338,16 +341,16 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
     private fun updateUIForSignInButton() {
         if (signInBtnWasClicked) {
-            signUpBtn.isAllCaps = false
-            signUpBtn.text = getString(R.string.loading_wait)
-            signUpprogressBar.visibility = View.VISIBLE
+            binding.signUpBtn.isAllCaps = false
+            binding.signUpBtn.text = getString(R.string.loading_wait)
+            binding.signUpprogressBar.visibility = View.VISIBLE
         }
     }
 
     private fun resetUIForLoginButton() {
-        signUpBtn.isAllCaps = true
-        signUpBtn.text = requireContext().getString(R.string.sign_up)
-        signUpprogressBar.visibility = View.GONE
+        binding.signUpBtn.isAllCaps = true
+        binding.signUpBtn.text = requireContext().getString(R.string.sign_up)
+        binding.signUpprogressBar.visibility = View.GONE
     }
 
 
@@ -398,13 +401,13 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
     private fun createAnimationsForUIWidgets() {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_left)
-        lin.startAnimation(animation)
+        binding.lin.startAnimation(animation)
         val animation1 = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_right)
-        signUpBtn.startAnimation(animation1)
+        binding.signUpBtn.startAnimation(animation1)
         val animation2 = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_slowly)
-        signuptxt.startAnimation(animation2)
+        binding.signuptxt.startAnimation(animation2)
         val animation3 = AnimationUtils.loadAnimation(requireContext(), R.anim.blink)
-        thirdPartyLoginLayoutParent1.startAnimation(animation3)
+        binding.thirdPartyLoginLayoutParent1.startAnimation(animation3)
     }
 
     override fun onDetach() {
@@ -444,7 +447,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Timber.w(e, "Google sign in failed")
-                showSnackbar(
+                showSnackBar(
                     "Google sign in failed", null,
                     R.drawable.ic_baseline_error_outline_24,
                     "", Color.RED

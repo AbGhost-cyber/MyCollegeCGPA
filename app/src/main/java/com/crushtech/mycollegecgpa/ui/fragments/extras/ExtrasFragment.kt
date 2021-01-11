@@ -12,21 +12,23 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.crushtech.mycollegecgpa.MainActivity
 import com.crushtech.mycollegecgpa.R
+import com.crushtech.mycollegecgpa.databinding.ExtrasLayoutBinding
 import com.crushtech.mycollegecgpa.dialogs.LogoutDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
+import com.crushtech.mycollegecgpa.utils.viewBinding
 import com.facebook.login.LoginManager
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.extras_layout.*
 import javax.inject.Inject
 
 const val LOG_OUT_DIALOG = "log out dialog"
 
 @AndroidEntryPoint
 class OthersFragment : BaseFragment(R.layout.extras_layout) {
+    private val binding by viewBinding(ExtrasLayoutBinding::bind)
+
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
@@ -39,7 +41,7 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
         (activity as MainActivity).apply {
             showAppBar()
             showMainActivityUI()
-            titleBarText.text = getString(R.string.my_extras)
+            activityMainBinding.titleBarText.text = getString(R.string.my_extras)
         }
         isThirdPartyUser = sharedPreferences.getBoolean(
             Constants.IS_THIRD_PARTY,
@@ -49,12 +51,12 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
 
         setClickAnimationForTexts(
             listOf(
-                editCourseGp,
-                ShareApp,
-                AboutApp,
-                rateApp,
-                privacyPolicy,
-                logOut
+                binding.editCourseGp,
+                binding.ShareApp,
+                binding.AboutApp,
+                binding.rateApp,
+                binding.privacyPolicy,
+                binding.logOut
             )
         )
 
