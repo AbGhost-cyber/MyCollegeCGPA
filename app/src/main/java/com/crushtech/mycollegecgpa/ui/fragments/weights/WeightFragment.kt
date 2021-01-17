@@ -3,10 +3,7 @@ package com.crushtech.mycollegecgpa.ui.fragments.weights
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +17,7 @@ import com.crushtech.mycollegecgpa.dialogs.EditWeightDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.ResetWeightDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Status
-import com.crushtech.mycollegecgpa.utils.viewBinding
+import com.crushtech.mycollegecgpa.utils.viewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 
 const val EDIT_WEIGHT_DIALOG = "edit weight dialog"
@@ -31,7 +28,17 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
     private lateinit var weightItemsAdapter: WeightItemsAdapter
     private val weightViewModel: WeightViewModel by viewModels()
     private var currentGradePoint: GradeClass? = null
-    val binding by viewBinding(WeightLayoutBinding::bind)
+    private var binding: WeightLayoutBinding by viewLifecycle()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = WeightLayoutBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).apply {
@@ -60,7 +67,7 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                         "can't update: weights should be between 0 and 20",
                         null,
                         R.drawable.ic_baseline_error_outline_24,
-                        "", Color.RED
+                        "", Color.BLACK
                     )
                 } else {
                     updateWeight(weights)
@@ -88,7 +95,7 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                             "can't update: weights should be between 0 and 20",
                             null,
                             R.drawable.ic_baseline_error_outline_24,
-                            "", Color.RED
+                            "", Color.BLACK
                         )
                     } else {
                         updateWeight(weights)
@@ -133,15 +140,7 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                         add(GradeSimplified("D", gradePoints.DGrade))
                         add(GradeSimplified("E/F", gradePoints.FOrEGrade))
                     }
-
-                    //sort by the gradepoints
-                    val orderGradeByPoints = gradeList.sortedBy { gradeSimp ->
-                        gradeSimp.gradePoint
-                    }
-                    //submit sorted gradepoints descending
-                    weightItemsAdapter.differ.submitList(orderGradeByPoints.reversed())
-
-
+                    weightItemsAdapter.differ.submitList(gradeList)
                 }
                 Status.ERROR -> {
                     binding.weightSwipeRefresh.isRefreshing = false
@@ -269,6 +268,11 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.reset_weight_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onDestroy() {
+        weightItemsAdapter.binding = null
+        super.onDestroy()
     }
 }
 

@@ -10,14 +10,14 @@ import com.crushtech.mycollegecgpa.data.local.entities.GradeSimplified
 import com.crushtech.mycollegecgpa.databinding.WeightItemsBinding
 
 class WeightItemsAdapter : RecyclerView.Adapter<WeightViewHolder>() {
-    lateinit var binding: WeightItemsBinding
+    var binding: WeightItemsBinding? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeightViewHolder {
 
         binding = WeightItemsBinding.inflate(
             LayoutInflater.from(parent.context), parent,
             false
         )
-        return WeightViewHolder(binding)
+        return WeightViewHolder(binding!!)
     }
 
     override fun getItemCount(): Int {
@@ -27,8 +27,8 @@ class WeightItemsAdapter : RecyclerView.Adapter<WeightViewHolder>() {
     override fun onBindViewHolder(holder: WeightViewHolder, position: Int) {
         val grade = differ.currentList[position]
         holder.itemView.apply {
-            binding.tvGrade.text = grade.name
-            binding.tvGradePoint.text = grade.gradePoint.toString()
+            binding!!.tvGrade.text = grade.name
+            binding!!.tvGradePoint.text = grade.gradePoint.toString()
 
             setOnClickListener {
                 onItemClickListener?.let { click ->

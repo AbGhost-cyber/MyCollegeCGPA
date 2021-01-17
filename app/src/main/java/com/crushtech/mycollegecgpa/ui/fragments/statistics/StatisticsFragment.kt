@@ -35,6 +35,7 @@ import com.github.mikephil.charting.components.XAxis.XAxisPosition
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
@@ -46,6 +47,7 @@ import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 const val REQUEST_CODE = 1
@@ -63,7 +65,8 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
     private lateinit var billingClient: BillingClient
     private var userPdfDownloadsCount: UserPdfDownloads? = null
     private val skuList = listOf("stats_download_coins")
-    private val binding by viewBinding(StatisticsFragmentBinding::bind)
+    private var binding: StatisticsFragmentBinding by viewLifecycle()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -72,7 +75,9 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         if (!(sharedPrefs.contains(STATISTICS_FIRST_TIME_OPEN))) {
             firsTimeOpen = true
             sharedPrefs.edit().putBoolean(STATISTICS_FIRST_TIME_OPEN, true).apply()
+
         }
+        binding = StatisticsFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -247,7 +252,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                         binding.totalCoursesOffered.text = courseString
                         sem.courses.forEach { course ->
                             totalNumberOfCreditHours += course.creditHours
-                            val creditHoursString = if (totalNumberOfCreditHours <= 1) {
+                            val creditHoursString = if (totalNumberOfCreditHours <= 1f) {
                                 "$totalNumberOfCreditHours hour"
                             } else {
                                 "$totalNumberOfCreditHours hours"
@@ -267,6 +272,18 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                         semesters.indices.map { i ->
                             BarEntry(i.toFloat(), semesters[i].getGPA().toFloat())
                         }
+
+                    val semesterCourseList = ArrayList<String>()
+                    semester.map { sem ->
+                        if (sem.courses.size <= 1) {
+                            semesterCourseList.add("${sem.courses.size} course")
+                        } else {
+                            semesterCourseList.add("${sem.courses.size} courses")
+                        }
+                    }
+                    binding.barChart.xAxis.valueFormatter =
+                        IndexAxisValueFormatter(semesterCourseList)
+
                     val typeface =
                         ResourcesCompat.getFont(requireContext(), R.font.capriola)
 
@@ -276,12 +293,11 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                         getColor(requireContext(), R.color.colorAccent)
                     )
 
-                    val barDataSet = BarDataSet(allGPA, "GPA per semester").apply {
+                    val barDataSet = BarDataSet(allGPA, "GPA over courses").apply {
                         valueTextColor = Color.BLACK
                         valueTypeface = typeface
                         valueTextSize = 13f
                         colors = colorList
-
                     }
 
                     binding.barChart.data = BarData(barDataSet)
@@ -324,16 +340,17 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
     private fun setUpBarCharts() {
         binding.barChart.xAxis.apply {
             position = XAxisPosition.BOTTOM
-            setDrawLabels(false)
             axisLineColor = Color.BLACK
             textColor = Color.BLACK
             setDrawGridLines(false)
+            granularity = 1f
+            isGranularityEnabled = true
+            setDrawLabels(true)
         }
         binding.barChart.axisLeft.apply {
             axisLineColor = Color.BLACK
             textColor = Color.BLACK
             setDrawGridLines(false)
-
         }
         binding.barChart.axisRight.apply {
             axisLineColor = Color.BLACK
@@ -341,6 +358,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
             setDrawGridLines(false)
 
         }
+
     }
 
 
@@ -365,14 +383,18 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
         content.measure(measureWidth, measuredHeight)
         content.layout(0, 0, page.canvas.width, page.canvas.height)
-        binding.tCHParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
-        binding.tCCParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
-        binding.saveAsPdf.visibility = View.INVISIBLE
-        binding.pdfDownloadParent.visibility = View.GONE
-        binding.sponsored.visibility = View.VISIBLE
-        val username = " For ${Constants.getCurrentUserName(sharedPrefs)}"
-        binding.userName.text = username
-        binding.userName.visibility = View.VISIBLE
+        binding.apply {
+            tCHParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
+            tCCParent.setCardBackgroundColor(getColor(requireContext(), R.color.colorPrimary))
+            saveAsPdf.visibility = View.INVISIBLE
+            pdfDownloadParent.visibility = View.GONE
+            sponsored.visibility = View.VISIBLE
+            val username = " For ${Constants.getCurrentUserName(sharedPrefs)}"
+            userName.text = username
+            userName.visibility = View.VISIBLE
+        }
+        (activity as MainActivity)
+            .activityMainBinding.mainActivityTransBg.visibility = View.VISIBLE
 
         //if barchart markerview was visible, then hide it while creating the pdf
         try {
@@ -466,6 +488,8 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                 }
                 binding.sponsored.visibility = View.INVISIBLE
                 binding.userName.visibility = View.INVISIBLE
+                (activity as MainActivity)
+                    .activityMainBinding.mainActivityTransBg.visibility = View.GONE
             } else {
                 showSnackBar(
                     "an unknown error occurred, please try again", null,
@@ -658,3 +682,4 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
     }
 }
+

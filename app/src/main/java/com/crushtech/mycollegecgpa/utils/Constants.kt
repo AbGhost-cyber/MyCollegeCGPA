@@ -40,7 +40,6 @@ object Constants {
     const val TOTAL_NUMBER_OF_CREDIT_HOURS = "totalNumberOfCreditHours"
     const val TOTAL_NUMBER_OF_COURSES = "totalNumberOfCourses"
     const val STATISTICS_FIRST_TIME_OPEN = "first time open"
-    const val COURSE_FIRST_TIME_OPEN = "course first time open"
     const val IS_LOGGED_IN = "is logged in"
 
     const val PRIVACY_POLICY = "https://www.mycollegecgpa.com/privacypolicy/"

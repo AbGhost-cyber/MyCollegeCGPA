@@ -5,7 +5,9 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
@@ -27,8 +29,9 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
 import com.crushtech.mycollegecgpa.utils.Constants.RC_SIGN_IN
 import com.crushtech.mycollegecgpa.utils.Status
-import com.crushtech.mycollegecgpa.utils.viewBinding
+import com.crushtech.mycollegecgpa.utils.viewLifecycle
 import com.facebook.*
+import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -42,7 +45,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment(R.layout.login_layout) {
-    private val binding by viewBinding(LoginLayoutBinding::bind)
+    private var binding: LoginLayoutBinding by viewLifecycle()
 
     @Inject
     lateinit var sharedPrefs: SharedPreferences
@@ -60,12 +63,23 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
     private lateinit var callbackManager: CallbackManager
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var accessTokenTracker: AccessTokenTracker
-    private var credentials: AuthCredential? = null
+    private lateinit var credentials: AuthCredential
 
     private var currentEmail: String? = null
     private var currentPassword: String? = null
     private var currentUserName: String? = null
     private var isThirdParty = false
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = LoginLayoutBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -124,6 +138,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             fragment = this@LoginFragment
             setReadPermissions("email", "public_profile")
             registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+
                 override fun onSuccess(result: LoginResult?) {
                     handleFacebookToken(result?.accessToken)
                 }
@@ -142,6 +157,9 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         null, R.drawable.ic_baseline_error_outline_24,
                         "", Color.RED
                     )
+                    if (firebaseAuth.currentUser != null) {
+                        LoginManager.getInstance().logOut()
+                    }
                 }
 
             })
@@ -164,21 +182,32 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
 
     private fun handleFacebookToken(token: AccessToken?) {
         token?.let {
-            credentials = FacebookAuthProvider.getCredential(it.token)
-            credentials?.let { authCredential ->
-                firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener { task ->
-                    if (task.isComplete) {
-                        val user = firebaseAuth.currentUser
-                        updateUI(user)
-                    } else {
-                        showSnackBar(
-                            "Authentication error", null,
-                            R.drawable.ic_baseline_error_outline_24,
-                            "", Color.RED
-                        )
-                    }
+            val credentials = FacebookAuthProvider.getCredential(it.token)
+            firebaseAuth.signInWithCredential(credentials).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Timber.d("signInWithCredential:success")
+                    val user = firebaseAuth.currentUser
+                    updateUI(user)
+                } else if (!(task.isSuccessful) && task.exception is FirebaseAuthUserCollisionException) {
+                    firebaseAuth.currentUser?.linkWithCredential(credentials)
+                        ?.addOnCompleteListener { _task ->
+                            if (_task.isSuccessful) {
+                                val user = _task.result?.user
+                                updateUI(user)
+                            } else {
+                                Timber.tag(TAG).w(_task.exception, "linking:failure")
+                            }
+                        }
+                } else {
+                    Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
+                    showSnackBar(
+                        "signInWithCredential:failure", null,
+                        R.drawable.ic_baseline_error_outline_24,
+                        "", Color.RED
+                    )
                 }
             }
+
         }
     }
 
@@ -241,7 +270,8 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                         this.isThirdParty = true
                         val snackBarText = "Welcome back $currentUserName"
                         showSnackBar(
-                            snackBarText, null, R.drawable.ic_baseline_whatshot_24,
+                            snackBarText, null,
+                            R.drawable.ic_baseline_whatshot_24,
                             "", Color.BLACK
                         )
                         sharedPrefs.edit().putBoolean(
@@ -305,20 +335,18 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         credentials = GoogleAuthProvider.getCredential(idToken, null)
-        credentials?.let { authCredential ->
-            firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Timber.d("signInWithCredential:success")
-                    val user = firebaseAuth.currentUser
-                    updateUI(user)
-                } else {
-                    Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
-                    showSnackBar(
-                        "signInWithCredential:failure", null,
-                        R.drawable.ic_baseline_error_outline_24,
-                        "", Color.RED
-                    )
-                }
+        firebaseAuth.signInWithCredential(credentials).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Timber.d("signInWithCredential:success")
+                val user = task.result?.user
+                updateUI(user)
+            } else {
+                Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
+                showSnackBar(
+                    "signInWithCredential:failure", null,
+                    R.drawable.ic_baseline_error_outline_24,
+                    "", Color.RED
+                )
             }
         }
     }
@@ -328,9 +356,9 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             usr.email?.let { email ->
                 if (currentEmail == NO_EMAIL || currentEmail.isNullOrEmpty()) {
                     currentEmail = email
-                    this.currentUserName = usr.displayName
                 }
                 usr.displayName?.let { username ->
+                    this.currentUserName = username
                     viewModel.loginThirdPartyUser(email, username)
                 }
             }
@@ -445,7 +473,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 firebaseAuthWithGoogle(googleAccount.idToken!!)
 
             } catch (e: ApiException) {
-                // Google Sign In failed, update UI appropriately
+                // Google Sign In failed
                 Timber.w(e, "Google sign in failed")
                 showSnackBar(
                     "Google sign in failed", null,

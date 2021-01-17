@@ -147,6 +147,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
     //facebbook login
-    implementation 'com.facebook.android:facebook-login:4.30.0'
+   // implementation 'com.facebook.android:facebook-login:4.30.0'
+    implementation 'com.facebook.android:facebook-login:4.42.0'
 
 }

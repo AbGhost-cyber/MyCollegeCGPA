@@ -35,9 +35,12 @@ class CourseViewModel @ViewModelInject constructor(
             repository.updateAddedCourse(courses, semesterId, coursePosition)
         }
 
-    fun insertCourses(courses: List<Courses>, semesterId: String) = viewModelScope.launch {
-        repository.insertCourses(courses, semesterId)
-    }
+//    fun insertCourses(courses: List<Courses>, semesterId: String) = viewModelScope.launch {
+//        repository.insertCourses(courses, semesterId)
+//    }
+fun updateCourses(courses: List<Courses>, semesterId: String) = viewModelScope.launch {
+    repository.updateCourses(courses, semesterId)
+}
 
     fun getSemesterById(semesterId: String) = viewModelScope.launch {
         _semester.postValue(Events(Resource.loading(null)))

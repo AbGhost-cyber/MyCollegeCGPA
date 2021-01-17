@@ -7,8 +7,10 @@ import android.content.pm.ActivityInfo
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -38,7 +40,7 @@ import com.crushtech.mycollegecgpa.utils.Constants.customRecyclerViewScrollListe
 import com.crushtech.mycollegecgpa.utils.Constants.getCurrentUserName
 import com.crushtech.mycollegecgpa.utils.Constants.setupDecorator
 import com.crushtech.mycollegecgpa.utils.Status
-import com.crushtech.mycollegecgpa.utils.viewBinding
+import com.crushtech.mycollegecgpa.utils.viewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.SimpleDateFormat
 import java.util.*
@@ -50,7 +52,7 @@ const val NOT_OWNER_DIALOG = "not owner dialog"
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(R.layout.home_layout) {
-    val binding by viewBinding(HomeLayoutBinding::bind)
+    private var binding: HomeLayoutBinding by viewLifecycle()
 
     @Inject
     lateinit var sharedPrefs: SharedPreferences
@@ -65,6 +67,16 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     private var currentSemester: Semester? = null
 
     private var authEmail: String? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = HomeLayoutBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -265,7 +277,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     Status.SUCCESS -> {
                         binding.addOwnerProgressImage.visibility = GONE
                         binding.addOwnerProgressBar.visibility = GONE
-
+                        (activity as MainActivity)
+                            .activityMainBinding.mainActivityTransBg.visibility = View.GONE
                         showSnackBar(
                             result.message ?: "Successfully shared semester",
                             null,
@@ -277,7 +290,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     Status.ERROR -> {
                         binding.addOwnerProgressImage.visibility = GONE
                         binding.addOwnerProgressBar.visibility = GONE
-
+                        (activity as MainActivity)
+                            .activityMainBinding.mainActivityTransBg.visibility = View.GONE
                         showSnackBar(
                             result.message ?: "An unknown error occurred", null,
                             R.drawable.ic_baseline_error_outline_24,
@@ -285,6 +299,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                         )
                     }
                     Status.LOADING -> {
+                        (activity as MainActivity)
+                            .activityMainBinding.mainActivityTransBg.visibility = View.VISIBLE
                         binding.addOwnerProgressImage.visibility = VISIBLE
                         binding.addOwnerProgressBar.visibility = VISIBLE
                     }
@@ -496,6 +512,11 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         super.onAttach(context)
+    }
+
+    override fun onDestroy() {
+        semesterAdapter.binding = null
+        super.onDestroy()
     }
 }
 

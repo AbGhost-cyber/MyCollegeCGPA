@@ -5,7 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.fragment.app.viewModels
@@ -17,25 +19,35 @@ import com.crushtech.mycollegecgpa.dialogs.LogoutDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
-import com.crushtech.mycollegecgpa.utils.viewBinding
+import com.crushtech.mycollegecgpa.utils.viewLifecycle
 import com.facebook.login.LoginManager
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 const val LOG_OUT_DIALOG = "log out dialog"
 
+
 @AndroidEntryPoint
 class OthersFragment : BaseFragment(R.layout.extras_layout) {
-    private val binding by viewBinding(ExtrasLayoutBinding::bind)
+    private var binding: ExtrasLayoutBinding by viewLifecycle()
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
 
     private var isThirdPartyUser = false
-    private lateinit var firebaseAuth: FirebaseAuth
 
     private val extrasViewModel: ExtrasViewModel by viewModels()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = ExtrasLayoutBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (activity as MainActivity).apply {
@@ -47,7 +59,7 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
             Constants.IS_THIRD_PARTY,
             Constants.NOT_THIRD_PARTY
         )
-        firebaseAuth = FirebaseAuth.getInstance()
+
 
         setClickAnimationForTexts(
             listOf(
@@ -67,6 +79,11 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
                 if (clicked) {
                     extrasViewModel.logOutCurrentUser(this)
                 }
+                val user = Firebase.auth.currentUser
+                if (user?.providerId == "google.com") {
+                    user.delete()
+                }
+                LoginManager.getInstance().logOut()
             }
         }
 
@@ -109,7 +126,7 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
             getString(R.string.play_store_uri) + appPackageName
         }
         shareIntent.type = "text/link"
-        val shareBody = getString(R.string.share_info) + strAppLink
+        val shareBody = getString(R.string.share_info) + " " + strAppLink
         val shareSub = "APP NAME/TITLE"
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSub)
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
@@ -121,11 +138,11 @@ class OthersFragment : BaseFragment(R.layout.extras_layout) {
             setPositiveListener { clicked ->
                 if (clicked) {
                     extrasViewModel.logOutCurrentUser(this)
-                    if (isThirdPartyUser) {
-                        if (firebaseAuth.currentUser != null)
-                            firebaseAuth.signOut()
-                        LoginManager.getInstance().logOut()
+                    val user = Firebase.auth.currentUser
+                    if (user?.providerId == "google.com") {
+                        user.delete()
                     }
+                    LoginManager.getInstance().logOut()
                 }
             }
         }.show(parentFragmentManager, LOG_OUT_DIALOG)

@@ -5,7 +5,9 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
@@ -27,7 +29,7 @@ import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_USERNAME
 import com.crushtech.mycollegecgpa.utils.Status
-import com.crushtech.mycollegecgpa.utils.viewBinding
+import com.crushtech.mycollegecgpa.utils.viewLifecycle
 import com.facebook.*
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -35,17 +37,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignUpFragment : BaseFragment(R.layout.signup_layout) {
-    private val binding by viewBinding(SignupLayoutBinding::bind)
+    private var binding: SignupLayoutBinding by viewLifecycle()
 
     @Inject
     lateinit var sharedPrefs: SharedPreferences
@@ -64,11 +63,21 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     lateinit var callbackManager: CallbackManager
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var accessTokenTracker: AccessTokenTracker
+    private lateinit var credentials: AuthCredential
 
     private var currentEmail: String? = null
     private var currentPassword: String? = null
     private var currentUserName: String? = null
     private var isThirdParty = false
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = SignupLayoutBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -169,28 +178,28 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
 
     private fun handleFacebookToken(token: AccessToken?) {
-        Timber.d("$TAG: handleFacebookToken $token")
         token?.let {
             val credentials = FacebookAuthProvider.getCredential(it.token)
             firebaseAuth.signInWithCredential(credentials).addOnCompleteListener { task ->
-                if (task.isComplete) {
-                    Timber.d("$TAG: sign in successfully")
+                if (task.isSuccessful) {
+                    Timber.d("signInWithCredential:success")
                     val user = firebaseAuth.currentUser
                     updateUI(user)
-                    showSnackBar(
-                        "an unknown error occurred",
-                        null, R.drawable.ic_baseline_whatshot_24,
-                        "", Color.BLACK
-                    )
+                } else if (!(task.isSuccessful) && task.exception is FirebaseAuthUserCollisionException) {
+                    firebaseAuth.currentUser?.linkWithCredential(credentials)
+                        ?.addOnSuccessListener { _result ->
+                            updateUI(_result.user)
+                        }
                 } else {
-                    Timber.d("$TAG: unknown error occurred")
+                    Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
                     showSnackBar(
-                        "Authentication error", null,
+                        "signInWithCredential:failure", null,
                         R.drawable.ic_baseline_error_outline_24,
                         "", Color.RED
                     )
                 }
             }
+
         }
     }
 
@@ -292,11 +301,11 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+        credentials = GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth.signInWithCredential(credentials).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Timber.d("signInWithCredential:success")
-                val user = firebaseAuth.currentUser
+                val user = task.result?.user
                 updateUI(user)
             } else {
                 Timber.tag(TAG).w(task.exception, "signInWithCredential:failure")
@@ -316,9 +325,10 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                     currentEmail = email
                     this.currentUserName = usr.displayName
                 }
-                usr.displayName?.let { username ->
-                    viewModel.loginThirdPartyUser(email, username)
-                }
+                viewModel.registerThirdPartyUser(
+                    email,
+                    usr.displayName ?: "no username"
+                )
             }
         }
     }
@@ -336,7 +346,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
 
     private fun googleSignIn() {
         val signInIntent = mGoogleSignInClient.signInIntent
-        requireActivity().startActivityForResult(signInIntent, Constants.RC_SIGN_IN)
+        startActivityForResult(signInIntent, Constants.RC_SIGN_IN)
     }
 
     private fun updateUIForSignInButton() {

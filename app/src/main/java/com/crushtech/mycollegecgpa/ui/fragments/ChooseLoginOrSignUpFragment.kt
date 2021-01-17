@@ -13,7 +13,9 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
 import android.widget.TextView
 import android.widget.TextView.BufferType.SPANNABLE
@@ -33,19 +35,28 @@ import com.crushtech.mycollegecgpa.utils.Constants.KEY_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_PASSWORD
 import com.crushtech.mycollegecgpa.utils.Constants.PRIVACY_POLICY
-import com.crushtech.mycollegecgpa.utils.viewBinding
+import com.crushtech.mycollegecgpa.utils.viewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChooseLoginOrSignUpFragment : BaseFragment(R.layout.choose_login_signup_layout) {
-    private val binding by viewBinding(ChooseLoginSignupLayoutBinding::bind)
+    private var binding: ChooseLoginSignupLayoutBinding by viewLifecycle()
 
     @Inject
     lateinit var sharedPrefs: SharedPreferences
 
     @Inject
     lateinit var basicAuthInterceptor: BasicAuthInterceptor
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = ChooseLoginSignupLayoutBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

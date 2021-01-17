@@ -35,8 +35,17 @@
                     android:id="@+id/best_semester_image"
                     android:layout_width="match_parent"
                     android:layout_height="100dp" />
+
             </RelativeLayout>
 
+            <View
+                android:id="@+id/shine_view"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@drawable/shiny_bg"
+                android:rotation="25"
+                app:layout_constraintStart_toStartOf="@+id/image_parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout3"

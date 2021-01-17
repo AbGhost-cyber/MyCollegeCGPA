@@ -5,6 +5,8 @@ import android.graphics.Color.RED
 import android.graphics.Color.parseColor
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.Adapter
@@ -36,6 +38,24 @@ class BestSemesterAdapter : Adapter<BestSemesterViewHolder>() {
         holder.itemView.apply {
             Picasso.get().load(R.drawable.best_semester).fit().centerCrop()
                 .into(binding.bestSemesterImage)
+
+            val anim = AnimationUtils.loadAnimation(context, R.anim.left_to_right)
+            binding.shineView.startAnimation(anim)
+            anim.setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    binding.shineView.startAnimation(anim)
+                }
+
+                override fun onAnimationRepeat(animation: Animation?) {
+                }
+
+            })
+
+
+
             binding.semesterName.text = semesters.semesterName
             if (semesters.courses.isNullOrEmpty()) {
                 binding.coursesNames.text = context.getString(R.string.empty_list)

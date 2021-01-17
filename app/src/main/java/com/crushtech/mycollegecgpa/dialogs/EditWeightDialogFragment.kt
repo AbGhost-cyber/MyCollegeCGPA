@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class EditWeightDialogFragment : DialogFragment() {
     private var positiveListener: ((Boolean, GradeSimplified) -> Unit)? = null
-    private var _binding: EditWeightDialogBinding? = null
+    private lateinit var binding: EditWeightDialogBinding
 
     fun setPositiveListener(listener: (Boolean, GradeSimplified) -> Unit) {
         positiveListener = listener
@@ -22,13 +22,13 @@ class EditWeightDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        _binding = EditWeightDialogBinding.inflate(
+        binding = EditWeightDialogBinding.inflate(
             LayoutInflater.from(context), null,
             false
         )
-        val binding = _binding
+
         val editWeightDialog = Dialog(requireContext())
-        editWeightDialog.setContentView(binding!!.root)
+        editWeightDialog.setContentView(binding.root)
         val simplifiedGrade = arguments?.getSerializable("GradeSimplified") as GradeSimplified?
         binding.apply {
             simplifiedGrade?.let { gs ->
@@ -66,10 +66,5 @@ class EditWeightDialogFragment : DialogFragment() {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         return editWeightDialog
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
     }
 }

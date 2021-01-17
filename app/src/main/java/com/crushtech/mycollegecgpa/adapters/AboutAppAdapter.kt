@@ -16,7 +16,7 @@ import com.crushtech.mycollegecgpa.ui.fragments.AboutAppItems
 
 class AboutAppAdapter : RecyclerView.Adapter<AboutAppViewHolder>() {
     private var counter = 0
-    private var binding: AboutAppItemsBinding? = null
+    var binding: AboutAppItemsBinding? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AboutAppViewHolder {
 
         binding = AboutAppItemsBinding.inflate(

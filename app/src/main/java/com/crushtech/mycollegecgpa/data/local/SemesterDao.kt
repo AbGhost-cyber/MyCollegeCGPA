@@ -1,7 +1,10 @@
 package com.crushtech.mycollegecgpa.data.local
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.crushtech.mycollegecgpa.data.local.entities.*
 import kotlinx.coroutines.flow.Flow
 
@@ -10,11 +13,8 @@ interface SemesterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSemester(semester: Semester)
 
-    @Insert
-    suspend fun insertCourse(course: Courses)
-
-    @Update
-    suspend fun updateCourse(course: Courses)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertCourse(course: Courses)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGrades(gradePoints: GradeClass)

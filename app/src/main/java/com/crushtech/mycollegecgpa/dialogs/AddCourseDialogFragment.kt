@@ -105,10 +105,10 @@ class AddCourseDialogFragment : DialogFragment() {
         createCourse.setOnClickListener {
             val courseName = courseNameEditText.text.toString()
             val creditHours = creditHoursEditText.text.toString()
-
+            val parentView = (activity as MainActivity).activityMainBinding
             if (courseName.isEmpty() || creditHours.isEmpty()) {
                 SimpleCustomSnackbar.make(
-                    MainActivity().activityMainBinding.root,
+                    parentView.root,
                     "please input all fields", Snackbar.LENGTH_LONG, null,
                     R.drawable.ic_baseline_error_outline_24, "",
                     Color.RED

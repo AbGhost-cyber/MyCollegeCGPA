@@ -1,7 +1,9 @@
 package com.crushtech.mycollegecgpa.ui.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -10,16 +12,25 @@ import com.crushtech.mycollegecgpa.R
 import com.crushtech.mycollegecgpa.adapters.AboutAppAdapter
 import com.crushtech.mycollegecgpa.databinding.AboutAppLayoutBinding
 import com.crushtech.mycollegecgpa.ui.BaseFragment
-import com.crushtech.mycollegecgpa.utils.viewBinding
+import com.crushtech.mycollegecgpa.utils.viewLifecycle
 
 class AboutAppItems(val title: String, val subItem: String) {
     var isExpanded = false
 }
 
 class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
-    private val binding by viewBinding(AboutAppLayoutBinding::bind)
+    private var binding: AboutAppLayoutBinding by viewLifecycle()
 
     private lateinit var aboutAppItemsAdapter: AboutAppAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = AboutAppLayoutBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -106,14 +117,21 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
             AboutAppItems(
                 "can i access my data on multiple devices?",
                 getString(R.string.can_i_access_on_multiple_device)
-            ))
+            )
+        )
         aboutAppItemsList.add(
             AboutAppItems(
                 "the grading system in the app doesn't correspond to that of my college",
                 getString(R.string.how_to_edit_grade_points)
-            ))
+            )
+        )
 
-         return aboutAppItemsList
+        return aboutAppItemsList
+    }
+
+    override fun onDestroy() {
+        aboutAppItemsAdapter.binding = null
+        super.onDestroy()
     }
 }
 

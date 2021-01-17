@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.crushtech.mycollegecgpa.MainActivity
@@ -22,12 +21,11 @@ import com.crushtech.mycollegecgpa.dialogs.AddCourseDialogFragment
 import com.crushtech.mycollegecgpa.dialogs.DeleteCourseDialogFragment
 import com.crushtech.mycollegecgpa.ui.BaseFragment
 import com.crushtech.mycollegecgpa.ui.fragments.weights.WeightViewModel
-import com.crushtech.mycollegecgpa.utils.Constants
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.NO_EMAIL
 import com.crushtech.mycollegecgpa.utils.Constants.customRecyclerViewScrollListener
 import com.crushtech.mycollegecgpa.utils.Status
-import com.crushtech.mycollegecgpa.utils.viewBinding
+import com.crushtech.mycollegecgpa.utils.viewLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import javax.inject.Inject
@@ -38,7 +36,7 @@ const val DELETE_COURSE_DIALOG = "delete course dialog"
 
 @AndroidEntryPoint
 class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
-    val binding by viewBinding(CourseListLayoutBinding::bind)
+    private var binding: CourseListLayoutBinding by viewLifecycle()
     private val args: CourseListFragmentArgs by navArgs()
 
     private val viewModel: CourseViewModel by viewModels()
@@ -49,25 +47,20 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
     private lateinit var courseAdapter: CourseAdapter
 
-    private var firsTimeOpen = false
-
     private var authEmail: String? = null
 
     var isOwner: Boolean = false
-
     @Inject
     lateinit var sharedPrefs: SharedPreferences
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        if (!(sharedPrefs.contains(Constants.COURSE_FIRST_TIME_OPEN))) {
-            firsTimeOpen = true
-            sharedPrefs.edit().putBoolean(Constants.COURSE_FIRST_TIME_OPEN, true).apply()
-        }
-        return super.onCreateView(inflater, container, savedInstanceState)
+    ): View {
+        binding = CourseListLayoutBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     @ExperimentalStdlibApi
@@ -146,7 +139,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
     }
 
     private fun subscribeToObservers() {
-        weightViewModel.allGradePoints.observe(viewLifecycleOwner, Observer {
+        weightViewModel.allGradePoints.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
@@ -181,16 +174,10 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
                 when (result.status) {
                     Status.SUCCESS -> {
                         val semester = result.data!!
-                        if (firsTimeOpen) {
-                            viewModel.insertCourses(semester.courses, semester.id)
-                        }
-                        currentSemester?.let { sem ->
-                            if (sem.courses.isEmpty() && semester.courses.isNotEmpty()) {
-                                viewModel.insertCourses(semester.courses, semester.id)
-                            }
-                        }
-
                         currentSemester = semester
+                        viewModel.updateCourses(semester.courses, semester.id)
+
+                        //play with create and save icons visibility
                         currentSemester?.let { _semester ->
                             if (_semester.owners[0] == authEmail || _semester.owners == listOf(
                                     authEmail
@@ -293,7 +280,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         )
         //close view if open
             ObjectAnimator.ofFloat(
-                courseAdapter.binding.itemsLayout, "translationX",
+                courseAdapter.binding?.itemsLayout, "translationX",
                 0F
             ).apply {
                 duration = 50
@@ -311,7 +298,6 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
     private fun insertCourse(course: Courses, message: String) {
         val semesterId = currentSemester?.id ?: UUID.randomUUID().toString()
-        course.semesterId = semesterId
         currentGradePoints?.let {
             course.gradesPoints = listOf(it)
         }
@@ -326,7 +312,6 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
     fun updateCourse(course: Courses, message: String, coursePosition: Int) {
         val semesterId = currentSemester?.id ?: UUID.randomUUID().toString()
-        course.semesterId = semesterId
         currentGradePoints?.let {
             course.gradesPoints = listOf(it)
         }
@@ -361,6 +346,11 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
         currentSemester?.let {
             viewModel.deleteCourse(course.id, it.id)
         }
+    }
+
+    override fun onDestroy() {
+        courseAdapter.binding = null
+        super.onDestroy()
     }
 }
 

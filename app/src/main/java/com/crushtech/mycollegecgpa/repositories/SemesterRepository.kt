@@ -11,7 +11,6 @@ import com.crushtech.mycollegecgpa.data.local.entities.*
 import com.crushtech.mycollegecgpa.data.remote.SemesterApi
 import com.crushtech.mycollegecgpa.data.remote.requests.*
 import com.crushtech.mycollegecgpa.ui.fragments.extras.OthersFragmentDirections
-import com.crushtech.mycollegecgpa.utils.Constants.COURSE_FIRST_TIME_OPEN
 import com.crushtech.mycollegecgpa.utils.Constants.IS_LOGGED_IN
 import com.crushtech.mycollegecgpa.utils.Constants.IS_THIRD_PARTY
 import com.crushtech.mycollegecgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
@@ -156,9 +155,6 @@ class SemesterRepository @Inject constructor(
         sharedPreferences.edit().remove(
             STATISTICS_FIRST_TIME_OPEN
         ).apply()
-        sharedPreferences.edit().remove(
-            COURSE_FIRST_TIME_OPEN
-        ).apply()
 
         val navOptions = NavOptions.Builder()
             .setPopUpTo(R.id.homeFragment, true)
@@ -205,7 +201,7 @@ class SemesterRepository @Inject constructor(
                 null
             )
         }
-        semesterDao.insertCourse(courses)
+        semesterDao.upsertCourse(courses.also { it.semesterId = semesterId })
     }
 
     suspend fun updateAddedCourse(courses: Courses, semesterId: String, coursePosition: Int) {
@@ -225,7 +221,7 @@ class SemesterRepository @Inject constructor(
                 null
             )
         }
-        semesterDao.updateCourse(courses)
+        semesterDao.upsertCourse(courses.also { it.semesterId = semesterId })
     }
 
     private suspend fun insertSemesters(notes: List<Semester>) {
@@ -265,9 +261,11 @@ class SemesterRepository @Inject constructor(
 
     }
 
-
-    suspend fun insertCourses(courses: List<Courses>, semesterId: String) {
-        courses.forEach { insertCourseForSemester(it, semesterId) }
+    //    suspend fun insertCourses(courses: List<Courses>, semesterId: String) {
+//        courses.forEach { insertCourseForSemester(it, semesterId) }
+//    }
+    suspend fun updateCourses(courses: List<Courses>, semesterId: String) {
+        courses.forEach { updateAddedCourse(it, semesterId, courses.indexOf(it)) }
     }
 
     suspend fun insertGradesPoints(gradePoints: GradeClass) {
@@ -463,6 +461,7 @@ class SemesterRepository @Inject constructor(
         }
     }
 }
+
 
 
 

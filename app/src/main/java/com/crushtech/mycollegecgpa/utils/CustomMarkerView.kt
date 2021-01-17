@@ -2,6 +2,7 @@ package com.crushtech.mycollegecgpa.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.view.LayoutInflater
 import com.crushtech.mycollegecgpa.data.local.entities.Semester
 import com.crushtech.mycollegecgpa.databinding.MarkerViewBinding
 import com.github.mikephil.charting.components.MarkerView
@@ -16,7 +17,9 @@ class CustomMarkerView(
     c: Context,
     layoutId: Int
 ) : MarkerView(c, layoutId) {
-    private var binding: MarkerViewBinding = MarkerViewBinding.bind(this)
+    private var binding = MarkerViewBinding.inflate(
+        LayoutInflater.from(context), this, true
+    )
 
     override fun getOffset(): MPPointF {
         return MPPointF(-width / 2f, -height.toFloat())
