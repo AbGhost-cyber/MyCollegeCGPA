@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "637347956422",
+    "project_id": "my-college-cgpa",
+    "storage_bucket": "my-college-cgpa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637347956422:android:8dce5c26ab4a6c89f939c7",
+        "android_client_info": {
+          "package_name": "com.crushtech.myccgpa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "637347956422-7cmdthv0en4b20a28jmsrlres5bauaah.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.crushtech.myccgpa",
+            "certificate_hash": "a48995d148d2122b9f3d59e9a255f93b54c6e075"
+          }
+        },
+        {
+          "client_id": "637347956422-3qpeh0fpifufdt5v0kec2ekt44n1hfm4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnTM-a2UoGmH6I-c6rhz4zRZKxcKQBc3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "637347956422-3qpeh0fpifufdt5v0kec2ekt44n1hfm4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
