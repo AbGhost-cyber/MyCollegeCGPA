@@ -83,5 +83,5 @@
     <string name="can_i_access_on_multiple_device">Yes, using facebook, google or even email and password sign-in</string>
     <string name="how_is_my_gpa_calculated">we calculate your gpa by totaling all your credit hours, numerical grade of your grade points and then dividing the total credit hours by the total numerical grade.</string>
     <string name="how_to_edit_grade_points">No worries, you can edit the default grading to suit your school\'s, simply go to the extras screen, click on edit grade points.</string>
-
+    <string name="itid_id" translatable="false">450160043536-1mhif71dpj9pll0e2dvb1b24tje4h8j0.apps.googleusercontent.com</string>
 </resources>

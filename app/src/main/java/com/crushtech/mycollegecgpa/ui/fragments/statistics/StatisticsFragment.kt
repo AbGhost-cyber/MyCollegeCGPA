@@ -72,14 +72,10 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (!(sharedPrefs.contains(STATISTICS_FIRST_TIME_OPEN))) {
-            firsTimeOpen = true
-            sharedPrefs.edit().putBoolean(STATISTICS_FIRST_TIME_OPEN, true).apply()
-
-        }
         binding = StatisticsFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -568,6 +564,11 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!(sharedPrefs.contains(STATISTICS_FIRST_TIME_OPEN))) {
+            firsTimeOpen = true
+            sharedPrefs.edit().putBoolean(STATISTICS_FIRST_TIME_OPEN, true).apply()
+
+        }
         setupBillingClient()
     }
 
@@ -682,4 +683,6 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
     }
 }
+
+
 

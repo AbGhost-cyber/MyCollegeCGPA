@@ -515,7 +515,9 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     }
 
     override fun onDestroy() {
-        semesterAdapter.binding = null
+        if (this::semesterAdapter.isInitialized) {
+            semesterAdapter.binding = null
+        }
         super.onDestroy()
     }
 }

@@ -349,7 +349,9 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
     }
 
     override fun onDestroy() {
-        courseAdapter.binding = null
+        if (this::courseAdapter.isInitialized) {
+            courseAdapter.binding = null
+        }
         super.onDestroy()
     }
 }

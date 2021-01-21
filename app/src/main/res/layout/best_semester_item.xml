@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:background="@drawable/shiny_bg"
-                android:rotation="25"
+                android:rotation="360"
                 app:layout_constraintStart_toStartOf="@+id/image_parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

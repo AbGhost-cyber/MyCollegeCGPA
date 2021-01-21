@@ -271,7 +271,9 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
     }
 
     override fun onDestroy() {
-        weightItemsAdapter.binding = null
+        if (this::weightItemsAdapter.isInitialized) {
+            weightItemsAdapter.binding = null
+        }
         super.onDestroy()
     }
 }

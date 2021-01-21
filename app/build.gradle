@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'dagger.hilt.android.plugin'
@@ -14,8 +13,8 @@ android {
         applicationId "com.crushtech.mycollegecgpa"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.6"
+        versionCode 8
+        versionName "1.7"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

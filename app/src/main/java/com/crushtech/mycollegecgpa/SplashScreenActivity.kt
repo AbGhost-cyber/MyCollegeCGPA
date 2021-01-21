@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.crushtech.mycollegecgpa.databinding.SplashScreenLayoutBinding
 import com.crushtech.mycollegecgpa.utils.Constants.viewBinding
@@ -24,14 +23,14 @@ class SplashScreenActivity : AppCompatActivity() {
             FLAG_FULLSCREEN
         )
         setContentView(binding.root)
-        val animation = AnimationUtils.loadAnimation(this, R.anim.tween)
-        binding.apply {
-            appLogo.animation = animation
-        }
+//        val animation = AnimationUtils.loadAnimation(this, R.anim.tween)
+//        binding.apply {
+//            appLogo.animation = animation
+//        }
 
         val intent = Intent(this, MainActivity::class.java)
         GlobalScope.launch(Dispatchers.Main) {
-            delay(3000L)
+            delay(5000L)
             startActivity(intent)
             finish()
         }

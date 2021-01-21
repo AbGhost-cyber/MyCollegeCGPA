@@ -20,6 +20,7 @@ class AboutAppItems(val title: String, val subItem: String) {
 
 class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
     private var binding: AboutAppLayoutBinding by viewLifecycle()
+    lateinit var aboutAppItemsList: MutableList<AboutAppItems>
 
     private lateinit var aboutAppItemsAdapter: AboutAppAdapter
 
@@ -41,6 +42,7 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
             activityMainBinding.titleBarText.text = getString(R.string.FAQs)
 
             setUpRecyclerview()
+            initDataForRv()
         }
         aboutAppItemsAdapter.setOnItemClickListener {
         }
@@ -52,22 +54,22 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
         (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         layoutManager = LinearLayoutManager(requireContext())
         addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
-        aboutAppItemsAdapter.differ.submitList(initDataForRv())
         setHasFixedSize(true)
     }
 
-    private fun initDataForRv(): List<AboutAppItems> {
-        val aboutAppItemsList = ArrayList<AboutAppItems>()
+    private fun initDataForRv() {
         aboutAppItemsList.add(
             AboutAppItems(
                 "What is this app about?",
                 getString(R.string.about_mycollege_cgpa)
-            ))
+            )
+        )
         aboutAppItemsList.add(
             AboutAppItems(
                 "How do i create a semester?",
-               getString(R.string.how_to_create_a_semester)
-            ))
+                getString(R.string.how_to_create_a_semester)
+            )
+        )
         aboutAppItemsList.add(
             AboutAppItems(
                 "How to create a course for a semester?",
@@ -125,12 +127,13 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
                 getString(R.string.how_to_edit_grade_points)
             )
         )
-
-        return aboutAppItemsList
+        aboutAppItemsAdapter.differ.submitList(aboutAppItemsList)
     }
 
     override fun onDestroy() {
-        aboutAppItemsAdapter.binding = null
+        if (this::aboutAppItemsAdapter.isInitialized) {
+            aboutAppItemsAdapter.binding = null
+        }
         super.onDestroy()
     }
 }
