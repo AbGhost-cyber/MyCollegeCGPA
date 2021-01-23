@@ -250,16 +250,26 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
                             }
                         }
-                        results.data?.let { semester ->
-                            semesterAdapter.differ.submitList(semester)
-                            checkForEmptyState(semester)
-                            binding.swipeRefreshLayout.isRefreshing = false
+                        results.data?.let { semesters ->
+                            semesterAdapter.differ.submitList(semesters)
+                            if (semesters.isNotEmpty()) {
+                                bestSemesterAdapter.differ.submitList(
+                                    listOf(getBestSemester(semesters))
+                                )
+                            }
+                            checkForEmptyState(semesters)
                         }
+                        binding.swipeRefreshLayout.isRefreshing = false
                     }
                     Status.LOADING -> {
-                        results.data?.let { semester ->
-                            semesterAdapter.differ.submitList(semester)
-                            checkForEmptyState(semester)
+                        results.data?.let { semesters ->
+                            semesterAdapter.differ.submitList(semesters)
+                            if (semesters.isNotEmpty()) {
+                                bestSemesterAdapter.differ.submitList(
+                                    listOf(getBestSemester(semesters))
+                                )
+                            }
+                            checkForEmptyState(semesters)
                         }
                         binding.swipeRefreshLayout.isRefreshing = true
                     }
@@ -521,6 +531,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         super.onDestroy()
     }
 }
+
+
 
 
 

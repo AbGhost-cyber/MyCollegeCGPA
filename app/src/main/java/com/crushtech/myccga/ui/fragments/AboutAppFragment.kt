@@ -20,7 +20,7 @@ class AboutAppItems(val title: String, val subItem: String) {
 
 class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
     private var binding: AboutAppLayoutBinding by viewLifecycle()
-    lateinit var aboutAppItemsList: MutableList<AboutAppItems>
+    lateinit var aboutAppItemsList: ArrayList<AboutAppItems>
 
     private lateinit var aboutAppItemsAdapter: AboutAppAdapter
 
@@ -58,6 +58,7 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
     }
 
     private fun initDataForRv() {
+        aboutAppItemsList = ArrayList()
         aboutAppItemsList.add(
             AboutAppItems(
                 "What is this app about?",
@@ -102,12 +103,6 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
         )
         aboutAppItemsList.add(
             AboutAppItems(
-                "what are grade/quality points?",
-                getString(R.string.what_are_quality_points)
-            )
-        )
-        aboutAppItemsList.add(
-            AboutAppItems(
                 "How do i share a semester?",
                 "navigate to home screen -> swipe left on the semester you wish to share -> input the receiver's email. please note, the receiver must have an existing account on the app."
             )
@@ -134,6 +129,12 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
             AboutAppItems(
                 "the grading system in the app doesn't correspond to that of my college",
                 getString(R.string.how_to_edit_grade_points)
+            )
+        )
+        aboutAppItemsList.add(
+            AboutAppItems(
+                "what are grades or quality points?",
+                getString(R.string.what_are_quality_points)
             )
         )
         aboutAppItemsAdapter.differ.submitList(aboutAppItemsList)

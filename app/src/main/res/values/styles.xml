@@ -27,7 +27,13 @@
 
     <dimen name="snackbar_textsize">17sp</dimen>
 
-    <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar" />
-
+    <!--Splash screen theme.-->
+    <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@mipmap/ic_launcher_round</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 
 </resources>
