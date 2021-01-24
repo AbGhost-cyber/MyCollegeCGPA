@@ -544,5 +544,3 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
 
 
-
-

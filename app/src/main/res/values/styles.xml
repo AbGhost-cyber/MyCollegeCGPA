@@ -8,7 +8,7 @@
     </style>
 
     <style name="BottomNavigationViewTextStyle">
-        <item name="fontFamily">@font/capriola</item>
+        <item name="fontFamily">@font/montserrat</item>
     </style>
 
     <style name="AppTheme.WhiteAccent">

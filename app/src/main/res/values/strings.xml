@@ -44,7 +44,7 @@
     <string name="share_this_app_txt">Share this App</string>
     <string name="edit_course_grade_points">Edit Course Grade points</string>
     <string name="create_semester">create semester</string>
-    <string name="no_of_pdf_downloads_remaining">No of pdf downloads remaining</string>
+    <string name="no_of_pdf_downloads_remaining">Numbers of pdf downloads remaining</string>
     <string name="click_to_purchase_more">click to purchase more</string>
     <string name="save_as_pdf">Save as pdf</string>
     <string name="total_courses_offered">Total courses offered</string>
@@ -83,5 +83,6 @@
     <string name="can_i_access_on_multiple_device">Yes, using facebook, google or even email and password sign-in</string>
     <string name="how_is_my_gpa_calculated">we calculate your gpa by totaling all your credit hours, numerical grade of your grade points and then dividing the total credit hours by the total numerical grade.</string>
     <string name="how_to_edit_grade_points">No worries, you can edit the default grading to suit your school\'s, simply go to the extras screen, click on edit grade points.</string>
-    <string name="itid_id" translatable="false">131259113879-eve2mo39mh5bgkbp91dcqrkap32va4d1.apps.googleusercontent.com</string>
+    <string name="itid_id" translatable="false">396570567028-evab0lus97r9igt2v21r6a8jbe5506hp.apps.googleusercontent.com</string>
+    <string name="input_credit_hours_below">input credit hours below</string>
 </resources>

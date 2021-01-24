@@ -320,7 +320,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
     private fun createGoogleSignInRequest() {
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.itid_id))
+            .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
 

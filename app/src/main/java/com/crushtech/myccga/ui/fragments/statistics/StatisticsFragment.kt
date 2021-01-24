@@ -290,7 +290,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                         IndexAxisValueFormatter(semesterCourseList)
 
                     val typeface =
-                        ResourcesCompat.getFont(requireContext(), R.font.capriola)
+                        ResourcesCompat.getFont(requireContext(), R.font.montserrat)
 
 
                     val colorList = listOf(

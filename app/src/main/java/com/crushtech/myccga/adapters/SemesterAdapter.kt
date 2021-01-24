@@ -143,7 +143,7 @@ class SemesterAdapter(private val authEmail: String) : Adapter<SemesterViewHolde
             override fun performFiltering(constraints: CharSequence?): FilterResults {
                 val charSearch = constraints.toString()
 
-                if (charSearch.isEmpty()) {
+                if (charSearch.isEmpty() && this@SemesterAdapter::actualList.isInitialized) {
                     filteredList.addAll(actualList)
                 } else {
                     val results = ArrayList<Semester>()
