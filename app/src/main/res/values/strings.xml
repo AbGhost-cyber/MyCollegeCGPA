@@ -85,4 +85,6 @@
     <string name="how_to_edit_grade_points">No worries, you can edit the default grading to suit your school\'s, simply go to the extras screen, click on edit grade points.</string>
     <string name="itid_id" translatable="false">396570567028-evab0lus97r9igt2v21r6a8jbe5506hp.apps.googleusercontent.com</string>
     <string name="input_credit_hours_below">input credit hours below</string>
+    <string name="personal_information">Personal Information</string>
+    <string name="account">Account</string>
 </resources>

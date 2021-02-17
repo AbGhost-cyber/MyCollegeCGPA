@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.crushtech.myccga.ui.fragments.home.HomeFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.home.HomeFragment"
         android:label="HomeFragment"
         tools:layout="@layout/home_layout">
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/extrasFragment"
-        android:name="com.crushtech.myccga.ui.fragments.extras.OthersFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.extras.OthersFragment"
         android:label="OthersFragment"
         tools:layout="@layout/extras_layout">
         <action
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.crushtech.myccga.ui.fragments.auth.LoginFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.auth.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/login_layout">
         <action
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.crushtech.myccga.ui.fragments.auth.SignUpFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.auth.SignUpFragment"
         android:label="SignUpFragment"
         tools:layout="@layout/signup_layout">
         <action
@@ -107,7 +107,7 @@
     </fragment>
     <fragment
         android:id="@+id/courseListFragment"
-        android:name="com.crushtech.myccga.ui.fragments.course.CourseListFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.course.CourseListFragment"
         android:label="CourseListFragment"
         tools:layout="@layout/course_list_layout">
         <argument
@@ -119,13 +119,13 @@
     </fragment>
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.crushtech.myccga.ui.fragments.statistics.StatisticsFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.statistics.StatisticsFragment"
         android:label="My Statistics"
         tools:layout="@layout/statistics_fragment" />
 
     <fragment
         android:id="@+id/chooseLoginOrSignUpFragment"
-        android:name="com.crushtech.myccga.ui.fragments.ChooseLoginOrSignUpFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.ChooseLoginOrSignUpFragment"
         android:label="ChooseLoginOrSignUpFragment"
         tools:layout="@layout/choose_login_signup_layout">
         <action
@@ -152,12 +152,12 @@
     </fragment>
     <fragment
         android:id="@+id/weightFragment"
-        android:name="com.crushtech.myccga.ui.fragments.weights.WeightFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.weights.WeightFragment"
         android:label="My Weights"
         tools:layout="@layout/weight_layout" />
     <fragment
         android:id="@+id/aboutAppFragment"
-        android:name="com.crushtech.myccga.ui.fragments.AboutAppFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.AboutAppFragment"
         android:label="AboutAppFragment" />
 
 </navigation>

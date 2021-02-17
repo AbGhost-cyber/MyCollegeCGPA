@@ -13,6 +13,7 @@
     <color name="itemOwned">#FFFFFF</color>
     <color name="fb_color">#1877F2</color>
     <color name="google_color">#F44336</color>
+    <color name="colorPrimary200">#742A5A77</color>
 
 
 </resources>
