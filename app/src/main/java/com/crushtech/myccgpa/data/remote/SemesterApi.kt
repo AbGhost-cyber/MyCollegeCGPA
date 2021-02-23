@@ -3,6 +3,7 @@ package com.crushtech.myccgpa.data.remote
 
 import com.crushtech.myccgpa.data.local.entities.GradeClass
 import com.crushtech.myccgpa.data.local.entities.Semester
+import com.crushtech.myccgpa.data.local.entities.SemesterRequests
 import com.crushtech.myccgpa.data.local.entities.UserPdfDownloads
 import com.crushtech.myccgpa.data.remote.requests.*
 import com.crushtech.myccgpa.data.remote.responses.SimpleResponse
@@ -50,9 +51,24 @@ interface SemesterApi {
         @Body deleteCourseRequest: DeleteCourseRequest
     ): Response<ResponseBody>
 
-    @POST("/addOwnerToSemester")
+    @POST("/deleteSemRequests")
+    suspend fun deleteSemRequest(
+        @Body deleteSemRequest: DeleteSemRequest
+    ): Response<ResponseBody>
+
+    @POST("/addUserToSemester")
     suspend fun addOwnerToSemester(
-        @Body addOwnerRequest: AddOwnerRequest
+        @Body addUserToSemesterRequest: AddUserToSemesterRequest
+    ): Response<SimpleResponse>
+
+    @POST("/acceptSharedSemester")
+    suspend fun acceptSharedSemester(
+        @Body acceptSharedSemester: AcceptSemesterRequest
+    ): Response<SimpleResponse>
+
+    @POST("/rejectSharedSemester")
+    suspend fun rejectSharedSemester(
+        @Body rejectSharedSemester: RejectSemesterRequest
     ): Response<SimpleResponse>
 
     @POST("/addCourseToSemester")
@@ -86,4 +102,7 @@ interface SemesterApi {
 
     @GET("/getUserGradePoints")
     suspend fun getUserGradePoints(): Response<GradeClass>
+
+    @GET("/getSemReqLists")
+    suspend fun getSemesterRequestList(): Response<List<SemesterRequests>>
 }

@@ -5,6 +5,11 @@
     android:id="@+id/semester_nav_graph"
     app:startDestination="@id/chooseLoginOrSignUpFragment">
 
+    <action
+        android:id="@+id/action_global_semesterRequestFragment"
+        app:destination="@+id/semesterRequestFragment"
+        app:launchSingleTop="true" />
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.crushtech.myccgpa.ui.fragments.home.HomeFragment"
@@ -23,8 +28,8 @@
     </fragment>
     <fragment
         android:id="@+id/extrasFragment"
-        android:name="com.crushtech.myccgpa.ui.fragments.extras.OthersFragment"
-        android:label="OthersFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.settings.SettingsFragment"
+        android:label="Settings"
         tools:layout="@layout/extras_layout">
         <action
             android:id="@+id/action_othersFragment_to_loginFragment"
@@ -50,6 +55,19 @@
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/fragment_fade_enter"
             app:popExitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_extrasFragment_to_semesterRequestFragment"
+            app:destination="@id/semesterRequestFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_extrasFragment_to_personalInfoFragment"
+            app:destination="@id/personalInfoFragment" />
+        <action
+            android:id="@+id/action_extrasFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -159,5 +177,17 @@
         android:id="@+id/aboutAppFragment"
         android:name="com.crushtech.myccgpa.ui.fragments.AboutAppFragment"
         android:label="AboutAppFragment" />
+    <fragment
+        android:id="@+id/semesterRequestFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.semesterrequest.SemesterRequestFragment"
+        android:label="SemesterRequestFragment" />
+    <fragment
+        android:id="@+id/personalInfoFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.personalinfo.PersonalInfoFragment"
+        android:label="PersonalInfoFragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.crushtech.myccgpa.ui.fragments.NotificationFragment"
+        android:label="NotificationFragment" />
 
 </navigation>

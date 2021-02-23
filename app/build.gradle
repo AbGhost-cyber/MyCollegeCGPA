@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     compileSdkVersion 30
@@ -15,7 +16,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 9
-        versionName "1.8"
+        versionName "My College CGPA v1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -43,6 +44,7 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
    // implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+//    implementation "androidx.collection:collection-ktx:1.1.0"
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -65,7 +67,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.0"
 
+    //security
     implementation "androidx.security:security-crypto:1.1.0-alpha03"
 
     // Room
@@ -84,10 +88,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 
-    // Coroutine Lifecycle Scopes
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.0"
+
     // Navigation Components
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.3"
     implementation "androidx.navigation:navigation-ui-ktx:2.3.3"
@@ -96,9 +97,8 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.2.0"
 
     //Dagger - Hilt
-    implementation "com.google.dagger:hilt-android:2.31-alpha"
-    kapt "com.google.dagger:hilt-android-compiler:2.30.1-alpha"
-
+    implementation "com.google.dagger:hilt-android:2.31.2-alpha"
+    kapt "com.google.dagger:hilt-android-compiler:2.31.2-alpha"
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt "androidx.hilt:hilt-compiler:1.0.0-alpha03"
 
@@ -153,4 +153,8 @@ dependencies {
 
     //one signal
     implementation 'com.onesignal:OneSignal:4.1.0'
+
+    //crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

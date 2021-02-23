@@ -14,9 +14,9 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
+import androidx.core.view.isEmpty
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
@@ -27,7 +27,9 @@ import com.crushtech.myccgpa.MainActivity
 import com.crushtech.myccgpa.R
 import com.crushtech.myccgpa.adapters.BestSemesterAdapter
 import com.crushtech.myccgpa.adapters.SemesterAdapter
+import com.crushtech.myccgpa.data.local.entities.STATE
 import com.crushtech.myccgpa.data.local.entities.Semester
+import com.crushtech.myccgpa.data.local.entities.SemesterRequests
 import com.crushtech.myccgpa.databinding.HomeLayoutBinding
 import com.crushtech.myccgpa.dialogs.AddOwnerDialogFragment
 import com.crushtech.myccgpa.dialogs.AddSemesterDialogFragment
@@ -110,7 +112,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     as AddOwnerDialogFragment?
             addOwnerDialog?.apply {
                 setPositiveListener { owner, clicked ->
-                    addOwnerToSemester(owner)
+                    addUserToSemester(owner)
                     if (clicked) {
                         semesterAdapter.notifyDataSetChanged()
                     }
@@ -219,13 +221,13 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     }
 
     private fun getBestSemester(semester: List<Semester>): Semester? {
-        return semester.maxBy {
+        return semester.maxByOrNull {
             it.getGPA()
         }
     }
 
     private fun subscribeToObservers() {
-        homeViewModel.allSemesters.observe(viewLifecycleOwner, Observer {
+        homeViewModel.allSemesters.observe(viewLifecycleOwner, {
             it?.let { event ->
                 val results = event.peekContent()
                 when (results.status) {
@@ -276,12 +278,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                 }
             }
         })
-        swipingItem.observe(viewLifecycleOwner, Observer {
+        swipingItem.observe(viewLifecycleOwner, {
             binding.swipeRefreshLayout.isEnabled = !it
         })
 
 
-        homeViewModel.addOwnerStatus.observe(viewLifecycleOwner, Observer { event ->
+        homeViewModel.addOwnerStatus.observe(viewLifecycleOwner, { event ->
             event?.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
@@ -354,7 +356,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     private fun showAddOwnerToSemesterDialog() {
         AddOwnerDialogFragment().apply {
             setPositiveListener { owner, clicked ->
-                addOwnerToSemester(owner)
+                addUserToSemester(owner)
                 if (clicked) {
                     semesterAdapter.notifyDataSetChanged()
                 }
@@ -369,9 +371,10 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
     }
 
 
-    private fun addOwnerToSemester(email: String) {
+    private fun addUserToSemester(email: String) {
         currentSemester?.let {
-            homeViewModel.addOwnerToSemester(email, it.id)
+            val semesterRequests = SemesterRequests(authEmail!!, it.id, STATE.PENDING)
+            homeViewModel.addOwnerToSemester(semesterRequests, email, it.id)
         }
     }
 
@@ -398,6 +401,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
             val allItemsHasNoCourses = semesterList.all {
                 it.courses.isNullOrEmpty()
+
             }
             if (allItemsHasNoCourses) {
                 binding.bestSemesterText2.visibility = VISIBLE
@@ -442,7 +446,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             }
             if (direction == RIGHT) {
                 homeViewModel.observeSemesterById(semester.id)
-                    .observe(viewLifecycleOwner, Observer {
+                    .observe(viewLifecycleOwner, {
                         it?.let { semester ->
                             currentSemester = semester
                         }

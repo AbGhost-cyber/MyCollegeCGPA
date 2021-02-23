@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.*
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.crushtech.myccgpa.MainActivity
@@ -119,7 +118,7 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
 
 
     private fun setUpObservers() {
-        weightViewModel.allGradePoints.observe(viewLifecycleOwner, Observer {
+        weightViewModel.allGradePoints.observe(viewLifecycleOwner, {
             val result = it.peekContent()
             when (result.status) {
                 Status.SUCCESS -> {

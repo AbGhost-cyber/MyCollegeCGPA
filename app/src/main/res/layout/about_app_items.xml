@@ -18,7 +18,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/montserrat_bold"
+            android:fontFamily="@font/product_sans_bold"
             android:padding="10dp"
             android:text="@string/about_app_txt"
             android:textColor="@color/colorPrimary"
@@ -42,7 +42,7 @@
         android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
+        android:fontFamily="@font/product_sans_regular"
         android:textColor="@color/colorPrimary"
         android:padding="10dp" />
 </LinearLayout>

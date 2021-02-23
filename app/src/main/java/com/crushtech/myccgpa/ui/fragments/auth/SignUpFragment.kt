@@ -18,6 +18,7 @@ import com.crushtech.myccgpa.MainActivity
 import com.crushtech.myccgpa.R
 import com.crushtech.myccgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.myccgpa.databinding.SignupLayoutBinding
+import com.crushtech.myccgpa.notification.OneSignalHelper
 import com.crushtech.myccgpa.ui.BaseFragment
 import com.crushtech.myccgpa.utils.Constants
 import com.crushtech.myccgpa.utils.Constants.IS_THIRD_PARTY
@@ -102,6 +103,7 @@ class SignUpFragment : BaseFragment(R.layout.signup_layout) {
                 currentEmail ?: "",
                 currentPassword ?: ""
             )
+            OneSignalHelper.setUserExternalId(currentEmail)
             redirectLogin()
         }
         subscribeToObservers()

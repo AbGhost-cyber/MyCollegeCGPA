@@ -1,6 +1,5 @@
 package com.crushtech.myccgpa.ui.fragments.course
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,10 +9,13 @@ import com.crushtech.myccgpa.data.local.entities.Semester
 import com.crushtech.myccgpa.repositories.SemesterRepository
 import com.crushtech.myccgpa.utils.Events
 import com.crushtech.myccgpa.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CourseViewModel @ViewModelInject constructor(
+@HiltViewModel
+class CourseViewModel @Inject constructor(
     private val repository: SemesterRepository
 ) : ViewModel() {
     private val _semester = MutableLiveData<Events<Resource<Semester>>>()
@@ -35,9 +37,6 @@ class CourseViewModel @ViewModelInject constructor(
             repository.updateAddedCourse(courses, semesterId, coursePosition)
         }
 
-    //    fun insertCourses(courses: List<Courses>, semesterId: String) = viewModelScope.launch {
-//        repository.insertCourses(courses, semesterId)
-//    }
     fun updateCourses(courses: List<Courses>, semesterId: String) = viewModelScope.launch {
         repository.updateCourses(courses, semesterId)
     }
@@ -76,8 +75,8 @@ class CourseViewModel @ViewModelInject constructor(
         repository.deleteCourse(courseId, semesterId)
     }
 
-    fun deleteLocallyDeletedCourseId(deletedCourseId: String) = viewModelScope.launch {
-        repository.deleteLocallyDeletedCourseId(deletedCourseId)
-    }
+//    fun deleteLocallyDeletedCourseId(deletedCourseId: String) = viewModelScope.launch {
+//        repository.deleteLocallyDeletedCourseId(deletedCourseId)
+//    }
 
 }

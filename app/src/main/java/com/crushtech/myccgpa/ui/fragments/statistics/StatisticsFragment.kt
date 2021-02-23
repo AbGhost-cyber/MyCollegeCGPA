@@ -16,10 +16,10 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.android.billingclient.api.*
 import com.crushtech.myccgpa.MainActivity
 import com.crushtech.myccgpa.R
@@ -105,7 +105,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
         val totalCC = sharedPrefs
             .getInt(TOTAL_NUMBER_OF_COURSES, 0)
 
-        totalCourseChange.observe(viewLifecycleOwner, Observer {
+        totalCourseChange.observe(viewLifecycleOwner, {
             when {
                 it == totalCC -> {
                     binding.courseChange.text = "0"
@@ -153,7 +153,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                 )
             }
         })
-        totalCreditHoursChange.observe(viewLifecycleOwner, Observer {
+        totalCreditHoursChange.observe(viewLifecycleOwner, {
             when {
                 it == totalCH -> {
                     binding.creditHoursChange.text = "0"
@@ -202,7 +202,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
             }
         })
         NetworkUtils.getNetworkLiveData(requireContext())
-            .observe(viewLifecycleOwner, Observer { content ->
+            .observe(viewLifecycleOwner, { content ->
                 val isConnected = content.peekContent()
                 if (isConnected) {
                     pdfDownloadsViewModel.getUserPdfDownloads()
@@ -240,7 +240,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
     }
 
     private fun setUpObservers() {
-        viewModel.allSemesters.observe(viewLifecycleOwner, Observer {
+        viewModel.allSemesters.observe(viewLifecycleOwner, {
             it?.let { content ->
                 val result = content.peekContent()
                 val semester = result.data
@@ -290,7 +290,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                         IndexAxisValueFormatter(semesterCourseList)
 
                     val typeface =
-                        ResourcesCompat.getFont(requireContext(), R.font.montserrat)
+                        ResourcesCompat.getFont(requireContext(), R.font.product_sans_regular)
 
 
                     val colorList = listOf(
@@ -298,7 +298,10 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
                         getColor(requireContext(), R.color.colorAccent)
                     )
 
-                    val barDataSet = BarDataSet(allGPA, "GPA over courses").apply {
+                    val barDataSet = BarDataSet(
+                        allGPA,
+                        "GPA over courses"
+                    ).apply {
                         valueTextColor = Color.BLACK
                         valueTypeface = typeface
                         valueTextSize = 13f
@@ -315,7 +318,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
 
         })
 
-        pdfDownloadsViewModel.pdfDownloads.observe(viewLifecycleOwner, Observer { results ->
+        pdfDownloadsViewModel.pdfDownloads.observe(viewLifecycleOwner, { results ->
             when (results.status) {
                 Status.SUCCESS -> {
                     val downloads = results.data!!
@@ -659,7 +662,7 @@ class StatisticsFragment : BaseFragment(R.layout.statistics_fragment), Purchases
             .setPurchaseToken(purchaseToken)
             .build()
 
-        billingClient.consumeAsync(consumeParams) { billingResult, outToken ->
+        billingClient.consumeAsync(consumeParams) { billingResult, _ ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 //award 5 download coins
                 userPdfDownloadsCount?.let {

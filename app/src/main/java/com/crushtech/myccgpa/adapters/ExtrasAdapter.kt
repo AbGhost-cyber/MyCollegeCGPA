@@ -6,10 +6,11 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.crushtech.myccgpa.R
 import com.crushtech.myccgpa.adapters.ExtrasAdapter.ExtraViewHolder
 import com.crushtech.myccgpa.databinding.ExtraItemBinding
 
-data class ExtraItems(val itemTitle: String, val itemDrawable: Int)
+data class ExtraItems(val itemTitle: String, val itemDrawable: Int?)
 class ExtrasAdapter : RecyclerView.Adapter<ExtraViewHolder>() {
     var binding: ExtraItemBinding? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExtraViewHolder {
@@ -20,19 +21,37 @@ class ExtrasAdapter : RecyclerView.Adapter<ExtraViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ExtraViewHolder, position: Int) {
-        val item = differ.currentList[position]
+        val extraItems = differ.currentList[position]
         holder.itemView.apply {
-            binding!!.apply {
-                itemTitle.text = item.itemTitle
-                itemImage.setImageDrawable(
-                    ContextCompat.getDrawable(context, item.itemDrawable)
-                )
-            }
-            setOnClickListener {
-                onItemClickListener?.let { click ->
-                    click(item)
+            binding?.let { bind ->
+                bind.itemTitle.text = extraItems.itemTitle
+                if (bind.itemTitle.text == "Log Out") {
+                    bind.itemTitle.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            android.R.color.holo_red_light
+                        )
+                    )
+                } else {
+                    bind.itemTitle.setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            R.color.colorPrimary
+                        )
+                    )
                 }
+                bind.itemImage.setImageDrawable(
+                    extraItems.itemDrawable?.let {
+                        ContextCompat.getDrawable(context, it)
+                    }
+
+                )
+                setOnClickListener {
+                    onItemClickListener?.invoke(position)
+                }
+
             }
+
         }
     }
 
@@ -52,11 +71,13 @@ class ExtrasAdapter : RecyclerView.Adapter<ExtraViewHolder>() {
     }
     val differ = AsyncListDiffer(this, diffUtilCallback)
 
-    private var onItemClickListener: ((ExtraItems) -> Unit)? = null
+    private var onItemClickListener: ((Int) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (ExtraItems) -> Unit) {
+    fun setOnItemClickListener(listener: (Int) -> Unit) {
         this.onItemClickListener = listener
     }
 
-    inner class ExtraViewHolder(itemView: ExtraItemBinding) : RecyclerView.ViewHolder(itemView.root)
+    inner class ExtraViewHolder(
+        binding: ExtraItemBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 }

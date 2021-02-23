@@ -2,18 +2,20 @@ package com.crushtech.myccgpa.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.*
+import com.crushtech.myccgpa.R
 import com.crushtech.myccgpa.databinding.ExtrasGroupItemsBinding
-import com.crushtech.myccgpa.ui.fragments.extras.OthersFragment
 
 
 data class Group(var groupTitle: String)
-class GroupAdapter(val extraFragment: OthersFragment) :
+class GroupAdapter :
     RecyclerView.Adapter<GroupAdapter.GroupViewHolder>() {
     var binding: ExtrasGroupItemsBinding? = null
-    var accountingItemAdapter: ExtrasAdapter = ExtrasAdapter()
+    var accountItemAdapter: ExtrasAdapter = ExtrasAdapter()
     var supportItemAdapter: ExtrasAdapter = ExtrasAdapter()
     var legalItemAdapter: ExtrasAdapter = ExtrasAdapter()
+    var logoutItemAdapter: ExtrasAdapter = ExtrasAdapter()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         binding = ExtrasGroupItemsBinding.inflate(
@@ -28,11 +30,10 @@ class GroupAdapter(val extraFragment: OthersFragment) :
         holder.itemView.apply {
             binding!!.apply {
                 groupTitle.text = group.groupTitle
-
                 setList(groupRecyclerView, position)
             }
-        }
 
+        }
     }
 
     override fun getItemCount(): Int {
@@ -44,41 +45,50 @@ class GroupAdapter(val extraFragment: OthersFragment) :
             0 -> setAccountList(recyclerView)
             1 -> setSupportList(recyclerView)
             2 -> setLegalList(recyclerView)
+            3 -> setLogoutItemList(recyclerView)
         }
-
     }
 
     private fun setAccountList(recyclerView: RecyclerView) {
-        accountingItemAdapter.setOnItemClickListener {
-
-        }
-        recyclerViewProps(recyclerView)
+        setRecyclerViewProps(recyclerView, accountItemAdapter)
     }
 
     private fun setLegalList(recyclerView: RecyclerView) {
-        legalItemAdapter.setOnItemClickListener {
-
-        }
-        recyclerViewProps(recyclerView)
+        setRecyclerViewProps(recyclerView, legalItemAdapter)
     }
 
     private fun setSupportList(recyclerView: RecyclerView) {
-        supportItemAdapter.setOnItemClickListener {
-
-        }
-        recyclerViewProps(recyclerView)
+        setRecyclerViewProps(recyclerView, supportItemAdapter)
     }
 
-    private fun recyclerViewProps(recyclerView: RecyclerView) {
+    private fun setLogoutItemList(recyclerView: RecyclerView) {
+        setRecyclerViewProps(recyclerView, logoutItemAdapter)
+    }
+
+    fun setRecyclerViewProps(
+        recyclerView: RecyclerView,
+        customAdapter: ExtrasAdapter
+    ) {
         recyclerView.apply {
-            setHasFixedSize(true)
+            adapter = customAdapter
             layoutManager = LinearLayoutManager(context)
             isNestedScrollingEnabled = true
             isSaveEnabled = true
-            DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+            addItemDecoration(
+                DividerItemDecoration(
+                    recyclerView.context,
+                    DividerItemDecoration.VERTICAL
+                ).also {
+                    val divider = ContextCompat.getDrawable(
+                        recyclerView.context, R.drawable.extra_items_divider
+                    )
+                    divider?.let { drawable ->
+                        it.setDrawable(drawable)
+                    }
+                }
+            )
         }
     }
-
 
     private val diffUtilCallback = object : DiffUtil.ItemCallback<Group>() {
         override fun areItemsTheSame(oldItem: Group, newItem: Group): Boolean {
@@ -95,3 +105,4 @@ class GroupAdapter(val extraFragment: OthersFragment) :
     inner class GroupViewHolder(itemView: ExtrasGroupItemsBinding) :
         RecyclerView.ViewHolder(itemView.root)
 }
+

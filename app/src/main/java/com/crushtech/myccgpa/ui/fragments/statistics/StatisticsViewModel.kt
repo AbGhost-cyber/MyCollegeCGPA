@@ -1,6 +1,5 @@
 package com.crushtech.myccgpa.ui.fragments.statistics
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.crushtech.myccgpa.data.local.entities.UserPdfDownloads
 import com.crushtech.myccgpa.repositories.SemesterRepository
 import com.crushtech.myccgpa.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StatisticsViewModel @ViewModelInject constructor(
+@HiltViewModel
+class StatisticsViewModel @Inject constructor(
     private val semesterRepository: SemesterRepository
 ) : ViewModel() {
 

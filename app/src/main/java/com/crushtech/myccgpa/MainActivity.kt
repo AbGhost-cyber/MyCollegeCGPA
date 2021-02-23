@@ -1,10 +1,11 @@
 package com.crushtech.myccgpa
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,11 +13,15 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.crushtech.myccgpa.databinding.ActivityMainBinding
+import com.crushtech.myccgpa.notification.OneSignalHelper
+import com.crushtech.myccgpa.utils.Constants
+import com.crushtech.myccgpa.utils.Constants.ACTION_SHOW_SEM_REQ_FRAGMENT
 import com.crushtech.myccgpa.utils.Constants.viewBinding
 import com.crushtech.myccgpa.utils.NetworkUtils
 import com.crushtech.myccgpa.utils.SimpleCustomSnackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -24,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     private var successBarShown = false
     private var errorBarShown = false
     private var appBarConfig: AppBarConfiguration? = null
+
+    @Inject
+    lateinit var sharedPrefs: SharedPreferences
 
     val activityMainBinding by viewBinding(ActivityMainBinding::inflate)
 
@@ -34,6 +42,11 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.apply {
             setDisplayShowTitleEnabled(false)
         }
+        val currentEmail = sharedPrefs.getString(
+            Constants.KEY_LOGGED_IN_EMAIL,
+            Constants.NO_EMAIL
+        ) ?: Constants.NO_EMAIL
+        OneSignalHelper.setUserExternalId(currentEmail)
 
         navController = Navigation.findNavController(this, R.id.gradesNavHostFragment)
 
@@ -65,6 +78,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun navigateToSemeReqFragmentIfNeeded(intent: Intent?) {
+        if (intent?.action == ACTION_SHOW_SEM_REQ_FRAGMENT) {
+            navController.navigate(
+                R.id.action_global_semesterRequestFragment
+            )
+        }
+    }
+
 
     fun hideAppBar() {
         supportActionBar?.hide()
@@ -89,7 +110,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleNetworkChanges(errorMessage: String, successMessage: String) {
-        NetworkUtils.getNetworkLiveData(applicationContext).observe(this, Observer {
+        NetworkUtils.getNetworkLiveData(applicationContext).observe(this, {
             it?.let { event ->
                 val isConnected = event.peekContent()
                 if (isConnected && successBarShown) {

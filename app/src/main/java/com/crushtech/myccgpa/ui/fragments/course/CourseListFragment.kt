@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.crushtech.myccgpa.MainActivity
@@ -141,7 +140,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
     }
 
     private fun subscribeToObservers() {
-        weightViewModel.allGradePoints.observe(viewLifecycleOwner, Observer {
+        weightViewModel.allGradePoints.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
@@ -170,7 +169,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
 
         })
 
-        viewModel.semester.observe(viewLifecycleOwner, Observer {
+        viewModel.semester.observe(viewLifecycleOwner, {
             //return our semester resource for the first time if not handled
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
@@ -210,7 +209,7 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
             }
         })
 
-        viewModel.courses.observe(viewLifecycleOwner, Observer {
+        viewModel.courses.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
                     Status.SUCCESS -> {
@@ -358,9 +357,4 @@ class CourseListFragment : BaseFragment(R.layout.course_list_layout) {
     }
 }
 
-fun main() {
-    val letters = "i am a young boy with beards"
-    val count = letters.toCharArray().filter { it in "aeiou" }.count()
-    println(count)
-}
 

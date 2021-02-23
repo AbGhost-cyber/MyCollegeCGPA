@@ -1,17 +1,19 @@
 package com.crushtech.myccgpa.ui.fragments.auth
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.crushtech.myccgpa.repositories.SemesterRepository
 import com.crushtech.myccgpa.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-class AuthViewModel @ViewModelInject constructor(
+@HiltViewModel
+class AuthViewModel @Inject constructor(
     private val repository: SemesterRepository
 ) : ViewModel() {
     private val _registerStatus = MutableLiveData<Resource<String>>()

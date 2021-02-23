@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:ellipsize="end"
-            android:fontFamily="@font/montserrat"
+            android:fontFamily="@font/product_sans_bold"
             android:maxLines="3"
             android:textColor="@android:color/white"
             android:textSize="15sp" />

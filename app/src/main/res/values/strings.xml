@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">My College CGPA</string>
     <string name="semesters">Semesters</string>
-    <string name="extras">Extras</string>
+    <string name="settings">Settings</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="reEnterPassword">Re-enter Password</string>
@@ -59,7 +59,6 @@
     <string name="sponsored_by_mycollege_cgpa">Sponsored by MyCollege CGPA</string>
     <string name="total_credit_hours">Total credit Hours</string>
     <string name="my_stats">My Statistics</string>
-    <string name="my_extras">Extras</string>
     <string name="my_weights">My Weights</string>
     <string name="facebook_app_id">388013185616690</string>
     <string name="fb_login_protocol_scheme">fb388013185616690</string>
@@ -85,6 +84,22 @@
     <string name="how_to_edit_grade_points">No worries, you can edit the default grading to suit your school\'s, simply go to the extras screen, click on edit grade points.</string>
     <string name="itid_id" translatable="false">396570567028-evab0lus97r9igt2v21r6a8jbe5506hp.apps.googleusercontent.com</string>
     <string name="input_credit_hours_below">input credit hours below</string>
-    <string name="personal_information">Personal Information</string>
-    <string name="account">Account</string>
+    <string name="semester_requests">Semester Requests</string>
+    <string name="all_semester_requests">All Semester Requests</string>
+    <string name="rejected">Rejected</string>
+    <string name="pending">Pending</string>
+    <string name="accepted">Accepted</string>
+    <string name="filter_none">None</string>
+    <string name="filter_list_by">Filter List By:</string>
+    <string name="delete_all_courses">delete All Courses</string>
+    <string name="delete_all_semester_request">delete All Semester Request</string>
+    <string name="personal_info">Personal Information</string>
+    <string name="reject_semester_request">reject semester request</string>
+    <string name="accept_semester_request">accept semester request</string>
+    <string name="delete_semester_request">delete semester request</string>
+    <string name="cancel_process">Cancel process</string>
+    <string name="choose_an_option_to_execute">Choose an option to execute</string>
+    <string name="no_sem_req_des">Semesters request sent to you will \nappear here.</string>
+    <string name="no_semester_requests">No Semester Requests</string>
+    <string name="notifications">Notifications</string>
 </resources>

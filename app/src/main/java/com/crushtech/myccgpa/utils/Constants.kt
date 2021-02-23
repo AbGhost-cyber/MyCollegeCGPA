@@ -22,7 +22,7 @@ object Constants {
     const val DATABASE_NAME = "semester_db"
 
     //    https://mycollegecgpa.xyz/
-    const val BASE_URL = "http://0.0.0.0:8089/"
+    const val BASE_URL = "http://10.0.2.2:8081/"
 
     const val WEIGHT_MAX = 20
 
@@ -45,6 +45,7 @@ object Constants {
 
     const val PRIVACY_POLICY = "https://www.mycollegecgpa.com/privacypolicy/"
     const val ONESIGNAL_APP_ID = "ab830271-41ae-4e33-a673-23414a8c9ba2"
+    const val ACTION_SHOW_SEM_REQ_FRAGMENT = "show semester request fragment"
 
     fun setupDecorator(
         c: Canvas, recyclerView: RecyclerView,

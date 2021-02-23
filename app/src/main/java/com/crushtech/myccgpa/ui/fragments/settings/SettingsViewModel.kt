@@ -1,13 +1,15 @@
-package com.crushtech.myccgpa.ui.fragments.extras
+package com.crushtech.myccgpa.ui.fragments.settings
 
 import androidx.fragment.app.Fragment
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.crushtech.myccgpa.repositories.SemesterRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ExtrasViewModel @ViewModelInject constructor(
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
     private val semesterRepository: SemesterRepository
 ) : ViewModel() {
 

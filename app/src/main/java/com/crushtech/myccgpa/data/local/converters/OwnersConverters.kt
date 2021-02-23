@@ -1,4 +1,4 @@
-package com.crushtech.myccgpa.data.local
+package com.crushtech.myccgpa.data.local.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

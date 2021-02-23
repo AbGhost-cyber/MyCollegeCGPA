@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/extra_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,9 +12,7 @@
         android:id="@+id/head_parent"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
+        android:background="?attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/item_title"
@@ -25,7 +24,6 @@
             android:ellipsize="end"
             android:fontFamily="@font/product_sans_bold"
             android:lines="1"
-            android:text="Personal Information"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
@@ -35,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="12dp"
-            android:src="@drawable/ic_baseline_chevron_right_24" />
+            app:tint="@color/colorPrimary" />
 
     </RelativeLayout>
 </RelativeLayout>

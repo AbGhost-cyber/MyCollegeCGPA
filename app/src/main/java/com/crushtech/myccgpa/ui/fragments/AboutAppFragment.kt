@@ -40,10 +40,10 @@ class AboutAppFragment : BaseFragment(R.layout.about_app_layout) {
             showAppBar()
             supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
             activityMainBinding.titleBarText.text = getString(R.string.FAQs)
-
-            setUpRecyclerview()
-            initDataForRv()
         }
+        setUpRecyclerview()
+        initDataForRv()
+
         aboutAppItemsAdapter.setOnItemClickListener {
         }
     }

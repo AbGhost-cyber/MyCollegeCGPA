@@ -3,6 +3,7 @@ package com.crushtech.myccgpa.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.crushtech.myccgpa.data.local.converters.*
 import com.crushtech.myccgpa.data.local.entities.*
 
 @Database(
@@ -10,13 +11,17 @@ import com.crushtech.myccgpa.data.local.entities.*
         Courses::class,
         LocallyDeletedSemesterId::class,
         LocallyDeletedCourseId::class,
-        GradeClass::class],
-    version = 15, exportSchema = false
+        LocallyDeletedSemesterRequestId::class,
+        GradeClass::class,
+        SemesterRequests::class],
+    version = 19, exportSchema = false
 )
 @TypeConverters(
-    Converters::class,
+    CourseConverters::class,
     OwnersConverters::class,
-    GradePointConverters::class
+    GradePointConverters::class,
+    SemesterRequestsConverters::class,
+    StateConverters::class
 )
 abstract class SemesterDatabase : RoomDatabase() {
     abstract fun semesterDao(): SemesterDao

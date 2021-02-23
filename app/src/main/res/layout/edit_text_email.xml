@@ -12,7 +12,7 @@
         android:id="@+id/etAddOwnerEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
+        android:fontFamily="@font/product_sans_regular"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:textColor="@android:color/black"

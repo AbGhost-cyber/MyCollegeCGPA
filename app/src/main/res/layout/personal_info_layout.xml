@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dummyHolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/person_info_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/product_sans_bold"
+                android:text="Edit Personal Information"
+                android:textColor="@color/colorPrimary"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.00999999" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/info_image"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_shape"
+                app:civ_border_color="@color/black_trans"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/person_info_tv"
+                app:layout_constraintVertical_bias="0.19" />
+
+            <TextView
+                android:id="@+id/textToImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/product_sans_bold"
+                android:text="A"
+                android:textColor="@android:color/white"
+                android:textSize="39sp"
+                app:layout_constraintBottom_toBottomOf="@+id/info_image"
+                app:layout_constraintEnd_toEndOf="@+id/info_image"
+                app:layout_constraintStart_toStartOf="@+id/info_image"
+                app:layout_constraintTop_toTopOf="@+id/info_image" />
+
+            <TextView
+                android:id="@+id/profilePhotoTv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/product_sans_bold"
+                android:text="Profile Photo"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/info_image"
+                app:layout_constraintVertical_bias="0.060000002" />
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                app:layout_constraintTop_toBottomOf="@id/profilePhotoTv"
+                tools:layout_editor_absoluteX="0dp">
+
+                <TextView
+                    android:id="@+id/FN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/product_sans_bold"
+                    android:padding="10dp"
+                    android:text="First Name"
+                    android:textColor="@color/colorPrimary200"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/FirstName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/product_sans_bold"
+                    android:padding="10dp"
+                    android:text="Ab"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/LN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/FN"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/product_sans_bold"
+                    android:padding="10dp"
+                    android:text="Last Name"
+                    android:textColor="@color/colorPrimary200"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/LastName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/FirstName"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/product_sans_bold"
+                    android:padding="10dp"
+                    android:text="Dremo"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/EM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/LN"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/product_sans_bold"
+                    android:padding="10dp"
+                    android:text="Email"
+                    android:textColor="@color/colorPrimary200"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/Email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/LastName"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/product_sans_bold"
+                    android:padding="10dp"
+                    android:text="xplendo@gmail.com"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/UN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/EM"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/product_sans_bold"
+                    android:padding="10dp"
+                    android:text="Username"
+                    android:textColor="@color/colorPrimary200"
+                    android:textSize="19sp" />
+
+                <TextView
+                    android:id="@+id/UserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/Email"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/product_sans_bold"
+                    android:padding="10dp"
+                    android:text="Abdremo"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="19sp" />
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

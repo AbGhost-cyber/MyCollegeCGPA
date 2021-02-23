@@ -28,7 +28,6 @@ import com.crushtech.myccgpa.R.id.action_chooseLoginOrSignUpFragment_to_signUpFr
 import com.crushtech.myccgpa.data.remote.BasicAuthInterceptor
 import com.crushtech.myccgpa.databinding.ChooseLoginSignupLayoutBinding
 import com.crushtech.myccgpa.ui.BaseFragment
-import com.crushtech.myccgpa.ui.fragments.ChooseLoginOrSignUpFragmentDirections.Companion.actionChooseLoginOrSignUpFragmentToHomeFragment
 import com.crushtech.myccgpa.utils.Constants.IS_LOGGED_IN
 import com.crushtech.myccgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
 import com.crushtech.myccgpa.utils.Constants.KEY_PASSWORD
@@ -131,7 +130,8 @@ class ChooseLoginOrSignUpFragment : BaseFragment(R.layout.choose_login_signup_la
             .setPopUpTo(R.id.chooseLoginOrSignUpFragment, true)
             .build()
         findNavController().navigate(
-            actionChooseLoginOrSignUpFragmentToHomeFragment(),
+            ChooseLoginOrSignUpFragmentDirections
+                .actionChooseLoginOrSignUpFragmentToHomeFragment(),
             navOptions
         )
     }

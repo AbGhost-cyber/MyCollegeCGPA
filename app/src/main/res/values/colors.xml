@@ -6,6 +6,7 @@
     <color name="itemColor">#E8E4FD</color>
     <color name="textColors">#25000000</color>
     <color name="progress_color">#64DD17</color>
+    <color name="yellow">#FFAB00</color>
     <color name="low_gpa">#DD2C00</color>
     <color name="black_trans">#80000000</color>
     <color name="pink">#FAE5E5</color>
@@ -14,6 +15,7 @@
     <color name="fb_color">#1877F2</color>
     <color name="google_color">#F44336</color>
     <color name="colorPrimary200">#742A5A77</color>
+    <color name="colorPrimary50">#744F8FB6</color>
 
 
 </resources>

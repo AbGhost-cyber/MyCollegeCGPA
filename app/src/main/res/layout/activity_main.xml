@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/montserrat_bold"
+                android:fontFamily="@font/product_sans_bold"
                 android:text="My Extras "
                 android:textColor="@color/colorPrimary"
                 android:textSize="22sp"

@@ -7,10 +7,11 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.crushtech.myccgpa.R
 import com.crushtech.myccgpa.data.local.SemesterDao
+import com.crushtech.myccgpa.data.local.converters.LocallyDeletedSemesterRequestId
 import com.crushtech.myccgpa.data.local.entities.*
 import com.crushtech.myccgpa.data.remote.SemesterApi
 import com.crushtech.myccgpa.data.remote.requests.*
-import com.crushtech.myccgpa.ui.fragments.extras.OthersFragmentDirections
+import com.crushtech.myccgpa.ui.fragments.settings.SettingsFragmentDirections
 import com.crushtech.myccgpa.utils.Constants.IS_LOGGED_IN
 import com.crushtech.myccgpa.utils.Constants.IS_THIRD_PARTY
 import com.crushtech.myccgpa.utils.Constants.KEY_LOGGED_IN_EMAIL
@@ -37,6 +38,10 @@ class SemesterRepository @Inject constructor(
     private val context: Application,
     private val sharedPreferences: SharedPreferences
 ) {
+    private val authEmail = sharedPreferences.getString(
+        KEY_LOGGED_IN_EMAIL,
+        NO_EMAIL
+    ) ?: NO_EMAIL
 
     suspend fun register(email: String, password: String, username: String) =
         withContext(Dispatchers.IO) {
@@ -160,10 +165,11 @@ class SemesterRepository @Inject constructor(
             .setPopUpTo(R.id.homeFragment, true)
             .build()
         fragment.findNavController().navigate(
-            OthersFragmentDirections.actionOthersFragmentToChooseLoginOrSignUpFragment(),
+            SettingsFragmentDirections.actionOthersFragmentToChooseLoginOrSignUpFragment(),
             navOptions
         )
         semesterDao.deleteGradePoints()
+        semesterDao.deleteAllSemesterRequests()
     }
 
     suspend fun insertSemester(semester: Semester) {
@@ -224,8 +230,8 @@ class SemesterRepository @Inject constructor(
         semesterDao.upsertCourse(courses.also { it.semesterId = semesterId })
     }
 
-    private suspend fun insertSemesters(notes: List<Semester>) {
-        notes.forEach { insertSemester(it) }
+    private suspend fun insertSemesters(semester: List<Semester>) {
+        semester.forEach { insertSemester(it) }
     }
 
     suspend fun insertUserPdfDownloads(downloads: UserPdfDownloads) {
@@ -261,9 +267,6 @@ class SemesterRepository @Inject constructor(
 
     }
 
-    //    suspend fun insertCourses(courses: List<Courses>, semesterId: String) {
-//        courses.forEach { insertCourseForSemester(it, semesterId) }
-//    }
     suspend fun updateCourses(courses: List<Courses>, semesterId: String) {
         courses.forEach { updateAddedCourse(it, semesterId, courses.indexOf(it)) }
     }
@@ -302,10 +305,15 @@ class SemesterRepository @Inject constructor(
         semesterDao.insertGrades(GradeClass())
     }
 
-    suspend fun addOwnerToSemester(owner: String, semesterId: String) =
+    suspend fun addUserToSemester(semesterRequests: SemesterRequests, receiver: String) =
         withContext(Dispatchers.IO) {
             try {
-                val response = semesterApi.addOwnerToSemester(AddOwnerRequest(owner, semesterId))
+                val response = semesterApi.addOwnerToSemester(
+                    AddUserToSemesterRequest(
+                        semesterRequests,
+                        receiver
+                    )
+                )
                 if (response.isSuccessful && response.body()!!.success) {
                     Resource.success(response.body()?.message)
                 } else {
@@ -321,6 +329,89 @@ class SemesterRepository @Inject constructor(
             }
 
         }
+
+    private suspend fun insertSemesterRequest(semesterRequests: SemesterRequests) {
+        semesterDao.insertSemesterRequest(semesterRequests)
+    }
+
+    private suspend fun insertSemRequestList(semesterRequests: List<SemesterRequests>) {
+        semesterRequests.onEach {
+            insertSemesterRequest(it)
+        }
+    }
+
+    suspend fun acceptSharedSemester(semesterRequests: SemesterRequests) =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = semesterApi.acceptSharedSemester(
+                    AcceptSemesterRequest(
+                        semesterRequests,
+                        authEmail
+                    )
+                )
+                if (response.isSuccessful && response.body()!!.success) {
+                    //  insertSemesterRequest(semesterRequests.also { it.state = STATE.ACCEPTED })
+                    Resource.success(response.body()?.message)
+                } else {
+                    Resource.error(
+                        response.body()?.message ?: response.message(), null
+                    )
+                }
+            } catch (e: Exception) {
+                Resource.error(
+                    "Couldn't connect to the servers. Check your internet connection",
+                    null
+                )
+            }
+
+        }
+
+    suspend fun rejectSharedSemester(semesterRequests: SemesterRequests) =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = semesterApi.rejectSharedSemester(
+                    RejectSemesterRequest(
+                        semesterRequests,
+                        authEmail
+                    )
+                )
+                if (response.isSuccessful && response.body()!!.success) {
+                    // insertSemesterRequest(semesterRequests.also { it.state = STATE.REJECTED })
+                    Resource.success(response.body()?.message)
+                } else {
+                    Resource.error(
+                        response.body()?.message ?: response.message(), null
+                    )
+                }
+            } catch (e: Exception) {
+                Resource.error(
+                    "Couldn't connect to the servers. Check your internet connection",
+                    null
+                )
+            }
+
+        }
+
+
+    fun getAllSemRequestList(): Flow<Resource<List<SemesterRequests>>> {
+        return networkBoundResource(
+            query = {
+                semesterDao.getAllSemestersRequestList()
+            },
+            fetch = {
+                syncSemRequests()
+                currentSemReqResponse
+            },
+            saveFetchResult = { response ->
+                response?.body()?.let {
+                    insertSemRequestList(it)
+                }
+            },
+            shouldFetch = {
+                getConnectionByPeeking()
+            }
+        )
+    }
 
     fun getAllSemesters(): Flow<Resource<List<Semester>>> {
         return networkBoundResource(
@@ -398,6 +489,10 @@ class SemesterRepository @Inject constructor(
         semesterDao.deleteLocallySemesterId(deletedSemesterId)
     }
 
+    private suspend fun deleteLocallyDeletedSemReqIds(deletedSemReqId: String) {
+        semesterDao.deleteLocallySemReqId(deletedSemReqId)
+    }
+
 
     suspend fun deleteCourse(courseId: String, semesterId: String) {
         val response = try {
@@ -414,12 +509,42 @@ class SemesterRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteLocallyDeletedCourseId(deletedCourseId: String) {
+    suspend fun deleteSemReq(semReqId: String) {
+        val response = try {
+            semesterApi.deleteSemRequest(DeleteSemRequest(authEmail, semReqId))
+        } catch (e: Exception) {
+            null
+        }
+        semesterDao.deleteSemReqById(semReqId)
+
+        if (response == null || !response.isSuccessful) {
+            semesterDao.insertLocallyDeletedSemReqId(LocallyDeletedSemesterRequestId(semReqId))
+        } else {
+            deleteLocallyDeletedSemReqIds(semReqId)
+        }
+    }
+
+    private suspend fun deleteLocallyDeletedCourseId(deletedCourseId: String) {
         semesterDao.deleteLocallyCourseId(deletedCourseId)
     }
 
 
     private var currentSemesterResponse: Response<List<Semester>>? = null
+    private var currentSemReqResponse: Response<List<SemesterRequests>>? = null
+
+
+    private suspend fun syncSemRequests() {
+        val locallyDeletedSemesterRequestId = semesterDao.getAllLocallyDeletedSemReqIds()
+        locallyDeletedSemesterRequestId.forEach { id ->
+            deleteSemReq(id.deletedSemReqId)
+            //  deleteSemReq()
+        }
+        currentSemReqResponse = semesterApi.getSemesterRequestList()
+        currentSemReqResponse?.body()?.let { semRequestLists ->
+            semesterDao.deleteAllSemesterRequests()
+            insertSemRequestList(semRequestLists)
+        }
+    }
 
     private suspend fun syncSemesters() {
         val locallyDeletedSemesterIds = semesterDao.getAllLocallyDeletedSemesterIds()
@@ -460,6 +585,10 @@ class SemesterRepository @Inject constructor(
             insertGradesPoints(it)
         }
     }
+
+    fun getPendingSemList() = semesterDao.getPendingSemReq()
+    fun getAcceptedSemList() = semesterDao.getAcceptedSemReq()
+    fun getRejectedSemList() = semesterDao.getRejectedSemReq()
 }
 
 

@@ -1,14 +1,16 @@
 package com.crushtech.myccgpa.ui.fragments.weights
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.crushtech.myccgpa.data.local.entities.GradeClass
 import com.crushtech.myccgpa.repositories.SemesterRepository
 import com.crushtech.myccgpa.utils.Events
 import com.crushtech.myccgpa.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WeightViewModel @ViewModelInject constructor(
+@HiltViewModel
+class WeightViewModel @Inject constructor(
     private val semesterRepository: SemesterRepository
 ) : ViewModel() {
 

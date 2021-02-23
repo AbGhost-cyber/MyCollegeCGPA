@@ -1,6 +1,5 @@
 package com.crushtech.myccgpa.data.remote.requests
 
-data class AddOwnerRequest(
-    val owner: String,
+data class DeleteAllCourseRequest(
     val semesterId: String
 )

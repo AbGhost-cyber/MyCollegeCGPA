@@ -1,14 +1,17 @@
 package com.crushtech.myccgpa.ui.fragments.home
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.crushtech.myccgpa.data.local.entities.Semester
+import com.crushtech.myccgpa.data.local.entities.SemesterRequests
 import com.crushtech.myccgpa.repositories.SemesterRepository
 import com.crushtech.myccgpa.utils.Events
 import com.crushtech.myccgpa.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel @ViewModelInject constructor(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val semesterRepository: SemesterRepository
 ) : ViewModel() {
 
@@ -42,21 +45,25 @@ class HomeViewModel @ViewModelInject constructor(
         semesterRepository.deleteLocallyDeletedSemesterId(deletedSemesterId)
     }
 
-    fun addOwnerToSemester(owner: String, semesterId: String) {
+    fun addOwnerToSemester(
+        semesterRequests: SemesterRequests,
+        receiver: String,
+        semesterId: String
+    ) {
         _addOwnerStatus.postValue(Events(Resource.loading(null)))
 
-        if (owner.isEmpty() || semesterId.isEmpty()) {
+        if (receiver.isEmpty() || semesterId.isEmpty()) {
             _addOwnerStatus.postValue(
                 Events(
                     Resource.error(
-                        "The owner can't be empty", null
+                        "The receiver can't be empty", null
                     )
                 )
             )
             return
         }
         viewModelScope.launch {
-            val result = semesterRepository.addOwnerToSemester(owner, semesterId)
+            val result = semesterRepository.addUserToSemester(semesterRequests, receiver)
 
             _addOwnerStatus.postValue(Events(result))
         }
