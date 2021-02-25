@@ -20,6 +20,7 @@ import com.crushtech.myccgpa.utils.Constants.viewBinding
 import com.crushtech.myccgpa.utils.NetworkUtils
 import com.crushtech.myccgpa.utils.SimpleCustomSnackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
+import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -76,6 +77,26 @@ class MainActivity : AppCompatActivity() {
             getString(R.string.network_available)
         )
 
+        val manager = ReviewManagerFactory.create(this)
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { _request ->
+            if (_request.isSuccessful) {
+                // We got the ReviewInfo object
+                val reviewInfo = _request.result
+                val flow =
+                    manager.launchReviewFlow((this), reviewInfo)
+                flow.addOnCompleteListener { _ ->
+                    // The flow has finished. The API does not indicate whether the user
+                    // reviewed or not, or even whether the review dialog was shown. Thus, no
+                    // matter the result, we continue our app flow.
+                }
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToSemeReqFragmentIfNeeded(intent)
     }
 
     private fun navigateToSemeReqFragmentIfNeeded(intent: Intent?) {

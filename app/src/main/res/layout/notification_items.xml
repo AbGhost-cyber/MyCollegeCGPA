@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:fontFamily="@font/product_sans_bold"
-            android:padding="10dp"
+            android:padding="1dp"
             android:text="Celebrating little wins"
             android:textColor="@color/colorPrimary"
             android:textSize="22sp" />
@@ -32,7 +32,7 @@
             android:layout_toStartOf="@id/noti_item_checked"
             android:ellipsize="end"
             android:fontFamily="@font/product_sans_regular"
-            android:padding="10dp"
+            android:padding="6dp"
             android:text="Looking back at what you've been up to recently in the app"
             android:textAlignment="textStart"
             android:textColor="@color/colorPrimary"

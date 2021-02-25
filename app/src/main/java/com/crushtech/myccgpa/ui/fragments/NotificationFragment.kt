@@ -34,13 +34,13 @@ class NotificationFragment : BaseFragment(R.layout.notification_layout) {
         (activity as MainActivity).apply {
             showAppBar()
             showMainActivityUI()
+            supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_chevron_left_24)
             activityMainBinding.titleBarText.text = getString(R.string.notifications)
         }
         setUpRecyclerView()
     }
 
     private fun setUpRecyclerView() {
-        //initGroupData()
         setUpGroupItemsData()
         groupNotAdapter = NotificationGroupAdapter()
         binding.apply {

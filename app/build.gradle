@@ -15,8 +15,8 @@ android {
         applicationId "com.crushtech.myccgpa"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 9
-        versionName "My College CGPA v1.8"
+        versionCode 10
+        versionName "My College CGPA v1.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -148,7 +148,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
     //facebbook login
-   // implementation 'com.facebook.android:facebook-login:4.30.0'
     implementation 'com.facebook.android:facebook-login:4.42.0'
 
     //one signal
@@ -157,4 +156,7 @@ dependencies {
     //crashlytics
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    //in app review prompt
+    implementation 'com.google.android.play:core-ktx:1.8.1'
 }

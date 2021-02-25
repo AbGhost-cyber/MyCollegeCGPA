@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -125,9 +126,14 @@ class SettingsFragment : BaseFragment(R.layout.settings_layout) {
                 when (position) {
                     0 -> rateAppFunction()
                     1 -> shareAppFunction()
+                    2 -> showSnackBar(
+                        "coming soon...", null,
+                        R.drawable.ic_baseline_bubble_chart_24,
+                        "", Color.BLACK
+                    )
                 }
             }
-            groupAdapter!!.legalItemAdapter.setOnItemClickListener { position ->
+            groupAdapter!!.legalItemAdapter.setOnItemClickListener {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(PRIVACY_POLICY)
                 startActivity(intent)

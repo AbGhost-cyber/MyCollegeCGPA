@@ -30,7 +30,7 @@ class NotificationGroupAdapter : RecyclerView.Adapter<NotificationGroupVh>() {
     }
 
     override fun getItemCount(): Int {
-        return 1
+        return 2
     }
 
     private fun setList(recyclerView: RecyclerView, position: Int) {

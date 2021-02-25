@@ -21,8 +21,7 @@ object Constants {
     )
     const val DATABASE_NAME = "semester_db"
 
-    //    https://mycollegecgpa.xyz/
-    const val BASE_URL = "http://10.0.2.2:8081/"
+    const val BASE_URL = "https://mycollegecgpa.xyz/"
 
     const val WEIGHT_MAX = 20
 
