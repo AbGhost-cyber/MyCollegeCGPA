@@ -16,8 +16,8 @@ class SemesterApplication : Application() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
 
-        //remove this before pushing to store
-        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
+//        //remove this before pushing to store
+//        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE)
         OneSignal.initWithContext(this)
         OneSignal.setAppId(ONESIGNAL_APP_ID)
         OneSignal.setNotificationOpenedHandler(NotificationReceiver(this))
@@ -35,3 +35,6 @@ class SemesterApplication : Application() {
 
     }
 }
+
+
+

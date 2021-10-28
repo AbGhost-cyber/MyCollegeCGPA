@@ -13,7 +13,6 @@ import com.crushtech.myccgpa.data.local.entities.GradeClass
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
-
 object Constants {
     val IGNORE_AUTH_URLS = listOf(
         "/login", "/register", "/fbLogin",
@@ -47,9 +46,12 @@ object Constants {
     const val ACTION_SHOW_SEM_REQ_FRAGMENT = "show semester request fragment"
 
     fun setupDecorator(
-        c: Canvas, recyclerView: RecyclerView,
+        c: Canvas,
+        recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
-        dX: Float, dY: Float, actionState: Int,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
         isCurrentlyActive: Boolean
     ) {
         RecyclerViewSwipeDecorator.Builder(
@@ -68,8 +70,6 @@ object Constants {
             .addSwipeRightBackgroundColor(Color.GREEN)
             .create()
             .decorate()
-
-
     }
 
     fun getCurrentUserName(sharedPrefs: SharedPreferences): String {
@@ -99,7 +99,6 @@ object Constants {
                 }
                 super.onScrollStateChanged(recyclerView, newState)
             }
-
         }
     }
 
@@ -126,5 +125,3 @@ object Constants {
             bindingInflater.invoke(layoutInflater)
         }
 }
-
-

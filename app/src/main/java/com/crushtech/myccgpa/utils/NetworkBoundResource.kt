@@ -6,7 +6,7 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> RequestType,
     crossinline saveFetchResult: suspend (RequestType) -> Unit,
-    crossinline onFetchFailed: (Throwable) -> Unit = { Unit },
+    crossinline onFetchFailed: (Throwable) -> Unit = { },
     crossinline shouldFetch: (ResultType) -> Boolean = { true }
 
     /**
@@ -28,15 +28,15 @@ inline fun <ResultType, RequestType> networkBoundResource(
     // get the first element emitted
     val data = query().first()
 
-    //check if need be to fetch
+    // check if need be to fetch
     val flow = if (shouldFetch(data)) {
         emit(Resource.loading(data))
 
         try {
-            //get data from ktor server
+            // get data from ktor server
             val fetchedResult = fetch()
 
-            //insert data into database
+            // insert data into database
             saveFetchResult(fetchedResult)
             query().map {
                 Resource.success(it)

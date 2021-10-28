@@ -1,6 +1,5 @@
 package com.crushtech.myccgpa.ui.fragments.home
 
-
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
@@ -87,9 +86,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             activityMainBinding.titleBarText.text = getString(R.string.mysemesters)
             showMainActivityUI()
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-
         }
-
 
         val username = "Hello, ${getCurrentUserName(sharedPrefs)}"
         binding.userName.text = username
@@ -104,12 +101,12 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
         if (savedInstanceState != null) {
             val addSemesterDialog = parentFragmentManager.findFragmentByTag(ADD_SEMESTER_DIALOG)
-                    as AddSemesterDialogFragment?
+                as AddSemesterDialogFragment?
             addSemesterDialog?.setPositiveListener { semesterName ->
                 insertSemester(semesterName)
             }
             val addOwnerDialog = parentFragmentManager.findFragmentByTag(ADD_OWNER_DIALOG)
-                    as AddOwnerDialogFragment?
+                as AddOwnerDialogFragment?
             addOwnerDialog?.apply {
                 setPositiveListener { owner, clicked ->
                     addUserToSemester(owner)
@@ -121,10 +118,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     if (clicked) {
                         semesterAdapter.notifyDataSetChanged()
                     }
-
                 }
             }
-
         }
         binding.viewPerformance.setOnClickListener {
             findNavController().navigate(
@@ -137,7 +132,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         setupSwipeRefreshLayout()
         subscribeToObservers()
 
-
         binding.addSemesterFab.setOnClickListener {
             showCreateSemesterDialog()
         }
@@ -145,7 +139,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         val cancelIcon = binding.semesterSearch.findViewById<ImageView>(R.id.search_close_btn)
         cancelIcon.setColorFilter(R.color.colorPrimary)
         cancelIcon.setOnClickListener {
-            //clear and reload items
+            // clear and reload items
             binding.semesterSearch.setQuery("", false)
             semesterAdapter.notifyDataSetChanged()
         }
@@ -163,9 +157,8 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             }
         })
 
-
         semesterAdapter.setOnItemClickListener { semester ->
-            //check if semester belongs to the current user
+            // check if semester belongs to the current user
             if (semester.owners[0] == authEmail || semester.owners == listOf(authEmail)) {
                 findNavController().navigate(
                     HomeFragmentDirections
@@ -213,7 +206,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         addOnScrollListener(customRecyclerViewScrollListener(listOf(binding.addSemesterFab)))
     }
 
-
     private fun setUpBestSemesterRecyclerView() = binding.rvBestSemester.apply {
         bestSemesterAdapter = BestSemesterAdapter()
         adapter = bestSemesterAdapter
@@ -249,7 +241,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                                     R.drawable.ic_baseline_error_outline_24,
                                     "", Color.RED
                                 )
-
                             }
                         }
                         results.data?.let { semesters ->
@@ -282,7 +273,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             binding.swipeRefreshLayout.isEnabled = !it
         })
 
-
         homeViewModel.addOwnerStatus.observe(viewLifecycleOwner, { event ->
             event?.getContentIfNotHandled()?.let { result ->
                 when (result.status) {
@@ -297,7 +287,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                             R.drawable.ic_baseline_bubble_chart_24,
                             "", Color.BLACK
                         )
-
                     }
                     Status.ERROR -> {
                         binding.addOwnerProgressImage.visibility = GONE
@@ -328,7 +317,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             }
         }.show(parentFragmentManager, ADD_SEMESTER_DIALOG)
     }
-
 
     private fun insertSemester(semesterName: String) {
         val authEmail = sharedPrefs.getString(
@@ -367,9 +355,7 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                 }
             }
         }.show(parentFragmentManager, ADD_OWNER_DIALOG)
-
     }
-
 
     private fun addUserToSemester(email: String) {
         currentSemester?.let {
@@ -377,7 +363,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
             homeViewModel.addOwnerToSemester(semesterRequests, email, it.id)
         }
     }
-
 
     private fun checkForEmptyState(semesterList: List<Semester>) {
         if (semesterList.isNullOrEmpty()) {
@@ -401,7 +386,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
 
             val allItemsHasNoCourses = semesterList.all {
                 it.courses.isNullOrEmpty()
-
             }
             if (allItemsHasNoCourses) {
                 binding.bestSemesterText2.visibility = VISIBLE
@@ -442,7 +426,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     "semester deleted", snackListener, R.drawable.ic_baseline_delete_24,
                     "Undo", Color.BLACK
                 )
-
             }
             if (direction == RIGHT) {
                 homeViewModel.observeSemesterById(semester.id)
@@ -453,7 +436,6 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                     })
                 showAddOwnerToSemesterDialog()
             }
-
         }
 
         override fun onChildDraw(
@@ -483,16 +465,13 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
                 actionState,
                 isCurrentlyActive
             )
-
         }
-
-
     }
 
     private fun setupSwipeRefreshLayout() {
         binding.swipeRefreshLayout.setOnRefreshListener {
 
-            //clear searchview on refresh
+            // clear searchview on refresh
             if (!(binding.semesterSearch.isEmpty())) {
                 binding.semesterSearch.setQuery("", false)
             }
@@ -536,16 +515,3 @@ class HomeFragment : BaseFragment(R.layout.home_layout) {
         super.onDestroy()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

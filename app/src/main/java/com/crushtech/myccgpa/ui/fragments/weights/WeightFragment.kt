@@ -48,7 +48,6 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
             activityMainBinding.titleBarText.text = getString(R.string.my_weights)
         }
 
-
         setUpRecyclerView()
         setUpObservers()
         syncWeight()
@@ -60,7 +59,7 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
         }
         if (savedInstanceState != null) {
             val editWeightDialog = parentFragmentManager.findFragmentByTag(EDIT_WEIGHT_DIALOG)
-                    as EditWeightDialogFragment?
+                as EditWeightDialogFragment?
             editWeightDialog?.setPositiveListener { weightOverflowed, weights ->
                 if (weightOverflowed) {
                     showSnackBar(
@@ -74,15 +73,13 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                 }
             }
             val resetWeightDialog = parentFragmentManager.findFragmentByTag(RESET_WEIGHT_DIALOG)
-                    as ResetWeightDialogFragment?
+                as ResetWeightDialogFragment?
             resetWeightDialog?.setPositiveListener { reset ->
                 if (reset) {
                     resetWeight(reset)
                 }
             }
         }
-
-
 
         weightItemsAdapter.setOnItemClickListener {
             val bundle = Bundle()
@@ -100,7 +97,6 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                     } else {
                         updateWeight(weights)
                     }
-
                 }
             }.show(parentFragmentManager, EDIT_WEIGHT_DIALOG)
         }
@@ -108,14 +104,12 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
         setHasOptionsMenu(true)
     }
 
-
     private fun setUpRecyclerView() = binding.weightRecView.apply {
         weightItemsAdapter = WeightItemsAdapter()
         adapter = weightItemsAdapter
         layoutManager = LinearLayoutManager(requireContext())
         addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
     }
-
 
     private fun setUpObservers() {
         weightViewModel.allGradePoints.observe(viewLifecycleOwner, {
@@ -177,27 +171,21 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                 }
                 "B-" -> {
                     gradePoint.BMinusGrade = gradeSimplified.gradePoint
-
                 }
                 "C+" -> {
                     gradePoint.CPlusGrade = gradeSimplified.gradePoint
-
                 }
                 "C" -> {
                     gradePoint.CGrade = gradeSimplified.gradePoint
-
                 }
                 "C-" -> {
                     gradePoint.CMinusGrade = gradeSimplified.gradePoint
-
                 }
                 "D+" -> {
                     gradePoint.DPlusGrade = gradeSimplified.gradePoint
-
                 }
                 "D" -> {
                     gradePoint.DGrade = gradeSimplified.gradePoint
-
                 }
                 else -> {
                     // it's E/F
@@ -212,7 +200,6 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
                 "", Color.BLACK
             )
         }
-
     }
 
     private fun syncWeight() {
@@ -277,6 +264,3 @@ class WeightFragment : BaseFragment(R.layout.weight_layout) {
         super.onDestroy()
     }
 }
-
-
-

@@ -29,7 +29,7 @@ class AuthViewModel @Inject constructor(
     val loginStatus: LiveData<Resource<String>> = _loginStatus
 
     fun register(email: String, password: String, repeatedPassword: String, username: String) {
-        //emit loading state, notify the observers that we are starting the register function
+        // emit loading state, notify the observers that we are starting the register function
         _registerStatus.postValue(Resource.loading(null))
         if (email.isEmpty() || password.isEmpty() || repeatedPassword.isEmpty() || username.isEmpty()) {
             _registerStatus.postValue(
@@ -93,9 +93,8 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-
     fun login(email: String, password: String) {
-        //emit loading state, notify the observers that we are starting the login function
+        // emit loading state, notify the observers that we are starting the login function
         _loginStatus.postValue(Resource.loading(null))
         if (email.isEmpty() || password.isEmpty()) {
             _loginStatus.postValue(
@@ -128,5 +127,4 @@ class AuthViewModel @Inject constructor(
             _thirdPartyLoginStatus.postValue(result)
         }
     }
-
 }

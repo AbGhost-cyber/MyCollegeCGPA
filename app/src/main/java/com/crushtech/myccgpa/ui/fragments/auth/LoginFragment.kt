@@ -72,7 +72,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
     private var currentUserName: String? = null
     private var isThirdParty = false
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -81,7 +80,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         binding = LoginLayoutBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,7 +90,7 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 FLAG_FULLSCREEN,
                 FLAG_FULLSCREEN
             )
-            //set screen orientation to portrait
+            // set screen orientation to portrait
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         }
 
@@ -108,7 +106,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             OneSignalHelper.setUserExternalId(currentEmail)
             redirectLogin()
         }
-
 
         subscribeToObservers()
 
@@ -126,49 +123,48 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             viewModel.login(email, password)
         }
 
-
         binding.FaceBookLoginBtn.setOnClickListener {
-            //call on click on the main fb button
+            // call on click on the main fb button
             binding.fbLoginButton.callOnClick()
         }
         binding.GoogleLoginBtn.setOnClickListener {
-            //call on click on the main ga button
+            // call on click on the main ga button
             binding.galoginButton.callOnClick()
             googleSignIn()
         }
 
-
         binding.fbLoginButton.apply {
             fragment = this@LoginFragment
             setReadPermissions("email", "public_profile")
-            registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            registerCallback(
+                callbackManager,
+                object : FacebookCallback<LoginResult> {
 
-                override fun onSuccess(result: LoginResult?) {
-                    handleFacebookToken(result?.accessToken)
-                }
+                    override fun onSuccess(result: LoginResult?) {
+                        handleFacebookToken(result?.accessToken)
+                    }
 
-                override fun onCancel() {
-                    showSnackBar(
-                        "authentication cancelled",
-                        null, R.drawable.ic_clear4,
-                        "", Color.BLACK
-                    )
-                }
+                    override fun onCancel() {
+                        showSnackBar(
+                            "authentication cancelled",
+                            null, R.drawable.ic_clear4,
+                            "", Color.BLACK
+                        )
+                    }
 
-                override fun onError(error: FacebookException?) {
-                    showSnackBar(
-                        "an unknown error occurred",
-                        null, R.drawable.ic_baseline_error_outline_24,
-                        "", Color.RED
-                    )
-                    if (firebaseAuth.currentUser != null) {
-                        LoginManager.getInstance().logOut()
+                    override fun onError(error: FacebookException?) {
+                        showSnackBar(
+                            "an unknown error occurred",
+                            null, R.drawable.ic_baseline_error_outline_24,
+                            "", Color.RED
+                        )
+                        if (firebaseAuth.currentUser != null) {
+                            LoginManager.getInstance().logOut()
+                        }
                     }
                 }
-
-            })
+            )
         }
-
 
         accessTokenTracker = object : AccessTokenTracker() {
             override fun onCurrentAccessTokenChanged(
@@ -179,10 +175,8 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                     firebaseAuth.signOut()
                 }
             }
-
         }
     }
-
 
     private fun handleFacebookToken(token: AccessToken?) {
         token?.let {
@@ -211,120 +205,123 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                     )
                 }
             }
-
         }
     }
 
-
     private fun subscribeToObservers() {
-        viewModel.loginStatus.observe(viewLifecycleOwner, Observer { result ->
-            result?.let {
-                when (result.status) {
-                    Status.SUCCESS -> {
-                        result.data?.let {
-                            this.currentUserName = it
+        viewModel.loginStatus.observe(
+            viewLifecycleOwner,
+            Observer { result ->
+                result?.let {
+                    when (result.status) {
+                        Status.SUCCESS -> {
+                            result.data?.let {
+                                this.currentUserName = it
+                            }
+                            this.isThirdParty = false
+                            resetUIForLoginButton()
+                            val snackBarText = "Welcome back $currentUserName"
+                            showSnackBar(
+                                snackBarText, null, R.drawable.ic_baseline_whatshot_24,
+                                "", Color.BLACK
+                            )
+                            sharedPrefs.edit().putBoolean(
+                                IS_THIRD_PARTY,
+                                false
+                            ).apply()
+
+                            sharedPrefs.edit().putString(
+                                KEY_LOGGED_IN_EMAIL,
+                                currentEmail
+                            ).apply()
+                            sharedPrefs.edit().putString(
+                                KEY_USERNAME,
+                                currentUserName
+                            ).apply()
+
+                            authenticateApi(
+                                currentEmail ?: "",
+                                currentPassword ?: ""
+                            )
+                            redirectLogin()
                         }
-                        this.isThirdParty = false
-                        resetUIForLoginButton()
-                        val snackBarText = "Welcome back $currentUserName"
-                        showSnackBar(
-                            snackBarText, null, R.drawable.ic_baseline_whatshot_24,
-                            "", Color.BLACK
-                        )
-                        sharedPrefs.edit().putBoolean(
-                            IS_THIRD_PARTY,
-                            false
-                        ).apply()
-
-                        sharedPrefs.edit().putString(
-                            KEY_LOGGED_IN_EMAIL,
-                            currentEmail
-                        ).apply()
-                        sharedPrefs.edit().putString(
-                            KEY_USERNAME,
-                            currentUserName
-                        ).apply()
-
-                        authenticateApi(
-                            currentEmail ?: "",
-                            currentPassword ?: ""
-                        )
-                        redirectLogin()
-                    }
-                    Status.ERROR -> {
-                        resetUIForLoginButton()
-                        val snackBarText = result.message
-                        showSnackBar(
-                            snackBarText ?: "an error occurred", null,
-                            R.drawable.ic_baseline_error_outline_24,
-                            "", Color.RED
-                        )
-                    }
-                    Status.LOADING -> {
-                        updateUIForLoginButton()
+                        Status.ERROR -> {
+                            resetUIForLoginButton()
+                            val snackBarText = result.message
+                            showSnackBar(
+                                snackBarText ?: "an error occurred", null,
+                                R.drawable.ic_baseline_error_outline_24,
+                                "", Color.RED
+                            )
+                        }
+                        Status.LOADING -> {
+                            updateUIForLoginButton()
+                        }
                     }
                 }
             }
-        })
+        )
 
-        viewModel.thirdPartyLoginStatus.observe(viewLifecycleOwner, Observer { result ->
-            result?.let {
-                when (result.status) {
-                    Status.SUCCESS -> {
-                        this.isThirdParty = true
-                        val snackBarText = "Welcome back $currentUserName"
-                        showSnackBar(
-                            snackBarText, null,
-                            R.drawable.ic_baseline_whatshot_24,
-                            "", Color.BLACK
-                        )
-                        sharedPrefs.edit().putBoolean(
-                            IS_THIRD_PARTY,
-                            true
-                        ).apply()
-                        sharedPrefs.edit().putString(
-                            KEY_LOGGED_IN_EMAIL,
-                            currentEmail
-                        ).apply()
-                        sharedPrefs.edit().putString(
-                            KEY_PASSWORD,
-                            currentPassword
-                        ).apply()
-                        sharedPrefs.edit().putString(
-                            KEY_USERNAME,
-                            currentUserName
-                        ).apply()
+        viewModel.thirdPartyLoginStatus.observe(
+            viewLifecycleOwner,
+            Observer { result ->
+                result?.let {
+                    when (result.status) {
+                        Status.SUCCESS -> {
+                            this.isThirdParty = true
+                            val snackBarText = "Welcome back $currentUserName"
+                            showSnackBar(
+                                snackBarText, null,
+                                R.drawable.ic_baseline_whatshot_24,
+                                "", Color.BLACK
+                            )
+                            sharedPrefs.edit().putBoolean(
+                                IS_THIRD_PARTY,
+                                true
+                            ).apply()
+                            sharedPrefs.edit().putString(
+                                KEY_LOGGED_IN_EMAIL,
+                                currentEmail
+                            ).apply()
+                            sharedPrefs.edit().putString(
+                                KEY_PASSWORD,
+                                currentPassword
+                            ).apply()
+                            sharedPrefs.edit().putString(
+                                KEY_USERNAME,
+                                currentUserName
+                            ).apply()
 
-                        authenticateApi(currentEmail ?: "")
-                        redirectLogin()
-                    }
-                    Status.ERROR -> {
-                        val snackBarText = result.message
-                        showSnackBar(
-                            snackBarText ?: "an error occurred", null,
-                            R.drawable.ic_baseline_error_outline_24,
-                            "", Color.RED
-                        )
-                    }
-                    Status.LOADING -> {
-                        showSnackBar(
-                            "please hold on for a moment.....",
-                            null,
-                            R.drawable.ic_baseline_error_outline_24,
-                            "", Color.BLACK,
-                            Snackbar.LENGTH_INDEFINITE
-                        )
+                            authenticateApi(currentEmail ?: "")
+                            redirectLogin()
+                        }
+                        Status.ERROR -> {
+                            val snackBarText = result.message
+                            showSnackBar(
+                                snackBarText ?: "an error occurred", null,
+                                R.drawable.ic_baseline_error_outline_24,
+                                "", Color.RED
+                            )
+                        }
+                        Status.LOADING -> {
+                            showSnackBar(
+                                "please hold on for a moment.....",
+                                null,
+                                R.drawable.ic_baseline_error_outline_24,
+                                "", Color.BLACK,
+                                Snackbar.LENGTH_INDEFINITE
+                            )
+                        }
                     }
                 }
             }
-        })
+        )
     }
-
 
     private fun createGoogleSignInRequest() {
         // Configure Google Sign In
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestIdToken(getString(R.string.itid_id))
             .requestEmail()
             .build()
 
@@ -369,7 +366,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         }
     }
 
-
     private fun authenticateApi(email: String, password: String = "") {
         if (isThirdParty) {
             basicAuthInterceptor.email = email
@@ -407,10 +403,10 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             NOT_THIRD_PARTY
         )
         return if (isThirdParty) {
-            //auth with email
+            // auth with email
             currentEmail != NO_EMAIL
         } else {
-            //basic auth requires email & password
+            // basic auth requires email & password
             currentEmail != NO_EMAIL && currentPassword != NO_PASSWORD
         }
     }
@@ -429,7 +425,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         binding.LoginProgressBar.visibility = View.GONE
     }
 
-
     private fun createAnimationsForUIWidgets() {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_left)
         binding.lin1.startAnimation(animation)
@@ -439,7 +434,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
         binding.logintxt.startAnimation(animation2)
         val animation3 = AnimationUtils.loadAnimation(requireContext(), R.anim.blink)
         binding.thirdPartyLoginLayoutParent.startAnimation(animation3)
-
     }
 
     override fun onDetach() {
@@ -457,14 +451,12 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.action_loginFragment_to_chooseLoginOrSignUpFragment)
             }
-
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressed)
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //facebook call back
+        // facebook call back
         callbackManager.onActivityResult(requestCode, resultCode, data)
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent()
@@ -475,7 +467,6 @@ class LoginFragment : BaseFragment(R.layout.login_layout) {
                 val googleAccount = task.getResult(ApiException::class.java)!!
                 Timber.d("firebaseAuthWithGoogle:%s", googleAccount.id)
                 firebaseAuthWithGoogle(googleAccount.idToken!!)
-
             } catch (e: ApiException) {
                 // Google Sign In failed
                 Timber.w(e, "Google sign in failed")

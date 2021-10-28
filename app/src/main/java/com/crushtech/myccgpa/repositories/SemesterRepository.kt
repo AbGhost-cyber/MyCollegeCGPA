@@ -52,7 +52,8 @@ class SemesterRepository @Inject constructor(
                 } else {
                     Resource.error(
                         response.body()?.message
-                            ?: response.message(), null
+                            ?: response.message(),
+                        null
                     )
                 }
             } catch (e: Exception) {
@@ -61,7 +62,6 @@ class SemesterRepository @Inject constructor(
                     null
                 )
             }
-
         }
 
     suspend fun registerThirdPartyUser(email: String, username: String) =
@@ -74,7 +74,8 @@ class SemesterRepository @Inject constructor(
                 } else {
                     Resource.error(
                         response.body()?.message
-                            ?: response.message(), null
+                            ?: response.message(),
+                        null
                     )
                 }
             } catch (e: Exception) {
@@ -83,9 +84,7 @@ class SemesterRepository @Inject constructor(
                     null
                 )
             }
-
         }
-
 
     suspend fun login(email: String, password: String) =
         withContext(Dispatchers.IO) {
@@ -104,9 +103,7 @@ class SemesterRepository @Inject constructor(
                     null
                 )
             }
-
         }
-
 
     suspend fun loginThirdPartyUser(email: String, username: String) =
         withContext(Dispatchers.IO) {
@@ -127,7 +124,6 @@ class SemesterRepository @Inject constructor(
                     null
                 )
             }
-
         }
 
     suspend fun logOutUser(fragment: Fragment) {
@@ -180,7 +176,7 @@ class SemesterRepository @Inject constructor(
         }
 
         if (response != null && response.isSuccessful) {
-            //insert to our server
+            // insert to our server
             semesterDao.insertSemester(semester.apply { isSynced = true })
         } else {
             // if response is null then insert note into
@@ -264,7 +260,6 @@ class SemesterRepository @Inject constructor(
                 null
             )
         }
-
     }
 
     suspend fun updateCourses(courses: List<Courses>, semesterId: String) {
@@ -300,7 +295,7 @@ class SemesterRepository @Inject constructor(
             )
         }
 
-        //delete previous grades in dao and reinsert new
+        // delete previous grades in dao and reinsert new
         semesterDao.deleteGradePoints()
         semesterDao.insertGrades(GradeClass())
     }
@@ -327,7 +322,6 @@ class SemesterRepository @Inject constructor(
                     null
                 )
             }
-
         }
 
     private suspend fun insertSemesterRequest(semesterRequests: SemesterRequests) {
@@ -363,7 +357,6 @@ class SemesterRepository @Inject constructor(
                     null
                 )
             }
-
         }
 
     suspend fun rejectSharedSemester(semesterRequests: SemesterRequests) =
@@ -389,9 +382,7 @@ class SemesterRepository @Inject constructor(
                     null
                 )
             }
-
         }
-
 
     fun getAllSemRequestList(): Flow<Resource<List<SemesterRequests>>> {
         return networkBoundResource(
@@ -442,20 +433,17 @@ class SemesterRepository @Inject constructor(
                 syncGradePoints()
 //                currentGradePointsResponse
                 currentGradePointsResponse
-
             },
             saveFetchResult = { response ->
                 response?.body()?.let {
                     insertGradesPoints(it)
                 }
-
             },
             shouldFetch = {
                 getConnectionByPeeking()
             }
         )
     }
-
 
     private fun getConnectionByPeeking(): Boolean {
         val events = getNetworkLiveData(context.applicationContext).value
@@ -468,7 +456,6 @@ class SemesterRepository @Inject constructor(
     suspend fun getSemesterById(semesterId: String) = semesterDao.getSemesterById(semesterId)
 
     suspend fun getCourseList(semesterId: String) = semesterDao.getCourseList(semesterId)
-
 
     suspend fun deleteSemester(semesterId: String) {
         val response = try {
@@ -492,7 +479,6 @@ class SemesterRepository @Inject constructor(
     private suspend fun deleteLocallyDeletedSemReqIds(deletedSemReqId: String) {
         semesterDao.deleteLocallySemReqId(deletedSemReqId)
     }
-
 
     suspend fun deleteCourse(courseId: String, semesterId: String) {
         val response = try {
@@ -528,10 +514,8 @@ class SemesterRepository @Inject constructor(
         semesterDao.deleteLocallyCourseId(deletedCourseId)
     }
 
-
     private var currentSemesterResponse: Response<List<Semester>>? = null
     private var currentSemReqResponse: Response<List<SemesterRequests>>? = null
-
 
     private suspend fun syncSemRequests() {
         val locallyDeletedSemesterRequestId = semesterDao.getAllLocallyDeletedSemReqIds()
@@ -564,9 +548,9 @@ class SemesterRepository @Inject constructor(
 
         currentSemesterResponse = semesterApi.getSemester()
         currentSemesterResponse?.body()?.let { semesters ->
-            //we delete all local semesters and reinsert again
+            // we delete all local semesters and reinsert again
             semesterDao.deleteAllSemesters()
-            //insert semesters gotten from server and set synced state to true
+            // insert semesters gotten from server and set synced state to true
             insertSemesters(semesters.onEach { semester -> semester.isSynced = true })
         }
     }
@@ -580,7 +564,7 @@ class SemesterRepository @Inject constructor(
         }
         currentGradePointsResponse = semesterApi.getUserGradePoints()
         currentGradePointsResponse?.body()?.let {
-            //we delete all local gradePoints and reinsert again
+            // we delete all local gradePoints and reinsert again
             semesterDao.deleteGradePoints()
             insertGradesPoints(it)
         }
@@ -590,9 +574,3 @@ class SemesterRepository @Inject constructor(
     fun getAcceptedSemList() = semesterDao.getAcceptedSemReq()
     fun getRejectedSemList() = semesterDao.getRejectedSemReq()
 }
-
-
-
-
-
-

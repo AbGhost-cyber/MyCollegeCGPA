@@ -20,21 +20,14 @@ data class Semester(
 ) {
 
     fun getGPA(): Double {
-        var totalHours = 0F
-        var totalPoints = 0F
-        courses.forEach {
-            totalHours += it.creditHours
-            totalPoints += it.getQualityPoints()
-
-        }
-
-        val GPA = totalPoints / totalHours
-        if (GPA.isNaN()) {
+        val totalHours = courses.map { it.creditHours }.sum()
+        val totalPoints = courses.map { it.getQualityPoints() }.sum()
+        val gpa = totalPoints / totalHours
+        if (gpa.isNaN()) {
             return 0.00
         }
-        return (GPA * 100.0).roundToInt() / 100.0
+        return (gpa * 100.0).roundToInt() / 100.0
     }
-
 
     fun getThreeCoursesName(): String {
         val threeCourses = ArrayList<String>()
@@ -42,19 +35,13 @@ data class Semester(
             if (threeCourses.size < 3) {
                 threeCourses.add(it.courseName)
             }
-
         }
         return threeCourses.joinToString(", ")
     }
 }
 
-
-fun getCGPA(semester: Triple<Semester, Semester, Semester>): Double {
-    val firstSemesterGPA = semester.first.getGPA()
-    val secondSemesterGPA = semester.second.getGPA()
-    val thirdSemesterGPA = semester.third.getGPA()
-    val totalGPA = firstSemesterGPA + secondSemesterGPA + thirdSemesterGPA
-    return totalGPA / 3
+fun getCGPA(vararg semesters: Semester): Double {
+    val totalGPA = semesters.map { it.getGPA() }.sum()
+    val size = semesters.size
+    return totalGPA / size
 }
-
-
